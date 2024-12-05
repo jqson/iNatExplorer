@@ -6,6 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		37F888642D0128BA00258BDC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F8885E2D0128BA00258BDC /* Preview Assets.xcassets */; };
+		37F888652D0128BA00258BDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F888602D0128BA00258BDC /* Assets.xcassets */; };
+		37F888662D0128BA00258BDC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888612D0128BA00258BDC /* ContentView.swift */; };
+		37F888672D0128BA00258BDC /* MyNaturalistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888622D0128BA00258BDC /* MyNaturalistApp.swift */; };
+		37F8886A2D01297D00258BDC /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888692D01297D00258BDC /* ListView.swift */; };
+		37F8886C2D0190EB00258BDC /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8886B2D0190EB00258BDC /* ItemView.swift */; };
+		37F8886F2D0193B900258BDC /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8886E2D0193B900258BDC /* Observation.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		37F888262CFFBCB300258BDC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,14 +37,16 @@
 		37F888152CFFBCB100258BDC /* MyNaturalist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyNaturalist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F888252CFFBCB300258BDC /* MyNaturalistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNaturalistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F8882F2CFFBCB300258BDC /* MyNaturalistUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNaturalistUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		37F8885E2D0128BA00258BDC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		37F888602D0128BA00258BDC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		37F888612D0128BA00258BDC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		37F888622D0128BA00258BDC /* MyNaturalistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNaturalistApp.swift; sourceTree = "<group>"; };
+		37F888692D01297D00258BDC /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		37F8886B2D0190EB00258BDC /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
+		37F8886E2D0193B900258BDC /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		37F888172CFFBCB100258BDC /* MyNaturalist */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MyNaturalist;
-			sourceTree = "<group>";
-		};
 		37F888282CFFBCB300258BDC /* MyNaturalistTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = MyNaturalistTests;
@@ -75,7 +87,7 @@
 		37F8880C2CFFBCB100258BDC = {
 			isa = PBXGroup;
 			children = (
-				37F888172CFFBCB100258BDC /* MyNaturalist */,
+				37F888632D0128BA00258BDC /* MyNaturalist */,
 				37F888282CFFBCB300258BDC /* MyNaturalistTests */,
 				37F888322CFFBCB300258BDC /* MyNaturalistUITests */,
 				37F888162CFFBCB100258BDC /* Products */,
@@ -92,6 +104,44 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		37F8885F2D0128BA00258BDC /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				37F8885E2D0128BA00258BDC /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		37F888632D0128BA00258BDC /* MyNaturalist */ = {
+			isa = PBXGroup;
+			children = (
+				37F888622D0128BA00258BDC /* MyNaturalistApp.swift */,
+				37F888682D01295400258BDC /* Views */,
+				37F8886D2D01937C00258BDC /* Models */,
+				37F888602D0128BA00258BDC /* Assets.xcassets */,
+				37F8885F2D0128BA00258BDC /* Preview Content */,
+			);
+			path = MyNaturalist;
+			sourceTree = "<group>";
+		};
+		37F888682D01295400258BDC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				37F888612D0128BA00258BDC /* ContentView.swift */,
+				37F888692D01297D00258BDC /* ListView.swift */,
+				37F8886B2D0190EB00258BDC /* ItemView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		37F8886D2D01937C00258BDC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				37F8886E2D0193B900258BDC /* Observation.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -106,9 +156,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				37F888172CFFBCB100258BDC /* MyNaturalist */,
 			);
 			name = MyNaturalist;
 			packageProductDependencies = (
@@ -212,6 +259,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37F888642D0128BA00258BDC /* Preview Assets.xcassets in Resources */,
+				37F888652D0128BA00258BDC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +285,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37F888662D0128BA00258BDC /* ContentView.swift in Sources */,
+				37F888672D0128BA00258BDC /* MyNaturalistApp.swift in Sources */,
+				37F8886A2D01297D00258BDC /* ListView.swift in Sources */,
+				37F8886C2D0190EB00258BDC /* ItemView.swift in Sources */,
+				37F8886F2D0193B900258BDC /* Observation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
