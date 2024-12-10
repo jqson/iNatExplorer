@@ -11,9 +11,14 @@
 		37F888652D0128BA00258BDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F888602D0128BA00258BDC /* Assets.xcassets */; };
 		37F888662D0128BA00258BDC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888612D0128BA00258BDC /* ContentView.swift */; };
 		37F888672D0128BA00258BDC /* MyNaturalistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888622D0128BA00258BDC /* MyNaturalistApp.swift */; };
-		37F8886A2D01297D00258BDC /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888692D01297D00258BDC /* ListView.swift */; };
-		37F8886C2D0190EB00258BDC /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8886B2D0190EB00258BDC /* ItemView.swift */; };
+		37F8886A2D01297D00258BDC /* ObservationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888692D01297D00258BDC /* ObservationListView.swift */; };
+		37F8886C2D0190EB00258BDC /* ObservationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8886B2D0190EB00258BDC /* ObservationItemView.swift */; };
 		37F8886F2D0193B900258BDC /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8886E2D0193B900258BDC /* Observation.swift */; };
+		37F888762D0416A200258BDC /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888752D0416A200258BDC /* NetworkService.swift */; };
+		37F888782D041B0A00258BDC /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888772D041B0900258BDC /* NetworkRequest.swift */; };
+		37F8887C2D041BE400258BDC /* RespnoseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8887B2D041BE400258BDC /* RespnoseModels.swift */; };
+		37F888802D082BB400258BDC /* ObservationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8887F2D082BB400258BDC /* ObservationDetailView.swift */; };
+		37F888882D083A4600258BDC /* CdnImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888872D083A4600258BDC /* CdnImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,9 +46,14 @@
 		37F888602D0128BA00258BDC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37F888612D0128BA00258BDC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		37F888622D0128BA00258BDC /* MyNaturalistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNaturalistApp.swift; sourceTree = "<group>"; };
-		37F888692D01297D00258BDC /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
-		37F8886B2D0190EB00258BDC /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
+		37F888692D01297D00258BDC /* ObservationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListView.swift; sourceTree = "<group>"; };
+		37F8886B2D0190EB00258BDC /* ObservationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationItemView.swift; sourceTree = "<group>"; };
 		37F8886E2D0193B900258BDC /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
+		37F888752D0416A200258BDC /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		37F888772D041B0900258BDC /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
+		37F8887B2D041BE400258BDC /* RespnoseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespnoseModels.swift; sourceTree = "<group>"; };
+		37F8887F2D082BB400258BDC /* ObservationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDetailView.swift; sourceTree = "<group>"; };
+		37F888872D083A4600258BDC /* CdnImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CdnImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -117,7 +127,8 @@
 			children = (
 				37F888622D0128BA00258BDC /* MyNaturalistApp.swift */,
 				37F888682D01295400258BDC /* Views */,
-				37F8886D2D01937C00258BDC /* Models */,
+				37F8886D2D01937C00258BDC /* ViewModels */,
+				37F888732D04163C00258BDC /* Network */,
 				37F888602D0128BA00258BDC /* Assets.xcassets */,
 				37F8885F2D0128BA00258BDC /* Preview Content */,
 			);
@@ -128,18 +139,30 @@
 			isa = PBXGroup;
 			children = (
 				37F888612D0128BA00258BDC /* ContentView.swift */,
-				37F888692D01297D00258BDC /* ListView.swift */,
-				37F8886B2D0190EB00258BDC /* ItemView.swift */,
+				37F888692D01297D00258BDC /* ObservationListView.swift */,
+				37F8886B2D0190EB00258BDC /* ObservationItemView.swift */,
+				37F8887F2D082BB400258BDC /* ObservationDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		37F8886D2D01937C00258BDC /* Models */ = {
+		37F8886D2D01937C00258BDC /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				37F8886E2D0193B900258BDC /* Observation.swift */,
 			);
-			path = Models;
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		37F888732D04163C00258BDC /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				37F888752D0416A200258BDC /* NetworkService.swift */,
+				37F888772D041B0900258BDC /* NetworkRequest.swift */,
+				37F8887B2D041BE400258BDC /* RespnoseModels.swift */,
+				37F888872D083A4600258BDC /* CdnImage.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,10 +308,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37F888782D041B0A00258BDC /* NetworkRequest.swift in Sources */,
+				37F888882D083A4600258BDC /* CdnImage.swift in Sources */,
 				37F888662D0128BA00258BDC /* ContentView.swift in Sources */,
+				37F8887C2D041BE400258BDC /* RespnoseModels.swift in Sources */,
 				37F888672D0128BA00258BDC /* MyNaturalistApp.swift in Sources */,
-				37F8886A2D01297D00258BDC /* ListView.swift in Sources */,
-				37F8886C2D0190EB00258BDC /* ItemView.swift in Sources */,
+				37F8886A2D01297D00258BDC /* ObservationListView.swift in Sources */,
+				37F8886C2D0190EB00258BDC /* ObservationItemView.swift in Sources */,
+				37F888802D082BB400258BDC /* ObservationDetailView.swift in Sources */,
+				37F888762D0416A200258BDC /* NetworkService.swift in Sources */,
 				37F8886F2D0193B900258BDC /* Observation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,7 +403,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -432,7 +460,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -450,6 +478,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MyNaturalist/Preview Content\"";
+				DEVELOPMENT_TEAM = 99D8GKU8Y6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -478,6 +507,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MyNaturalist/Preview Content\"";
+				DEVELOPMENT_TEAM = 99D8GKU8Y6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

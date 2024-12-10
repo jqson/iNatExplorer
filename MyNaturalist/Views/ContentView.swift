@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @StateObject var observationViewModel = ObservationViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ObservationListView(observations: observationViewModel.observations)
+        .onAppear {
+            if observationViewModel.observations.isEmpty {
+                Task {
+                    await observationViewModel.fetchData()
+                }
+            }
         }
-        .padding()
     }
 }
 

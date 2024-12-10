@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ItemView: View {
+struct ObservationItemView: View {
     
     enum Constants {
         static let imageSize: CGFloat = 100
@@ -17,10 +17,13 @@ struct ItemView: View {
     
     var body: some View {
         HStack {
-            AsyncImage(url: observation.imageUrl) { image in
-                image.image?.resizable()
+            AsyncImage(url: observation.photos.first?.getUrl(.small)) { image in
+                image.resizable()
+            } placeholder: {
+                Color.gray
             }
             .frame(width: Constants.imageSize, height: Constants.imageSize)
+            
             
             VStack(alignment: .leading) {
                 Text(observation.name)
@@ -31,5 +34,5 @@ struct ItemView: View {
 }
 
 #Preview {
-    ItemView(observation: Observation.Constants.preview)
+    ObservationItemView(observation: Observation.Constants.preview)
 }
