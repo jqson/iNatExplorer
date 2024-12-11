@@ -10,7 +10,9 @@ import Foundation
 class NetworkRequest {
     
     enum Constants {
-        static let baseUrl = "https://api.inaturalist.org/v1"
+        static let iNatBaseUrl = "https://api.inaturalist.org/v1"
+        static let geoCodeBaseUrl = "https://maps.googleapis.com/maps/api/geocode/json"
+        static let gmsKey = "AIzaSyDQPAmqBULGhHwOj8LPrsHSTn-r-bYfKo4"
     }
     
     enum Observation {
@@ -24,13 +26,25 @@ class NetworkRequest {
     }
     
     static func getObservations() async -> ObservationResponse? {
-        let requestUrl = URL(string: Constants.baseUrl + Observation.endPoint)
+        let requestUrl = URL(string: Constants.iNatBaseUrl + Observation.endPoint)
         return try? await NetworkService.sendRequest(url: requestUrl)
     }
     
     static func getPlaces(placeIds: Set<Int>) async -> PlacesResponse? {
-        var requestURL = URL(string: Constants.baseUrl + Places.endPoint)
+        var requestURL = URL(string: Constants.iNatBaseUrl + Places.endPoint)
         requestURL?.appendPathComponent(Array(placeIds).map({ String($0) }).joined(separator: ","))
         return try? await NetworkService.sendRequest(url: requestURL)
+    }
+    
+    static func getAddress(coordinates: Coordinates) async -> ReverseGeoResponse? {
+        let queryItems: [URLQueryItem] = [
+            .init(name: "key", value: Constants.gmsKey),
+            .init(name: "latlng", value: "\(coordinates.lat),\(coordinates.lng)")
+        ]
+        
+        var requestUrl = URL(string: Constants.geoCodeBaseUrl)
+        requestUrl?.append(queryItems: queryItems)
+        
+        return try? await NetworkService.sendRequest(url: requestUrl)
     }
 }

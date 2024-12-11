@@ -22,11 +22,17 @@ struct ObservationResponse: Codable {
             let photo: Photo
         }
         
+        struct GeoJson: Codable {
+            let type: String
+            let coordinates: [Double]
+        }
+        
         let id: Int
         let observedOnString: String
         let taxon: Taxon
         let observationPhotos: [ObservationPhoto]
         let placeIds: [Int]
+        let geojson: GeoJson
     }
     
     let results: [Results]
@@ -36,6 +42,14 @@ struct PlacesResponse: Codable {
     struct Results: Codable {
         let id: Int
         let displayName: String
+    }
+    
+    let results: [Results]
+}
+
+struct ReverseGeoResponse: Codable {
+    struct Results: Codable {
+        let formattedAddress: String
     }
     
     let results: [Results]

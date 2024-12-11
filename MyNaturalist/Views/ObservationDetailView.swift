@@ -10,6 +10,7 @@ import SwiftUI
 struct ObservationDetailView: View {
     
     var observation: Observation
+    @StateObject var locationViewModel = LocationViewModel()
     
     var body: some View {
         VStack {
@@ -17,9 +18,11 @@ struct ObservationDetailView: View {
             
             Text(observation.observedTime)
             
-            if let placeName = observation.placeName {
-                Text(placeName)
-            }
+//            if let placeName = observation.placeName {
+//                Text(placeName)
+//            }
+            Text("\(observation.coordinates)")
+            Text(locationViewModel.location?.displayAddress ?? "Failed to get address")
             
             List(observation.photos, id: \.id) { photo in
                 AsyncImage(url: photo.getUrl(.medium)) { image in
@@ -34,6 +37,11 @@ struct ObservationDetailView: View {
             }
             .listRowSpacing(5)
             .listStyle(PlainListStyle())
+        }
+        .onAppear {
+            Task {
+                await locationViewModel.fetchData(coordinates: observation.coordinates)
+            }
         }
     }
 }
