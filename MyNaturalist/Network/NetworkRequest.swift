@@ -14,11 +14,21 @@ class NetworkRequest {
     }
     
     enum Observation {
-        static let endPoint = "/observations?verifiable=true&order_by=id&order=desc&page=1&spam=false&locale=en-US&ttl=3600&per_page=5&taxon_id=19350"
+        static let endPoint = "/observations?verifiable=true&order_by=observed_on&order=desc&page=1&spam=false&pnelat=38.8643&nelng=-121.208178&swlat=36.8929759&swlng=-123.632497&taxon_id=19350&locale=en-US&per_page=5&return_bounds=true"
+    }
+    
+    enum Places {
+        static let endPoint = "/places/"
     }
     
     static func getObservations() async -> ObservationResponse? {
-        let requestUrl = Constants.baseUrl + Observation.endPoint
-        return try? await NetworkService.sendRequest(fromUrl: requestUrl)
+        let requestUrl = URL(string: Constants.baseUrl + Observation.endPoint)
+        return try? await NetworkService.sendRequest(url: requestUrl)
+    }
+    
+    static func getPlaces(placeIds: Set<Int>) async -> PlacesResponse? {
+        var requestURL = URL(string: Constants.baseUrl + Places.endPoint)
+        requestURL?.appendPathComponent(Array(placeIds).map({ String($0) }).joined(separator: ","))
+        return try? await NetworkService.sendRequest(url: requestURL)
     }
 }

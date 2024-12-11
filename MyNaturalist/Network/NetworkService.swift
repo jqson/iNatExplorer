@@ -20,8 +20,8 @@ class NetworkService {
         case success = 200
     }
     
-    static func sendRequest<T: Codable>(fromUrl: String) async throws -> T? {
-        guard let url = URL(string: fromUrl) else {
+    static func sendRequest<T: Codable>(url: URL?) async throws -> T? {
+        guard let url = url else {
             throw NetworkError.badUrl
         }
         

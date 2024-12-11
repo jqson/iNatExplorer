@@ -30,11 +30,11 @@ struct Observation: Identifiable {
     @Published var observations = [Observation]()
     
     func fetchData() async {
-        guard let response: ObservationResponse = await NetworkRequest.getObservations() else {
+        guard let observationResponse = await NetworkRequest.getObservations() else {
             return
         }
         
-        observations = response.results.map { result in
+        observations = observationResponse.results.map { result in
             .init(
                 id: result.id,
                 name: result.taxon.englishCommonName,
@@ -44,5 +44,12 @@ struct Observation: Identifiable {
                 })
             )
         }
+        
+        let placeIds: Set<Int> = Set(observationResponse.results.compactMap({ $0.placeIds.last }))
+        print(placeIds)
+        guard let placesResponse = await NetworkRequest.getPlaces(placeIds: placeIds) else {
+            return
+        }
+        print(placesResponse)
     }
 }
