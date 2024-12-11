@@ -8,12 +8,15 @@
 import Foundation
 
 struct ObservationResponse: Codable {
-    struct Results: Codable {
+    
+    struct Result: Codable {
+        
         struct Taxon: Codable {
             let englishCommonName: String
         }
         
         struct ObservationPhoto: Codable {
+            
             struct Photo: Codable {
                 let id: Int
                 let url: String
@@ -34,13 +37,36 @@ struct ObservationResponse: Codable {
         let geojson: GeoJson
     }
     
-    let results: [Results]
+    let results: [Result]
 }
 
 struct ReverseGeoResponse: Codable {
-    struct Results: Codable {
+    struct Result: Codable {
+        struct AddressComponent: Codable {
+            
+            enum ComponentType: String, Codable {
+                case streetNumber = "street_number"
+                case route
+                case postalCode = "postal_code"
+                case locality
+                case political
+                case other
+                
+                public init(from decoder: Decoder) throws {
+                    guard let rawValue = try? decoder.singleValueContainer().decode(String.self) else {
+                        self = .other
+                        return
+                    }
+                    self = ComponentType(rawValue: rawValue) ?? .other
+                }
+            }
+            
+            let types: [ComponentType]
+        }
+        
+        let addressComponents: [AddressComponent]
         let formattedAddress: String
     }
     
-    let results: [Results]
+    let results: [Result]
 }

@@ -11,7 +11,7 @@ typealias Coordinates = (lat: Double, lng: Double)
 
 struct Location {
     
-    enum AddressComponents: String {
+    enum AddressComponent: String {
         case streetNumber = "street_number"
         case route
         case postalCode = "postal_code"
@@ -32,9 +32,12 @@ struct Location {
             return
         }
         
-        location = .init(
-            coordinates: coordinates,
-            displayAddress: addressResponse.results.first?.formattedAddress
-        )
+        let selectedAddress = addressResponse.results.filter({ address in
+            guard let componentTypes = address.addressComponents.first?.types else { return false }
+            
+            return componentTypes.contains(.postalCode)
+        }).first?.formattedAddress
+        
+        location = .init(coordinates: coordinates, displayAddress: selectedAddress)
     }
 }
