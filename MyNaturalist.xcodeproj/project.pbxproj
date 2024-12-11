@@ -19,7 +19,6 @@
 		37F8887C2D041BE400258BDC /* RespnoseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8887B2D041BE400258BDC /* RespnoseModels.swift */; };
 		37F888802D082BB400258BDC /* ObservationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8887F2D082BB400258BDC /* ObservationDetailView.swift */; };
 		37F888882D083A4600258BDC /* CdnImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888872D083A4600258BDC /* CdnImage.swift */; };
-		37F8888D2D09762700258BDC /* PlaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8888C2D09762700258BDC /* PlaceManager.swift */; };
 		37F888902D09810700258BDC /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 37F8888F2D09810700258BDC /* GoogleMaps */; };
 		37F888922D0A1E1C00258BDC /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888912D0A1E1C00258BDC /* Location.swift */; };
 /* End PBXBuildFile section */
@@ -57,7 +56,6 @@
 		37F8887B2D041BE400258BDC /* RespnoseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespnoseModels.swift; sourceTree = "<group>"; };
 		37F8887F2D082BB400258BDC /* ObservationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDetailView.swift; sourceTree = "<group>"; };
 		37F888872D083A4600258BDC /* CdnImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CdnImage.swift; sourceTree = "<group>"; };
-		37F8888C2D09762700258BDC /* PlaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceManager.swift; sourceTree = "<group>"; };
 		37F888912D0A1E1C00258BDC /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,7 +132,6 @@
 				37F888622D0128BA00258BDC /* MyNaturalistApp.swift */,
 				37F888682D01295400258BDC /* Views */,
 				37F8886D2D01937C00258BDC /* ViewModels */,
-				37F888892D09761000258BDC /* Managers */,
 				37F888732D04163C00258BDC /* Network */,
 				37F888602D0128BA00258BDC /* Assets.xcassets */,
 				37F8885F2D0128BA00258BDC /* Preview Content */,
@@ -171,14 +168,6 @@
 				37F888872D083A4600258BDC /* CdnImage.swift */,
 			);
 			path = Network;
-			sourceTree = "<group>";
-		};
-		37F888892D09761000258BDC /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				37F8888C2D09762700258BDC /* PlaceManager.swift */,
-			);
-			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -337,7 +326,6 @@
 				37F8886A2D01297D00258BDC /* ObservationListView.swift in Sources */,
 				37F8886C2D0190EB00258BDC /* ObservationItemView.swift in Sources */,
 				37F888802D082BB400258BDC /* ObservationDetailView.swift in Sources */,
-				37F8888D2D09762700258BDC /* PlaceManager.swift in Sources */,
 				37F888762D0416A200258BDC /* NetworkService.swift in Sources */,
 				37F8886F2D0193B900258BDC /* Observation.swift in Sources */,
 			);

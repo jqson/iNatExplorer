@@ -18,10 +18,6 @@ struct ObservationDetailView: View {
             
             Text(observation.observedTime)
             
-//            if let placeName = observation.placeName {
-//                Text(placeName)
-//            }
-            Text("\(observation.coordinates)")
             Text(locationViewModel.location?.displayAddress ?? "Failed to get address")
             
             List(observation.photos, id: \.id) { photo in

@@ -21,19 +21,9 @@ class NetworkRequest {
             + "&taxon_id=19350&locale=en-US&per_page=20&return_bounds=true"
     }
     
-    enum Places {
-        static let endPoint = "/places/"
-    }
-    
     static func getObservations() async -> ObservationResponse? {
         let requestUrl = URL(string: Constants.iNatBaseUrl + Observation.endPoint)
         return try? await NetworkService.sendRequest(url: requestUrl)
-    }
-    
-    static func getPlaces(placeIds: Set<Int>) async -> PlacesResponse? {
-        var requestURL = URL(string: Constants.iNatBaseUrl + Places.endPoint)
-        requestURL?.appendPathComponent(Array(placeIds).map({ String($0) }).joined(separator: ","))
-        return try? await NetworkService.sendRequest(url: requestURL)
     }
     
     static func getAddress(coordinates: Coordinates) async -> ReverseGeoResponse? {

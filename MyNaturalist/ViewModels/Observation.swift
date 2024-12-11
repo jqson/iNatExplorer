@@ -15,7 +15,6 @@ struct Observation: Identifiable {
             name: "Barking Owl",
             observedTime: "2024-09-12T18:10:00+09:30",
             photos: [.init(id: 456279884, urlStr: "https://inaturalist-open-data.s3.amazonaws.com/photos/363572869/square.jpeg")!],
-//            placeName: "arnhem land tropical savanna",
             coordinates: (lat: 38.20608, lng: -122.75155)
         )
     }
@@ -25,7 +24,6 @@ struct Observation: Identifiable {
     let name: String
     let observedTime: String
     let photos: [CdnImage]
-//    let placeName: String?
     let coordinates: Coordinates
 }
 
@@ -38,15 +36,6 @@ struct Observation: Identifiable {
             return
         }
         
-//        let placeIds: Set<Int> = Set(observationResponse.results.compactMap({ $0.placeIds.last }))
-//        if let placesResponse = await NetworkRequest.getPlaces(placeIds: placeIds) {
-//            let placeDict = placesResponse.results.reduce(into: [Int: String]()) {
-//                $0[$1.id] = $1.displayName
-//            }
-//            
-//            LocationManager.shared.addPlaces(placeDict)
-//        }
-        
         observations = observationResponse.results.map { result in
             .init(
                 id: result.id,
@@ -55,7 +44,6 @@ struct Observation: Identifiable {
                 photos: result.observationPhotos.compactMap({
                     .init(id: $0.photo.id, urlStr: $0.photo.url)
                 }),
-//                placeName: LocationManager.shared.getPlace(id: result.placeIds.last),
                 coordinates: (lat: result.geojson.coordinates[1], lng: result.geojson.coordinates[0])
             )
         }

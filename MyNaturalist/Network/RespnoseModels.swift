@@ -31,17 +31,7 @@ struct ObservationResponse: Codable {
         let observedOnString: String
         let taxon: Taxon
         let observationPhotos: [ObservationPhoto]
-        let placeIds: [Int]
         let geojson: GeoJson
-    }
-    
-    let results: [Results]
-}
-
-struct PlacesResponse: Codable {
-    struct Results: Codable {
-        let id: Int
-        let displayName: String
     }
     
     let results: [Results]
