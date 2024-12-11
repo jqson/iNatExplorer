@@ -17,6 +17,10 @@ struct ObservationDetailView: View {
             
             Text(observation.observedTime)
             
+            if let placeName = observation.placeName {
+                Text(placeName)
+            }
+            
             List(observation.photos, id: \.id) { photo in
                 AsyncImage(url: photo.getUrl(.medium)) { image in
                     image

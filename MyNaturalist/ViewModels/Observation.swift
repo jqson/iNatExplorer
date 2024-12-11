@@ -14,7 +14,8 @@ struct Observation: Identifiable {
             id: 252658676,
             name: "Barking Owl",
             observedTime: "2024-09-12T18:10:00+09:30",
-            photos: [.init(id: 456279884, urlStr: "https://inaturalist-open-data.s3.amazonaws.com/photos/363572869/square.jpeg")!]
+            photos: [.init(id: 456279884, urlStr: "https://inaturalist-open-data.s3.amazonaws.com/photos/363572869/square.jpeg")!],
+            placeName: "arnhem land tropical savanna"
         )
     }
     
@@ -23,6 +24,7 @@ struct Observation: Identifiable {
     let name: String
     let observedTime: String
     let photos: [CdnImage]
+    let placeName: String?
 }
 
 @MainActor class ObservationViewModel: ObservableObject {
@@ -34,6 +36,15 @@ struct Observation: Identifiable {
             return
         }
         
+        let placeIds: Set<Int> = Set(observationResponse.results.compactMap({ $0.placeIds.last }))
+        if let placesResponse = await NetworkRequest.getPlaces(placeIds: placeIds) {
+            let placeDict = placesResponse.results.reduce(into: [Int: String]()) {
+                $0[$1.id] = $1.displayName
+            }
+            
+            PlaceManager.shared.addPlaces(placeDict)
+        }
+        
         observations = observationResponse.results.map { result in
             .init(
                 id: result.id,
@@ -41,15 +52,9 @@ struct Observation: Identifiable {
                 observedTime: result.observedOnString,
                 photos: result.observationPhotos.compactMap({
                     .init(id: $0.photo.id, urlStr: $0.photo.url)
-                })
+                }),
+                placeName: PlaceManager.shared.getPlace(id: result.placeIds.last)
             )
         }
-        
-        let placeIds: Set<Int> = Set(observationResponse.results.compactMap({ $0.placeIds.last }))
-        print(placeIds)
-        guard let placesResponse = await NetworkRequest.getPlaces(placeIds: placeIds) else {
-            return
-        }
-        print(placesResponse)
     }
 }

@@ -14,7 +14,9 @@ class NetworkRequest {
     }
     
     enum Observation {
-        static let endPoint = "/observations?verifiable=true&order_by=observed_on&order=desc&page=1&spam=false&pnelat=38.8643&nelng=-121.208178&swlat=36.8929759&swlng=-123.632497&taxon_id=19350&locale=en-US&per_page=5&return_bounds=true"
+        static let endPoint = "/observations?verifiable=true&order_by=observed_on&order=desc&page=1&photos=true"
+            + "&nelat=37.8764014352312&nelng=-121.57421471187659&swlat=36.89876283035327&swlng=-122.64812828609534"
+            + "&taxon_id=19350&locale=en-US&per_page=20&return_bounds=true"
     }
     
     enum Places {
