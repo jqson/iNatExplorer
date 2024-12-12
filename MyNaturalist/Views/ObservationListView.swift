@@ -9,15 +9,29 @@ import SwiftUI
 
 struct ObservationListView: View {
     
-    var observations: [Observation]
+    @StateObject var observationViewModel = ObservationViewModel()
+    @State var observations: [Observation] = []
+    @State var isLoading = true
     
     var body: some View {
         NavigationSplitView {
-            List(observations) { observation in
-                NavigationLink {
-                    ObservationDetailView(observation: observation)
-                } label: {
-                    ObservationItemView(observation: observation)
+            ZStack {
+                List(observations) { observation in
+                    NavigationLink(destination: ObservationDetailView(observation: observation)) {
+                        ObservationItemView(observation: observation)
+                    }
+                }
+                
+                ProgressView()
+                    .opacity(isLoading ? 1 : 0)
+            }
+            .onAppear {
+                if observationViewModel.observations.isEmpty {
+                    Task {
+                        await observationViewModel.fetchData()
+                        observations = observationViewModel.observations
+                        isLoading = false
+                    }
                 }
             }
         } detail: {
@@ -27,6 +41,5 @@ struct ObservationListView: View {
 }
 
 #Preview {
-    let observation: Observation = Observation.Constants.preview
-    ObservationListView(observations: [observation, observation, observation])
+    ObservationListView()
 }
