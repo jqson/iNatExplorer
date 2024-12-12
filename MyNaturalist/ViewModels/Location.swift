@@ -8,15 +8,14 @@
 import Foundation
 
 typealias Coordinates = (lat: Double, lng: Double)
+typealias AddressComponentType = ReverseGeoResponse.Result.AddressComponent.ComponentType
 
 struct Location {
     
-    enum AddressComponent: String {
-        case streetNumber = "street_number"
-        case route
-        case postalCode = "postal_code"
-        case locality
-        case political
+    enum Constants {
+        static let addressTypePriority: [AddressComponentType] = [
+            .park, .route, .postalCode
+        ]
     }
     
     let coordinates: Coordinates
@@ -32,12 +31,21 @@ struct Location {
             return
         }
         
-        let selectedAddress = addressResponse.results.filter({ address in
-            guard let componentTypes = address.addressComponents.first?.types else { return false }
-            
-            return componentTypes.contains(.postalCode)
-        }).first?.formattedAddress
+        location = .init(
+            coordinates: coordinates,
+            displayAddress: getDisplayAddress(addressResponse: addressResponse)
+        )
+    }
+    
+    private func getDisplayAddress(addressResponse: ReverseGeoResponse) -> String? {
+        for componentType in Location.Constants.addressTypePriority {
+            for address in addressResponse.results {
+                if address.addressComponents.first?.types.contains(componentType) ?? false {
+                    return address.formattedAddress
+                }
+            }
+        }
         
-        location = .init(coordinates: coordinates, displayAddress: selectedAddress)
+        return addressResponse.results.first?.formattedAddress
     }
 }

@@ -50,6 +50,7 @@ struct ReverseGeoResponse: Codable {
                 case postalCode = "postal_code"
                 case locality
                 case political
+                case park
                 case other
                 
                 public init(from decoder: Decoder) throws {
