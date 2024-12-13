@@ -9,7 +9,7 @@ import SwiftUI
 
 protocol SelectableItem {
     var text: String { get }
-    var selected: Bool { get set }
+    var isSelected: Bool { get set }
 }
 
 struct FilterView: View {
@@ -22,12 +22,12 @@ struct FilterView: View {
             SelectionView(selectionItem: $filterItem)
                 .listRowSeparator(.hidden)
                 .listRowInsets(.init(top: 5, leading: 20, bottom: 5, trailing: 20))
-                .onChange(of: filterItem.selected) {
-                    guard !isMultipleSelection, filterItem.selected else { return }
+                .onChange(of: filterItem.isSelected) {
+                    guard !isMultipleSelection, filterItem.isSelected else { return }
                     
                     for index in filterItems.indices {
                         guard filterItems[index].text != filterItem.text else { continue }
-                        filterItems[index].selected = false
+                        filterItems[index].isSelected = false
                     }
                 }
         }
@@ -42,11 +42,11 @@ struct SelectionView: View {
             .font(.title3)
             .cornerRadius(10)
             .padding()
-            .foregroundStyle(selectionItem.selected ? Color.white : Color.accentColor)
-            .background(selectionItem.selected ? Color.accentColor : Color.white)
+            .foregroundStyle(selectionItem.isSelected ? Color.white : Color.accentColor)
+            .background(selectionItem.isSelected ? Color.accentColor : Color.white)
             .border(Color.accentColor)
             .onTapGesture {
-                selectionItem.selected.toggle()
+                selectionItem.isSelected.toggle()
             }
     }
 }

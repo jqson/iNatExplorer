@@ -30,5 +30,5 @@ struct TaxonStruct: SelectableItem {
     let taxon: Taxon
     
     var text: String { name }
-    var selected: Bool = false
+    var isSelected: Bool = false
 }

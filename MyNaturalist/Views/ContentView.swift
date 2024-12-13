@@ -11,7 +11,7 @@ struct ContentView: View {
     
     @State var filterItems: [SelectableItem] = Taxon.allCases.map({ $0.info })
     var taxons: [Taxon] {
-        filterItems.filter({ $0.selected }).compactMap { ($0 as? TaxonStruct)?.taxon }
+        filterItems.filter({ $0.isSelected }).compactMap { ($0 as? TaxonStruct)?.taxon }
     }
     
     var body: some View {
