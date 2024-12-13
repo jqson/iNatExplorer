@@ -32,7 +32,7 @@ struct ObservationResponse: Codable {
         
         let id: Int
         let observedOnString: String
-        let taxon: Taxon
+        let taxon: Taxon?
         let observationPhotos: [ObservationPhoto]
         let geojson: GeoJson
     }

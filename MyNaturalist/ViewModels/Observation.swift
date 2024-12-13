@@ -39,7 +39,7 @@ struct Observation: Identifiable {
         observations = observationResponse.results.map { result in
             .init(
                 id: result.id,
-                name: result.taxon.englishCommonName ?? "Unknown",
+                name: result.taxon?.englishCommonName ?? "Unknown",
                 observedTime: result.observedOnString,
                 photos: result.observationPhotos.compactMap({
                     .init(id: $0.photo.id, urlStr: $0.photo.url)
