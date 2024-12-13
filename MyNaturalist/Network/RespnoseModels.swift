@@ -12,7 +12,7 @@ struct ObservationResponse: Codable {
     struct Result: Codable {
         
         struct Taxon: Codable {
-            let englishCommonName: String
+            let englishCommonName: String?
         }
         
         struct ObservationPhoto: Codable {

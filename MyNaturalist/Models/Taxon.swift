@@ -15,11 +15,11 @@ enum Taxon: CaseIterable {
     var info: TaxonStruct {
         switch self {
         case .greatHornedOwl:
-            .init(id: 20044, name: "Great Horned Owl")
+            .init(id: 20044, name: "Great Horned Owl", taxon: self)
         case .shortEaredOwl:
-            .init(id: 20315, name: "Short-eared Owl")
+            .init(id: 20315, name: "Short-eared Owl", taxon: self)
         case .americanBarnOwl:
-            .init(id: 1578502, name: "American Barn Owl")
+            .init(id: 1578502, name: "American Barn Owl", taxon: self)
         }
     }
 }
@@ -27,6 +27,7 @@ enum Taxon: CaseIterable {
 struct TaxonStruct: SelectableItem {
     let id: Int
     let name: String
+    let taxon: Taxon
     
     var text: String { name }
     var selected: Bool = false

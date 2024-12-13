@@ -13,6 +13,8 @@ struct ObservationListView: View {
     @State var observations: [Observation] = []
     @State var isLoading = true
     
+    var taxons: [Taxon] = []
+    
     var body: some View {
         NavigationSplitView {
             ZStack {
@@ -26,12 +28,10 @@ struct ObservationListView: View {
                     .opacity(isLoading ? 1 : 0)
             }
             .onAppear {
-                if observationViewModel.observations.isEmpty {
-                    Task {
-                        await observationViewModel.fetchData()
-                        observations = observationViewModel.observations
-                        isLoading = false
-                    }
+                Task {
+                    await observationViewModel.fetchData(taxons: taxons)
+                    observations = observationViewModel.observations
+                    isLoading = false
                 }
             }
         } detail: {

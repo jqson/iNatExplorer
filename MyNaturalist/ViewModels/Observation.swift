@@ -31,15 +31,15 @@ struct Observation: Identifiable {
     
     @Published var observations = [Observation]()
     
-    func fetchData() async {
-        guard let observationResponse = await NetworkRequest.getObservations() else {
+    func fetchData(taxons: [Taxon] = []) async {
+        guard let observationResponse = await NetworkRequest.getObservations(taxons: taxons) else {
             return
         }
         
         observations = observationResponse.results.map { result in
             .init(
                 id: result.id,
-                name: result.taxon.englishCommonName,
+                name: result.taxon.englishCommonName ?? "Unknown",
                 observedTime: result.observedOnString,
                 photos: result.observationPhotos.compactMap({
                     .init(id: $0.photo.id, urlStr: $0.photo.url)

@@ -27,7 +27,7 @@ struct Location {
     @Published var location: Location? = nil
     
     func fetchData(coordinates: Coordinates) async {
-        guard let addressResponse = await NetworkRequest.getAddress(coordinates: coordinates) else {
+        guard let addressResponse = await NetworkRequest.reverseGeo(coordinates: coordinates) else {
             return
         }
         

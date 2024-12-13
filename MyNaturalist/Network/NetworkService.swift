@@ -25,6 +25,8 @@ class NetworkService {
             throw NetworkError.badUrl
         }
         
+        print(url)
+        
         let (data, response) = try await URLSession.shared.data(from: url)
         
         guard let response = response as? HTTPURLResponse else {
@@ -38,6 +40,7 @@ class NetworkService {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let decodedResponse = try? decoder.decode(T.self, from: data) else {
+            print("NetworkError.decodeError")
             throw NetworkError.decodeError
         }
         
