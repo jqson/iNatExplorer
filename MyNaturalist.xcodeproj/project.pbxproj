@@ -20,6 +20,8 @@
 		37F888802D082BB400258BDC /* ObservationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8887F2D082BB400258BDC /* ObservationDetailView.swift */; };
 		37F888882D083A4600258BDC /* CdnImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888872D083A4600258BDC /* CdnImage.swift */; };
 		37F888922D0A1E1C00258BDC /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888912D0A1E1C00258BDC /* Location.swift */; };
+		37F888962D0B628500258BDC /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888952D0B628500258BDC /* FilterView.swift */; };
+		37F8889B2D0B643400258BDC /* Taxon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8889A2D0B643400258BDC /* Taxon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		37F8887F2D082BB400258BDC /* ObservationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDetailView.swift; sourceTree = "<group>"; };
 		37F888872D083A4600258BDC /* CdnImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CdnImage.swift; sourceTree = "<group>"; };
 		37F888912D0A1E1C00258BDC /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		37F888952D0B628500258BDC /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		37F8889A2D0B643400258BDC /* Taxon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Taxon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -130,6 +134,7 @@
 				37F888622D0128BA00258BDC /* MyNaturalistApp.swift */,
 				37F888682D01295400258BDC /* Views */,
 				37F8886D2D01937C00258BDC /* ViewModels */,
+				37F888972D0B63FB00258BDC /* Models */,
 				37F888732D04163C00258BDC /* Network */,
 				37F888602D0128BA00258BDC /* Assets.xcassets */,
 				37F8885F2D0128BA00258BDC /* Preview Content */,
@@ -141,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				37F888612D0128BA00258BDC /* ContentView.swift */,
+				37F888952D0B628500258BDC /* FilterView.swift */,
 				37F888692D01297D00258BDC /* ObservationListView.swift */,
 				37F8886B2D0190EB00258BDC /* ObservationItemView.swift */,
 				37F8887F2D082BB400258BDC /* ObservationDetailView.swift */,
@@ -166,6 +172,14 @@
 				37F888872D083A4600258BDC /* CdnImage.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		37F888972D0B63FB00258BDC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				37F8889A2D0B643400258BDC /* Taxon.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,6 +330,7 @@
 				37F888782D041B0A00258BDC /* NetworkRequest.swift in Sources */,
 				37F888882D083A4600258BDC /* CdnImage.swift in Sources */,
 				37F888662D0128BA00258BDC /* ContentView.swift in Sources */,
+				37F8889B2D0B643400258BDC /* Taxon.swift in Sources */,
 				37F8887C2D041BE400258BDC /* RespnoseModels.swift in Sources */,
 				37F888922D0A1E1C00258BDC /* Location.swift in Sources */,
 				37F888672D0128BA00258BDC /* MyNaturalistApp.swift in Sources */,
@@ -324,6 +339,7 @@
 				37F888802D082BB400258BDC /* ObservationDetailView.swift in Sources */,
 				37F888762D0416A200258BDC /* NetworkService.swift in Sources */,
 				37F8886F2D0193B900258BDC /* Observation.swift in Sources */,
+				37F888962D0B628500258BDC /* FilterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
