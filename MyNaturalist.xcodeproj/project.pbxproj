@@ -168,7 +168,6 @@
 			children = (
 				37F888752D0416A200258BDC /* NetworkService.swift */,
 				37F888772D041B0900258BDC /* NetworkRequest.swift */,
-				37F8887B2D041BE400258BDC /* RespnoseModels.swift */,
 				37F888872D083A4600258BDC /* CdnImage.swift */,
 			);
 			path = Network;
@@ -178,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				37F8889A2D0B643400258BDC /* Taxon.swift */,
+				37F8887B2D041BE400258BDC /* RespnoseModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
