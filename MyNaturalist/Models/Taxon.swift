@@ -7,11 +7,10 @@
 
 import Foundation
 
-enum Taxon {
+enum Taxon: CaseIterable {
     case greatHornedOwl
     case shortEaredOwl
     case americanBarnOwl
-    case other(TaxonStruct)
     
     var info: TaxonStruct {
         switch self {
@@ -21,8 +20,6 @@ enum Taxon {
             .init(id: 20315, name: "Short-eared Owl")
         case .americanBarnOwl:
             .init(id: 1578502, name: "American Barn Owl")
-        case .other(let taxon):
-            taxon
         }
     }
 }

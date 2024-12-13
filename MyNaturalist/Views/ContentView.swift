@@ -9,9 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var filterItems: [SelectableItem] = [
-        Taxon.greatHornedOwl, Taxon.shortEaredOwl, Taxon.americanBarnOwl
-    ].map({ $0.info })
+    @State var filterItems: [SelectableItem] = Taxon.allCases.map({ $0.info })
     
     var body: some View {
         NavigationStack {

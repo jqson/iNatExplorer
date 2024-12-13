@@ -52,9 +52,7 @@ struct SelectionView: View {
 }
 
 #Preview {
-    @Previewable @State var selections: [SelectableItem] = [
-        Taxon.greatHornedOwl, Taxon.shortEaredOwl, Taxon.americanBarnOwl
-    ].map({ $0.info })
+    @Previewable @State var selections: [SelectableItem] = Taxon.allCases.map({ $0.info })
     
     FilterView(filterItems: $selections)
 }
