@@ -16,7 +16,7 @@ struct ObservationListView: View {
     var taxons: [Taxon] = []
     
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             ZStack {
                 List(observations) { observation in
                     NavigationLink(destination: ObservationDetailView(observation: observation)) {
@@ -34,8 +34,6 @@ struct ObservationListView: View {
                     isLoading = false
                 }
             }
-        } detail: {
-            Text("Select an item to view details")
         }
     }
 }
