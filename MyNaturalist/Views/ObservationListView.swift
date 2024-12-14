@@ -22,7 +22,9 @@ struct ObservationListView: View {
                     NavigationLink(destination: ObservationDetailView(observation: observation)) {
                         ObservationItemView(observation: observation)
                     }
+                    .navigationTitle("Search Results")
                 }
+                .listStyle(.plain)
                 
                 ProgressView()
                     .opacity(isLoading ? 1 : 0)

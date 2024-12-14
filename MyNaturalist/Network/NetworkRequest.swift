@@ -39,7 +39,7 @@ class NetworkRequest {
             queryItems.append(.init(name: Observation.taxonIdKey, value: taxonIdValue))
         }
         
-        queryItems.append(.init(name: Observation.perPageKey, value: "10"))
+        queryItems.append(.init(name: Observation.perPageKey, value: "20"))
         
         requestUrl?.append(queryItems: queryItems)
         

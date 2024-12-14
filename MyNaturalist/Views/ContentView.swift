@@ -17,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack() {
-                FilterView(filterItems: $filterItems)
+                FilterView(filterItems: $filterItems, isMultipleSelection: true)
                 
                 Spacer()
                 

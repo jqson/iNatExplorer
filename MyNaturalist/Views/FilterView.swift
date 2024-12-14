@@ -31,6 +31,8 @@ struct FilterView: View {
                     }
                 }
         }
+        .listStyle(.plain)
+        .scrollDisabled(true)
     }
 }
 
