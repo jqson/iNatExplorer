@@ -17,9 +17,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack() {
-                FilterView(filterItems: $filterItems, isMultipleSelection: true)
-                
-                Spacer()
+                FilterView(
+                    filterItems: $filterItems,
+                    filterTitle: "Species",
+                    isMultipleSelection: true
+                )
                 
                 NavigationLink(destination: ObservationListView(taxons: taxons)) {
                     Text("Search")
@@ -32,6 +34,7 @@ struct ContentView: View {
                         .padding()
                 }
                 .navigationTitle("Filter")
+                .navigationBarHidden(true)
             }
         }
     }

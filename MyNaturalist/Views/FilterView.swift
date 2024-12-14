@@ -15,24 +15,36 @@ protocol SelectableItem {
 struct FilterView: View {
     @Binding var filterItems: [SelectableItem]
     
+    var filterTitle: String?
     var isMultipleSelection: Bool = false
     
     var body: some View {
-        List($filterItems, id: \.text) { $filterItem in
-            SelectionView(selectionItem: $filterItem)
-                .listRowSeparator(.hidden)
-                .listRowInsets(.init(top: 5, leading: 20, bottom: 5, trailing: 20))
-                .onChange(of: filterItem.isSelected) {
-                    guard !isMultipleSelection, filterItem.isSelected else { return }
-                    
-                    for index in filterItems.indices {
-                        guard filterItems[index].text != filterItem.text else { continue }
-                        filterItems[index].isSelected = false
+        Section {
+            List($filterItems, id: \.text) { $filterItem in
+                SelectionView(selectionItem: $filterItem)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.init(top: 6, leading: 20, bottom: 6, trailing: 20))
+                    .onChange(of: filterItem.isSelected) {
+                        guard !isMultipleSelection, filterItem.isSelected else { return }
+                        
+                        for index in filterItems.indices {
+                            guard filterItems[index].text != filterItem.text else { continue }
+                            filterItems[index].isSelected = false
+                        }
                     }
-                }
+            }
+            .scrollDisabled(true)
+        } header: {
+            if let title = filterTitle {
+                Text(title)
+                    .font(.title2)
+                    .bold()
+                    .foregroundStyle(Color.accentColor)
+                    .padding(.leading, 20)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
         .listStyle(.plain)
-        .scrollDisabled(true)
     }
 }
 
@@ -42,11 +54,17 @@ struct SelectionView: View {
     var body: some View {
         Text(selectionItem.text)
             .font(.title3)
-            .cornerRadius(10)
             .padding()
+            .frame(height: 40)
             .foregroundStyle(selectionItem.isSelected ? Color.white : Color.accentColor)
-            .background(selectionItem.isSelected ? Color.accentColor : Color.white)
-            .border(Color.accentColor)
+            .background(
+                selectionItem.isSelected ? Color.accentColor : Color(UIColor.systemBackground)
+            )
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.accentColor, lineWidth: 1)
+            )
             .onTapGesture {
                 selectionItem.isSelected.toggle()
             }
@@ -56,5 +74,5 @@ struct SelectionView: View {
 #Preview {
     @Previewable @State var selections: [SelectableItem] = Taxon.allCases.map({ $0.info })
     
-    FilterView(filterItems: $selections)
+    FilterView(filterItems: $selections, filterTitle: "Species")
 }
