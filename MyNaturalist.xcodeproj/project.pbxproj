@@ -154,13 +154,13 @@
 			isa = PBXGroup;
 			children = (
 				37F888612D0128BA00258BDC /* ContentView.swift */,
-				378AF5BF2D1557B800AC77A8 /* SpeciesListView.swift */,
-				378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */,
 				378AF5BD2D1405B600AC77A8 /* SearchView.swift */,
 				37F888952D0B628500258BDC /* FilterView.swift */,
 				37F888692D01297D00258BDC /* ObservationListView.swift */,
 				37F8886B2D0190EB00258BDC /* ObservationItemView.swift */,
 				37F8887F2D082BB400258BDC /* ObservationDetailView.swift */,
+				378AF5BF2D1557B800AC77A8 /* SpeciesListView.swift */,
+				378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -168,8 +168,8 @@
 		37F8886D2D01937C00258BDC /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				378AF5C32D15580D00AC77A8 /* Species.swift */,
 				37F8886E2D0193B900258BDC /* Observation.swift */,
+				378AF5C32D15580D00AC77A8 /* Species.swift */,
 				37F888912D0A1E1C00258BDC /* Location.swift */,
 			);
 			path = ViewModels;

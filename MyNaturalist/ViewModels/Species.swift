@@ -18,6 +18,23 @@ struct Species: Identifiable {
     }
     
     let id: Int
-    let name: String
+    let name: String?
     let photo: CdnImage?
+}
+
+@MainActor class SpeciesViewModel: ObservableObject {
+    
+    @Published var species: [Species] = []
+    
+    func fetchData() async {
+        guard let response = await NetworkRequest.getSpeciesCounts() else { return }
+        
+        species = response.results.map { result in
+            .init(
+                id: result.taxon.id,
+                name: result.taxon.englishCommonName,
+                photo: .init(photoResponse: result.taxon.defaultPhoto)
+            )
+        }
+    }
 }

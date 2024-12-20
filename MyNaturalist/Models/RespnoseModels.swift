@@ -10,19 +10,8 @@ import Foundation
 struct ObservationResponse: Codable {
     
     struct Result: Codable {
-        
-        struct Taxon: Codable {
-            let englishCommonName: String?
-        }
-        
         struct ObservationPhoto: Codable {
-            
-            struct Photo: Codable {
-                let id: Int
-                let url: String
-            }
-            
-            let photo: Photo
+            let photo: PhotoResponse
         }
         
         struct GeoJson: Codable {
@@ -32,12 +21,33 @@ struct ObservationResponse: Codable {
         
         let id: Int
         let observedOnString: String
-        let taxon: Taxon?
+        let taxon: TaxonResponse?
         let observationPhotos: [ObservationPhoto]
         let geojson: GeoJson
     }
     
     let results: [Result]
+}
+
+struct SpeciesCountsResponse: Codable {
+    
+    struct Result: Codable {
+        let count: Int
+        let taxon: TaxonResponse
+    }
+    
+    let results: [Result]
+}
+
+struct TaxonResponse: Codable {
+    let id: Int
+    let englishCommonName: String?
+    let defaultPhoto: PhotoResponse
+}
+    
+struct PhotoResponse: Codable {
+    let id: Int
+    let url: String
 }
 
 struct ReverseGeoResponse: Codable {

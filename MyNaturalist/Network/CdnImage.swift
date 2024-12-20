@@ -22,6 +22,10 @@ struct CdnImage {
     let baseUrl: URL
     let fileExtension: String
     
+    init?(photoResponse: PhotoResponse) {
+        self.init(id: photoResponse.id, urlStr: photoResponse.url)
+    }
+    
     init?(id: Int, urlStr: String) {
         self.id = id
         

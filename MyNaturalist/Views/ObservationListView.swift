@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ObservationListView: View {
     
-    @StateObject var observationViewModel = ObservationViewModel()
-    @State var observations: [Observation] = []
-    @State var isLoading = true
+    @StateObject private var observationViewModel = ObservationViewModel()
+    @State private var observations: [Observation] = []
+    @State private var isLoading = true
     
     var taxons: [Taxon] = []
     

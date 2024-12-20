@@ -9,17 +9,32 @@ import SwiftUI
 
 struct SpeciesListView: View {
     
-    @State var species: [Species]
+    @StateObject private var speciesViewModel = SpeciesViewModel()
+    @State private var species: [Species] = []
+    
+    private var speciesCount: String {
+        species.count <= 500 ? String(species.count) : "500 (max)"
+    }
     
     var body: some View {
-        LazyVGrid(columns: [GridItem(), GridItem()]) {
-            ForEach(species) { species in
-                SpeciesItemView(species: species)
+        ScrollView {
+            Text("Species: \(speciesCount)")
+            
+            LazyVGrid(columns: .init(repeating: GridItem(),count: 3)) {
+                ForEach(species) { species in
+                    SpeciesItemView(species: species)
+                }
+            }
+            .onAppear() {
+                Task {
+                    await speciesViewModel.fetchData()
+                    species = speciesViewModel.species
+                }
             }
         }
     }
 }
 
 #Preview {
-    SpeciesListView(species: [Species.Constants.preview])
+    SpeciesListView()
 }

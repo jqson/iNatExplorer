@@ -29,7 +29,7 @@ struct Observation: Identifiable {
 
 @MainActor class ObservationViewModel: ObservableObject {
     
-    @Published var observations = [Observation]()
+    @Published var observations: [Observation] = []
     
     func fetchData(taxons: [Taxon] = []) async {
         guard let observationResponse = await NetworkRequest.getObservations(taxons: taxons) else {
@@ -41,9 +41,7 @@ struct Observation: Identifiable {
                 id: result.id,
                 name: result.taxon?.englishCommonName ?? "Unknown",
                 observedTime: result.observedOnString,
-                photos: result.observationPhotos.compactMap({
-                    .init(id: $0.photo.id, urlStr: $0.photo.url)
-                }),
+                photos: result.observationPhotos.compactMap({ .init(photoResponse: $0.photo) }),
                 coordinates: (lat: result.geojson.coordinates[1], lng: result.geojson.coordinates[0])
             )
         }

@@ -13,15 +13,23 @@ struct SpeciesItemView: View {
     
     var body: some View {
         VStack {
-            AsyncImage(url: species.photo?.getUrl(.square)) { image in
+            AsyncImage(url: species.photo?.getUrl(.small)) { image in
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFill()
             } placeholder: {
                 Color.gray
             }
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                minHeight: 0,
+                maxHeight: .infinity
+            )
+            .aspectRatio(1, contentMode: .fit)
+            .clipped()
             
-            Text(species.name)
+            Text(species.name ?? "Unknown")
         }
     }
 }
