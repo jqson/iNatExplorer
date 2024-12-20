@@ -14,7 +14,7 @@ struct Observation: Identifiable {
             id: 252658676,
             name: "Barking Owl",
             observedTime: "2024-09-12T18:10:00+09:30",
-            photos: [.init(id: 456279884, urlStr: "https://inaturalist-open-data.s3.amazonaws.com/photos/363572869/square.jpeg")!],
+            photos: [.init(id: 363572869, urlStr: "https://inaturalist-open-data.s3.amazonaws.com/photos/363572869/square.jpeg")!],
             coordinates: (lat: 38.20608, lng: -122.75155)
         )
     }

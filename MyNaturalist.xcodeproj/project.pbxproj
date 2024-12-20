@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		378AF5BE2D1405B600AC77A8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5BD2D1405B600AC77A8 /* SearchView.swift */; };
+		378AF5C02D1557B800AC77A8 /* SpeciesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5BF2D1557B800AC77A8 /* SpeciesListView.swift */; };
+		378AF5C22D1557FC00AC77A8 /* SpeciesItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */; };
+		378AF5C42D15580D00AC77A8 /* Species.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C32D15580D00AC77A8 /* Species.swift */; };
 		37F888642D0128BA00258BDC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F8885E2D0128BA00258BDC /* Preview Assets.xcassets */; };
 		37F888652D0128BA00258BDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F888602D0128BA00258BDC /* Assets.xcassets */; };
 		37F888662D0128BA00258BDC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888612D0128BA00258BDC /* ContentView.swift */; };
@@ -44,6 +47,9 @@
 
 /* Begin PBXFileReference section */
 		378AF5BD2D1405B600AC77A8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		378AF5BF2D1557B800AC77A8 /* SpeciesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesListView.swift; sourceTree = "<group>"; };
+		378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesItemView.swift; sourceTree = "<group>"; };
+		378AF5C32D15580D00AC77A8 /* Species.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Species.swift; sourceTree = "<group>"; };
 		37F888152CFFBCB100258BDC /* MyNaturalist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyNaturalist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F888252CFFBCB300258BDC /* MyNaturalistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNaturalistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F8882F2CFFBCB300258BDC /* MyNaturalistUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNaturalistUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,6 +154,8 @@
 			isa = PBXGroup;
 			children = (
 				37F888612D0128BA00258BDC /* ContentView.swift */,
+				378AF5BF2D1557B800AC77A8 /* SpeciesListView.swift */,
+				378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */,
 				378AF5BD2D1405B600AC77A8 /* SearchView.swift */,
 				37F888952D0B628500258BDC /* FilterView.swift */,
 				37F888692D01297D00258BDC /* ObservationListView.swift */,
@@ -160,6 +168,7 @@
 		37F8886D2D01937C00258BDC /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				378AF5C32D15580D00AC77A8 /* Species.swift */,
 				37F8886E2D0193B900258BDC /* Observation.swift */,
 				37F888912D0A1E1C00258BDC /* Location.swift */,
 			);
@@ -330,11 +339,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				378AF5C02D1557B800AC77A8 /* SpeciesListView.swift in Sources */,
 				37F888782D041B0A00258BDC /* NetworkRequest.swift in Sources */,
 				37F888882D083A4600258BDC /* CdnImage.swift in Sources */,
 				37F888662D0128BA00258BDC /* ContentView.swift in Sources */,
 				37F8889B2D0B643400258BDC /* Taxon.swift in Sources */,
 				37F8887C2D041BE400258BDC /* RespnoseModels.swift in Sources */,
+				378AF5C22D1557FC00AC77A8 /* SpeciesItemView.swift in Sources */,
 				37F888922D0A1E1C00258BDC /* Location.swift in Sources */,
 				37F888672D0128BA00258BDC /* MyNaturalistApp.swift in Sources */,
 				37F8886A2D01297D00258BDC /* ObservationListView.swift in Sources */,
@@ -344,6 +355,7 @@
 				37F888762D0416A200258BDC /* NetworkService.swift in Sources */,
 				37F8886F2D0193B900258BDC /* Observation.swift in Sources */,
 				37F888962D0B628500258BDC /* FilterView.swift in Sources */,
+				378AF5C42D15580D00AC77A8 /* Species.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
