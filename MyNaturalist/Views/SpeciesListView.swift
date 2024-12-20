@@ -11,26 +11,38 @@ struct SpeciesListView: View {
     
     @StateObject private var speciesViewModel = SpeciesViewModel()
     @State private var species: [Species] = []
+    @State private var isLoading: Bool = true
     
     private var speciesCount: String {
         species.count <= 500 ? String(species.count) : "500 (max)"
     }
     
     var body: some View {
-        ScrollView {
-            Text("Species: \(speciesCount)")
-            
-            LazyVGrid(columns: .init(repeating: GridItem(),count: 3)) {
-                ForEach(species) { species in
-                    SpeciesItemView(species: species)
+        ZStack {
+            ScrollView {
+                Text("Species: \(speciesCount)")
+                
+                LazyVGrid(columns: .init(repeating: GridItem(),count: 3)) {
+                    ForEach(species) { species in
+                        SpeciesItemView(species: species)
+                    }
                 }
-            }
-            .onAppear() {
-                Task {
+                .task {
+                    guard isLoading else { return }
+                    
                     await speciesViewModel.fetchData()
                     species = speciesViewModel.species
+                    isLoading = false
                 }
             }
+            
+            ZStack {
+                Color(UIColor.systemBackground)
+                    .edgesIgnoringSafeArea(.all)
+                ProgressView()
+                    .scaleEffect(2)
+            }
+            .opacity(isLoading ? 1 : 0)
         }
     }
 }

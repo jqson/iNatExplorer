@@ -26,15 +26,20 @@ struct ObservationListView: View {
                 }
                 .listStyle(.plain)
                 
-                ProgressView()
-                    .opacity(isLoading ? 1 : 0)
-            }
-            .onAppear {
-                Task {
-                    await observationViewModel.fetchData(taxons: taxons)
-                    observations = observationViewModel.observations
-                    isLoading = false
+                ZStack {
+                    Color(UIColor.systemBackground)
+                        .edgesIgnoringSafeArea(.all)
+                    ProgressView()
+                        .scaleEffect(2)
                 }
+                .opacity(isLoading ? 1 : 0)
+            }
+            .task {
+                guard isLoading else { return }
+                
+                await observationViewModel.fetchData(taxons: taxons)
+                observations = observationViewModel.observations
+                isLoading = false
             }
         }
     }
