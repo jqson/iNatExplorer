@@ -18,31 +18,37 @@ struct SpeciesListView: View {
     }
     
     var body: some View {
-        ZStack {
-            ScrollView {
-                Text("Species: \(speciesCount)")
-                
-                LazyVGrid(columns: .init(repeating: GridItem(),count: 3)) {
-                    ForEach(species) { species in
-                        SpeciesItemView(species: species)
+        NavigationStack {
+            ZStack {
+                ScrollView {
+                    Text("Species: \(speciesCount)")
+                    
+                    LazyVGrid(columns: .init(repeating: GridItem(),count: 3)) {
+                        ForEach(species) { species in
+                            NavigationLink(destination: SpeciesDetailView(species: species)) {
+                                SpeciesItemView(species: species)
+                            }
+                            .navigationTitle("Species List")
+                            .navigationBarHidden(true)
+                        }
+                    }
+                    .task {
+                        guard isLoading else { return }
+                        
+                        await speciesViewModel.fetchData()
+                        species = speciesViewModel.species
+                        isLoading = false
                     }
                 }
-                .task {
-                    guard isLoading else { return }
-                    
-                    await speciesViewModel.fetchData()
-                    species = speciesViewModel.species
-                    isLoading = false
+                
+                ZStack {
+                    Color(UIColor.systemBackground)
+                        .edgesIgnoringSafeArea(.all)
+                    ProgressView()
+                        .scaleEffect(2)
                 }
+                .opacity(isLoading ? 1 : 0)
             }
-            
-            ZStack {
-                Color(UIColor.systemBackground)
-                    .edgesIgnoringSafeArea(.all)
-                ProgressView()
-                    .scaleEffect(2)
-            }
-            .opacity(isLoading ? 1 : 0)
         }
     }
 }

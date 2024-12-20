@@ -24,7 +24,7 @@ struct ObservationDetailView: View {
                 AsyncImage(url: photo.getUrl(.medium)) { image in
                     image
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
+                        .scaledToFit()
                 } placeholder: {
                     Color.gray
                 }

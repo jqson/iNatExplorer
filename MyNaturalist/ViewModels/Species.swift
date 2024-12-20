@@ -19,7 +19,7 @@ struct Species: Identifiable {
     }
     
     let id: Int
-    let name: String?
+    let name: String
     let photo: CdnImage?
     let count: Int
 }
@@ -34,7 +34,7 @@ struct Species: Identifiable {
         species = response.results.map { result in
             .init(
                 id: result.taxon.id,
-                name: result.taxon.englishCommonName,
+                name: result.taxon.englishCommonName ?? "Unknown",
                 photo: .init(photoResponse: result.taxon.defaultPhoto),
                 count: result.count
             )

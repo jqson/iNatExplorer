@@ -29,7 +29,7 @@ struct SpeciesItemView: View {
             .aspectRatio(1, contentMode: .fit)
             .clipped()
             
-            Text(species.name ?? "Unknown")
+            Text(species.name)
                 .multilineTextAlignment(.center)
             
             Text(verbatim: "Count: \(species.count)")
