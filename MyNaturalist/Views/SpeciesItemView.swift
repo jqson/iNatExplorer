@@ -30,6 +30,9 @@ struct SpeciesItemView: View {
             .clipped()
             
             Text(species.name ?? "Unknown")
+                .multilineTextAlignment(.center)
+            
+            Text(verbatim: "Count: \(species.count)")
         }
     }
 }

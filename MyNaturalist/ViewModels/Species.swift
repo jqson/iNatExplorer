@@ -13,13 +13,15 @@ struct Species: Identifiable {
         static let preview: Species = .init(
             id: 6317,
             name: "Anna's Hummingbird",
-            photo: .init(id: 256649705, urlStr: "https://static.inaturalist.org/photos/256649705/square.jpg")
+            photo: .init(id: 256649705, urlStr: "https://static.inaturalist.org/photos/256649705/square.jpg"),
+            count: 1234
         )
     }
     
     let id: Int
     let name: String?
     let photo: CdnImage?
+    let count: Int
 }
 
 @MainActor class SpeciesViewModel: ObservableObject {
@@ -33,7 +35,8 @@ struct Species: Identifiable {
             .init(
                 id: result.taxon.id,
                 name: result.taxon.englishCommonName,
-                photo: .init(photoResponse: result.taxon.defaultPhoto)
+                photo: .init(photoResponse: result.taxon.defaultPhoto),
+                count: result.count
             )
         }
     }
