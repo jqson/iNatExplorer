@@ -7,9 +7,11 @@
 
 import Foundation
 
-struct Taxon {
+struct Taxon: Hashable {
     
     enum Constants {
+        static let unknownTaxon: Taxon = .init(id: -1, name: "Unknown", rank: .others)
+        
         static let greatHornedOwl: Taxon = .init(id: 20044, name: "Great Horned Owl", rank: .species)
         static let shortEaredOwl: Taxon = .init(id: 20315, name: "Short-eared Owl", rank: .species)
         static let americanBarnOwl: Taxon = .init(id: 1578502, name: "American Barn Owl", rank: .species)

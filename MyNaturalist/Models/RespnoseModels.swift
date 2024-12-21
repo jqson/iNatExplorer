@@ -40,16 +40,17 @@ struct SpeciesCountsResponse: Codable {
 }
 
 struct TaxonResponse: Codable {
-    struct Ancestors: Codable {
+    struct Ancestor: Codable {
         let id: Int
         let rank: String
-        let englishCommonName: String
+        let name: String
+        let englishCommonName: String?
     }
     
     let id: Int
     let englishCommonName: String?
     let defaultPhoto: PhotoResponse
-    let ancestors: [Ancestors]
+    let ancestors: [Ancestor]
 }
     
 struct PhotoResponse: Codable {

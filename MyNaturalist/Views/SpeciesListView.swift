@@ -10,11 +10,12 @@ import SwiftUI
 struct SpeciesListView: View {
     
     @StateObject private var speciesViewModel = SpeciesViewModel()
-    @State private var species: [Species] = []
+    @State private var families: [Family] = []
+    @State private var speciesCount: Int = 0
     @State private var isLoading: Bool = true
     
-    private var speciesCount: String {
-        species.count <= 500 ? String(species.count) : "500 (max)"
+    private var speciesCountDisplay: String {
+        speciesCount <= 500 ? String(speciesCount) : "500 (max)"
     }
     
     var body: some View {
@@ -23,20 +24,25 @@ struct SpeciesListView: View {
                 ScrollView {
                     Text("Species: \(speciesCount)")
                     
-                    LazyVGrid(columns: .init(repeating: GridItem(),count: 3)) {
-                        ForEach(species) { species in
-                            NavigationLink(destination: SpeciesDetailView(species: species)) {
-                                SpeciesItemView(species: species)
+                    LazyVGrid(columns: .init(repeating: GridItem(),count: 3), pinnedViews: .sectionHeaders) {
+                        ForEach(families) { family in
+                            Section(header: Text(family.taxon.name)) {
+                                ForEach(family.species) { species in
+                                    NavigationLink(destination: SpeciesDetailView(species: species)) {
+                                        SpeciesItemView(species: species)
+                                    }
+                                    .navigationTitle("Species List")
+                                    .navigationBarHidden(true)
+                                }
                             }
-                            .navigationTitle("Species List")
-                            .navigationBarHidden(true)
                         }
                     }
                     .task {
                         guard isLoading else { return }
                         
                         await speciesViewModel.fetchData()
-                        species = speciesViewModel.species
+                        families = speciesViewModel.families
+                        speciesCount = speciesViewModel.speciesCount
                         isLoading = false
                     }
                 }
