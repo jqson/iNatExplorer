@@ -7,28 +7,36 @@
 
 import Foundation
 
-enum Taxon: CaseIterable {
-    case greatHornedOwl
-    case shortEaredOwl
-    case americanBarnOwl
+struct Taxon {
     
-    var info: TaxonStruct {
-        switch self {
-        case .greatHornedOwl:
-            .init(id: 20044, name: "Great Horned Owl", taxon: self)
-        case .shortEaredOwl:
-            .init(id: 20315, name: "Short-eared Owl", taxon: self)
-        case .americanBarnOwl:
-            .init(id: 1578502, name: "American Barn Owl", taxon: self)
-        }
+    enum Constants {
+        static let greatHornedOwl: Taxon = .init(id: 20044, name: "Great Horned Owl", rank: .species)
+        static let shortEaredOwl: Taxon = .init(id: 20315, name: "Short-eared Owl", rank: .species)
+        static let americanBarnOwl: Taxon = .init(id: 1578502, name: "American Barn Owl", rank: .species)
     }
-}
-
-struct TaxonStruct: SelectableItem {
+    
+    enum Rank: String {
+        case kingdom
+        case phylum
+        case subphylum
+        case classRank = "class"
+        case order
+        case family
+        case subfamily
+        case tribe
+        case genus
+        case species
+        case others
+    }
+    
     let id: Int
     let name: String
+    let rank: Rank
+}
+
+struct SelectableTaxon: SelectableItem {
     let taxon: Taxon
     
-    var text: String { name }
+    var text: String { taxon.name }
     var isSelected: Bool = false
 }

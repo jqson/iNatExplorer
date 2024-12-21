@@ -44,7 +44,7 @@ class NetworkRequest {
         var queryItems: [URLQueryItem] = []
         
         if !taxons.isEmpty {
-            let taxonIdValue = taxons.map({ String($0.info.id) }).joined(separator: ",")
+            let taxonIdValue = taxons.map({ String($0.id) }).joined(separator: ",")
             queryItems.append(.init(name: Observation.taxonIdKey, value: taxonIdValue))
         }
         
