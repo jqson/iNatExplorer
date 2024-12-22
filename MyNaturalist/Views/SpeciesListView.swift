@@ -22,18 +22,26 @@ struct SpeciesListView: View {
         NavigationStack {
             ZStack {
                 ScrollView {
-                    Text("Species: \(speciesCount)")
+                    Text("Total species: \(speciesCount)")
                     
-                    LazyVGrid(columns: .init(repeating: GridItem(),count: 3), pinnedViews: .sectionHeaders) {
+                    LazyVGrid(
+                        columns: .init(repeating: GridItem(),count: 3),
+                        alignment: .leading
+                    ) {
                         ForEach(families) { family in
-                            Section(header: Text(family.taxon.name)) {
+                            Section {
                                 ForEach(family.species) { species in
                                     NavigationLink(destination: SpeciesDetailView(species: species)) {
                                         SpeciesItemView(species: species)
                                     }
                                     .navigationTitle("Species List")
-                                    .navigationBarHidden(true)
                                 }
+                            } header: {
+                                Spacer()
+                                Text(family.taxon.name)
+                                    .bold()
+                                    .foregroundColor(.primary)
+                                    .padding(.leading)
                             }
                         }
                     }

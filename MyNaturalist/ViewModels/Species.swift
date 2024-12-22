@@ -59,7 +59,7 @@ struct Family: Identifiable {
         
         speciesCount = species.count
         
-        species.sort(by: { $0.name < $1.name})
+        species.sort(by: { $0.count > $1.count})
         
         families = Dictionary(grouping: species) {
             $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon

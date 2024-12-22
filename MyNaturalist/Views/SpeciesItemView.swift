@@ -12,7 +12,7 @@ struct SpeciesItemView: View {
     var species: Species
     
     var body: some View {
-        VStack {
+        ZStack(alignment: .bottom) {
             AsyncImage(url: species.photo?.getUrl(.small)) { image in
                 image
                     .resizable()
@@ -29,10 +29,14 @@ struct SpeciesItemView: View {
             .aspectRatio(1, contentMode: .fit)
             .clipped()
             
-            Text(species.name)
-                .multilineTextAlignment(.center)
-            
-            Text(verbatim: "Count: \(species.count)")
+            VStack {
+                Text(verbatim: "\(species.name)\n\(species.count)")
+                    .font(.callout)
+                    .accentColor(.white)
+                    .shadow(color: .black, radius: 2)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 4)
+            }
         }
     }
 }
