@@ -11,9 +11,23 @@ struct SpeciesDetailView: View {
     
     var species: Species
     
+    @State private var inFilter: Bool = false
+    
     var body: some View {
         VStack {
-            Text(species.name)
+            HStack {
+                Text(species.name)
+                    .padding(.leading)
+                
+                Spacer()
+                
+                Button {
+                    updateSpeciesFilter()
+                } label: {
+                    Text(inFilter ? "Remove Filter" : "Add Filter")
+                }
+            }
+            .padding(.horizontal)
             
             AsyncImage(url: species.photo?.getUrl(.medium)) { image in
                 image
@@ -37,6 +51,10 @@ struct SpeciesDetailView: View {
             }
             .padding()
         }
+    }
+    
+    private func updateSpeciesFilter() {
+        inFilter.toggle()
     }
 }
 

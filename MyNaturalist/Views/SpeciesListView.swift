@@ -40,7 +40,7 @@ struct SpeciesListView: View {
                                 Spacer()
                                 Text(family.taxon.name)
                                     .bold()
-                                    .foregroundColor(.primary)
+                                    .foregroundStyle(.primary)
                                     .padding(.leading)
                             }
                         }
