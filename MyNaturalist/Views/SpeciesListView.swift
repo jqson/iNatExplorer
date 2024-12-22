@@ -37,11 +37,10 @@ struct SpeciesListView: View {
                                     .navigationTitle("Species List")
                                 }
                             } header: {
-                                Spacer()
                                 Text(family.taxon.name)
                                     .bold()
                                     .foregroundStyle(.primary)
-                                    .padding(.leading)
+                                    .padding([.leading, .top], 10)
                             }
                         }
                     }
