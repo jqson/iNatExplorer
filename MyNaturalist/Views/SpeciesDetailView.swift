@@ -22,6 +22,20 @@ struct SpeciesDetailView: View {
             } placeholder: {
                 Color.gray
             }
+            
+            let columns: [GridItem] = [
+                GridItem(.fixed(120), alignment: .init(horizontal: .trailing, vertical: .top)),
+                GridItem(.flexible(), alignment: .leading)
+            ]
+            
+            LazyVGrid(columns: columns) {
+                ForEach(species.ancestors) { ancestor in
+                    Text("\(ancestor.rank.rawValue.capitalized):")
+                    Text(ancestor.name)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .padding()
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Taxon: Hashable {
+struct Taxon: Identifiable, Hashable {
     
     enum Constants {
         static let unknownTaxon: Taxon = .init(id: -1, name: "Unknown", rank: .others)

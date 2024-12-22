@@ -15,7 +15,11 @@ struct Species: Identifiable {
             name: "Anna's Hummingbird",
             photo: .init(id: 256649705, urlStr: "https://static.inaturalist.org/photos/256649705/square.jpg"),
             count: 1234,
-            ancestors: []
+            ancestors: [
+                .init(id: 1, name: "Animals", rank: .kingdom),
+                .init(id: 5562, name: "Hummingbirds", rank: .family),
+                .init(id: 1542294, name: "Bee Hummingbirds and Allies", rank: .tribe),
+            ]
         )
     }
     
