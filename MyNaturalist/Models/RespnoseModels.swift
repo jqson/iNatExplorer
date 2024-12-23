@@ -48,6 +48,8 @@ struct TaxonResponse: Codable {
     }
     
     let id: Int
+    let rank: String
+    let name: String
     let englishCommonName: String?
     let defaultPhoto: PhotoResponse
     let ancestors: [Ancestor]

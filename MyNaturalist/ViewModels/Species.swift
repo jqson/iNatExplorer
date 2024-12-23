@@ -11,8 +11,7 @@ struct Species: Identifiable {
     
     enum Constants {
         static let preview: Species = .init(
-            id: 6317,
-            name: "Anna's Hummingbird",
+            taxon: .init(id: 6317, name: "Anna's Hummingbird", rank: .species),
             photo: .init(id: 256649705, urlStr: "https://static.inaturalist.org/photos/256649705/square.jpg"),
             count: 1234,
             ancestors: [
@@ -23,11 +22,13 @@ struct Species: Identifiable {
         )
     }
     
-    let id: Int
-    let name: String
+    let taxon: Taxon
     let photo: CdnImage?
     let count: Int
     let ancestors: [Taxon]
+    
+    var id: Int { taxon.id }
+    var name: String { taxon.name }
 }
 
 struct Family: Identifiable {
@@ -47,17 +48,10 @@ struct Family: Identifiable {
         
         var species: [Species] = response.results.map { result in
             .init(
-                id: result.taxon.id,
-                name: result.taxon.englishCommonName ?? "Unknown",
+                taxon: .init(taxonResponse: result.taxon),
                 photo: .init(photoResponse: result.taxon.defaultPhoto),
                 count: result.count,
-                ancestors: result.taxon.ancestors.map {
-                    .init(
-                        id: $0.id,
-                        name: $0.englishCommonName ?? $0.name,
-                        rank: Taxon.Rank(rawValue: $0.rank) ?? .others
-                    )
-                }
+                ancestors: result.taxon.ancestors.map { .init(ancestorResponse: $0) }
             )
         }
         

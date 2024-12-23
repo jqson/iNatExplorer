@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Taxon: Identifiable, Hashable {
+struct Taxon: Identifiable, Hashable, Codable {
     
     enum Constants {
         static let unknownTaxon: Taxon = .init(id: -1, name: "Unknown", rank: .others)
@@ -17,7 +17,7 @@ struct Taxon: Identifiable, Hashable {
         static let americanBarnOwl: Taxon = .init(id: 1578502, name: "American Barn Owl", rank: .species)
     }
     
-    enum Rank: String {
+    enum Rank: String, Codable {
         case kingdom
         case phylum
         case subphylum
@@ -34,6 +34,20 @@ struct Taxon: Identifiable, Hashable {
     let id: Int
     let name: String
     let rank: Rank
+}
+
+extension Taxon {
+    init(taxonResponse: TaxonResponse) {
+        id = taxonResponse.id
+        name = taxonResponse.englishCommonName ?? taxonResponse.name
+        rank = Taxon.Rank(rawValue: taxonResponse.rank) ?? .others
+    }
+    
+    init(ancestorResponse: TaxonResponse.Ancestor) {
+        id = ancestorResponse.id
+        name = ancestorResponse.englishCommonName ?? ancestorResponse.name
+        rank = Taxon.Rank(rawValue: ancestorResponse.rank) ?? .others
+    }
 }
 
 struct SelectableTaxon: SelectableItem {

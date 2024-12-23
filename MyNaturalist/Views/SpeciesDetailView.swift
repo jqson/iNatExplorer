@@ -51,9 +51,19 @@ struct SpeciesDetailView: View {
             }
             .padding()
         }
+        .onAppear() {
+            inFilter = FilterManager.shared.taxonInFilter(species.taxon)
+        }
     }
     
     private func updateSpeciesFilter() {
+        let filterManager = FilterManager.shared
+        if inFilter {
+            filterManager.removeTaxon(species.taxon)
+        } else {
+            filterManager.addTaxon(species.taxon)
+        }
+        
         inFilter.toggle()
     }
 }

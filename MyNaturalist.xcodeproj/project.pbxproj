@@ -12,6 +12,7 @@
 		378AF5C22D1557FC00AC77A8 /* SpeciesItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */; };
 		378AF5C42D15580D00AC77A8 /* Species.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C32D15580D00AC77A8 /* Species.swift */; };
 		378AF5C62D16104D00AC77A8 /* SpeciesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */; };
+		37F62C902D19323400FECE1A /* FilterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C8F2D19323400FECE1A /* FilterManager.swift */; };
 		37F888642D0128BA00258BDC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F8885E2D0128BA00258BDC /* Preview Assets.xcassets */; };
 		37F888652D0128BA00258BDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37F888602D0128BA00258BDC /* Assets.xcassets */; };
 		37F888662D0128BA00258BDC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F888612D0128BA00258BDC /* ContentView.swift */; };
@@ -52,6 +53,7 @@
 		378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesItemView.swift; sourceTree = "<group>"; };
 		378AF5C32D15580D00AC77A8 /* Species.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Species.swift; sourceTree = "<group>"; };
 		378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesDetailView.swift; sourceTree = "<group>"; };
+		37F62C8F2D19323400FECE1A /* FilterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterManager.swift; sourceTree = "<group>"; };
 		37F888152CFFBCB100258BDC /* MyNaturalist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyNaturalist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F888252CFFBCB300258BDC /* MyNaturalistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNaturalistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F8882F2CFFBCB300258BDC /* MyNaturalistUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyNaturalistUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +112,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		37F62C8E2D19322400FECE1A /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				37F62C8F2D19323400FECE1A /* FilterManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		37F8880C2CFFBCB100258BDC = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +155,7 @@
 				37F888682D01295400258BDC /* Views */,
 				37F8886D2D01937C00258BDC /* ViewModels */,
 				37F888972D0B63FB00258BDC /* Models */,
+				37F62C8E2D19322400FECE1A /* Manager */,
 				37F888732D04163C00258BDC /* Network */,
 				37F888602D0128BA00258BDC /* Assets.xcassets */,
 				37F8885F2D0128BA00258BDC /* Preview Content */,
@@ -355,6 +366,7 @@
 				37F8886C2D0190EB00258BDC /* ObservationItemView.swift in Sources */,
 				37F888802D082BB400258BDC /* ObservationDetailView.swift in Sources */,
 				378AF5C62D16104D00AC77A8 /* SpeciesDetailView.swift in Sources */,
+				37F62C902D19323400FECE1A /* FilterManager.swift in Sources */,
 				378AF5BE2D1405B600AC77A8 /* SearchView.swift in Sources */,
 				37F888762D0416A200258BDC /* NetworkService.swift in Sources */,
 				37F8886F2D0193B900258BDC /* Observation.swift in Sources */,
