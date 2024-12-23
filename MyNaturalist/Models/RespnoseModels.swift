@@ -52,7 +52,7 @@ struct TaxonResponse: Codable {
     let name: String
     let englishCommonName: String?
     let defaultPhoto: PhotoResponse
-    let ancestors: [Ancestor]
+    let ancestors: [Ancestor]?
 }
     
 struct PhotoResponse: Codable {

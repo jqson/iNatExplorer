@@ -51,7 +51,7 @@ struct Family: Identifiable {
                 taxon: .init(taxonResponse: result.taxon),
                 photo: .init(photoResponse: result.taxon.defaultPhoto),
                 count: result.count,
-                ancestors: result.taxon.ancestors.map { .init(ancestorResponse: $0) }
+                ancestors: result.taxon.ancestors?.map({ .init(ancestorResponse: $0) }) ?? []
             )
         }
         
