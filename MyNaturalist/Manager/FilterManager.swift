@@ -18,6 +18,8 @@ class FilterManager {
         loadTaxonFilter()
     }
     
+    private(set) var taxonFilter: [Taxon] = []
+    
     func taxonInFilter(_ taxon: Taxon) -> Bool {
         return taxonFilter.contains(taxon)
     }
@@ -35,8 +37,6 @@ class FilterManager {
         taxonFilter.removeAll(where: { $0.id == taxon.id })
         saveTaxonFilter()
     }
-    
-    private var taxonFilter: [Taxon] = []
     
     private func loadTaxonFilter() {
         taxonFilter = loadCodableArray(for: Constants.taxonKey)

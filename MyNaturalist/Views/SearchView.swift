@@ -9,21 +9,17 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @State var filterItems: [SelectableItem] = [
-        SelectableTaxon(taxon: Taxon.Constants.greatHornedOwl),
-        SelectableTaxon(taxon: Taxon.Constants.shortEaredOwl),
-        SelectableTaxon(taxon: Taxon.Constants.americanBarnOwl),
-    ]
+    @State var taxonFilterItems: [SelectableItem] = []
     
     var taxons: [Taxon] {
-        filterItems.filter({ $0.isSelected }).compactMap { ($0 as? SelectableTaxon)?.taxon }
+        taxonFilterItems.filter({ $0.isSelected }).compactMap { ($0 as? SelectableTaxon)?.taxon }
     }
     
     var body: some View {
         NavigationStack {
             VStack() {
                 FilterView(
-                    filterItems: $filterItems,
+                    filterItems: $taxonFilterItems,
                     filterTitle: "Species",
                     isMultipleSelection: true
                 )
@@ -41,6 +37,9 @@ struct SearchView: View {
                 .navigationTitle("Filter")
                 .navigationBarHidden(true)
             }
+        }
+        .onAppear() {
+            taxonFilterItems = FilterManager.shared.taxonFilter.map { SelectableTaxon(taxon: $0) }
         }
     }
 }

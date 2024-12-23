@@ -12,6 +12,13 @@ protocol SelectableItem {
     var isSelected: Bool { get set }
 }
 
+struct SelectableTaxon: SelectableItem {
+    let taxon: Taxon
+    
+    var text: String { taxon.name }
+    var isSelected: Bool = false
+}
+
 struct FilterView: View {
     @Binding var filterItems: [SelectableItem]
     

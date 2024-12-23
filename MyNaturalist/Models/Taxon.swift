@@ -49,10 +49,3 @@ extension Taxon {
         rank = Taxon.Rank(rawValue: ancestorResponse.rank) ?? .others
     }
 }
-
-struct SelectableTaxon: SelectableItem {
-    let taxon: Taxon
-    
-    var text: String { taxon.name }
-    var isSelected: Bool = false
-}
