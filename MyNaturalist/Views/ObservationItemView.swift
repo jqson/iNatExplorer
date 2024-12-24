@@ -18,11 +18,14 @@ struct ObservationItemView: View {
     var body: some View {
         HStack {
             AsyncImage(url: observation.photos.first?.getUrl(.small)) { image in
-                image.resizable()
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
             } placeholder: {
                 Color.gray
             }
             .frame(width: Constants.imageSize, height: Constants.imageSize)
+            .clipped()
             
             
             VStack(alignment: .leading) {
