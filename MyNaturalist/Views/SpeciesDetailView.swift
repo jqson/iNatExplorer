@@ -11,8 +11,6 @@ struct SpeciesDetailView: View {
     
     var species: Species
     
-    @State private var inFilter: Bool = false
-    
     var body: some View {
         VStack {
             HStack {
@@ -21,11 +19,7 @@ struct SpeciesDetailView: View {
                 
                 Spacer()
                 
-                Button {
-                    updateSpeciesFilter()
-                } label: {
-                    Text(inFilter ? "Remove Filter" : "Add Filter")
-                }
+                UpdateFilterButtonView(species: species)
             }
             .padding(.horizontal)
             
@@ -51,23 +45,10 @@ struct SpeciesDetailView: View {
             }
             .padding()
         }
-        .onAppear() {
-            inFilter = FilterManager.shared.taxonInFilter(species.taxon)
-        }
-    }
-    
-    private func updateSpeciesFilter() {
-        let filterManager = FilterManager.shared
-        if inFilter {
-            filterManager.removeTaxon(species.taxon)
-        } else {
-            filterManager.addTaxon(species.taxon)
-        }
-        
-        inFilter.toggle()
     }
 }
 
 #Preview {
     SpeciesDetailView(species: Species.Constants.preview)
+        .environmentObject(FilterManager())
 }

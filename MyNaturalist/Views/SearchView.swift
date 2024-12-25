@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
     
+    @EnvironmentObject var filterManager: FilterManager
     @State var taxonFilterItems: [SelectableItem] = []
     
     var taxons: [Taxon] {
@@ -39,7 +40,7 @@ struct SearchView: View {
             }
         }
         .onAppear() {
-            taxonFilterItems = FilterManager.shared.taxonFilter.map { SelectableTaxon(taxon: $0) }
+            taxonFilterItems = filterManager.taxonFilter.map { SelectableTaxon(taxon: $0) }
         }
     }
 }

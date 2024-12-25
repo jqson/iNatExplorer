@@ -7,18 +7,17 @@
 
 import Foundation
 
-class FilterManager {
+class FilterManager: ObservableObject {
     
     enum Constants {
         static let taxonKey = "taxonFilter"
     }
     
-    static let shared = FilterManager();
-    private init() {
+    init() {
         loadTaxonFilter()
     }
     
-    private(set) var taxonFilter: [Taxon] = []
+    @Published private(set) var taxonFilter: [Taxon] = []
     
     func taxonInFilter(_ taxon: Taxon) -> Bool {
         return taxonFilter.contains(taxon)

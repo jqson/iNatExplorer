@@ -10,9 +10,12 @@ import SwiftUI
 @main
 struct MyNaturalistApp: App {
     
+    @StateObject var filterManager = FilterManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        .environmentObject(filterManager)
     }
 }
