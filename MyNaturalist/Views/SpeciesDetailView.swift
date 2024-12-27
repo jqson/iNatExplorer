@@ -36,10 +36,12 @@ struct SpeciesDetailView: View {
                 GridItem(.flexible(), alignment: .leading)
             ]
             
+            let classification: [Taxon] = species.ancestors + [species.taxon]
+            
             LazyVGrid(columns: columns) {
-                ForEach(species.ancestors) { ancestor in
-                    Text("\(ancestor.rank.rawValue.capitalized):")
-                    Text(ancestor.name)
+                ForEach(classification) { taxon in
+                    Text("\(taxon.rank.rawValue.capitalized):")
+                    Text(taxon.name)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
