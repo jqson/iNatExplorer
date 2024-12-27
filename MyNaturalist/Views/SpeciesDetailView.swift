@@ -19,7 +19,7 @@ struct SpeciesDetailView: View {
                 
                 Spacer()
                 
-                UpdateFilterButtonView(species: species)
+                UpdateFilterButtonView(taxon: species.taxon)
             }
             .padding(.horizontal)
             

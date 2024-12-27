@@ -14,7 +14,15 @@ struct ObservationDetailView: View {
     
     var body: some View {
         VStack {
-            Text(observation.name)
+            HStack {
+                Text(observation.name)
+                    .padding(.leading)
+                
+                Spacer()
+                
+                UpdateFilterButtonView(taxon: observation.taxon)
+            }
+            .padding()
             
             Text(observation.observedTime)
             
@@ -44,4 +52,5 @@ struct ObservationDetailView: View {
 
 #Preview {
     ObservationDetailView(observation: Observation.Constants.preview)
+        .environmentObject(FilterManager())
 }

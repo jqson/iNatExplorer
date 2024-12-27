@@ -12,7 +12,7 @@ struct Observation: Identifiable {
     enum Constants {
         static let preview: Observation = .init(
             id: 252658676,
-            name: "Barking Owl",
+            taxon: Taxon.Constants.greatHornedOwl,
             observedTime: "2024-09-12T18:10:00+09:30",
             photos: [.init(id: 363572869, urlStr: "https://inaturalist-open-data.s3.amazonaws.com/photos/363572869/square.jpeg")!],
             coordinates: (lat: 38.20608, lng: -122.75155)
@@ -21,10 +21,14 @@ struct Observation: Identifiable {
     
     
     let id: Int
-    let name: String
+    let taxon: Taxon?
     let observedTime: String
     let photos: [CdnImage]
     let coordinates: Coordinates
+    
+    var name: String {
+        taxon?.name ?? "Unknown"
+    }
 }
 
 @MainActor class ObservationViewModel: ObservableObject {
@@ -37,9 +41,13 @@ struct Observation: Identifiable {
         }
         
         observations = observationResponse.results.map { result in
-            .init(
+            var taxon: Taxon?
+            if let observationTaxon = result.taxon {
+                taxon = .init(taxonResponse: observationTaxon)
+            }
+            return .init(
                 id: result.id,
-                name: result.taxon?.englishCommonName ?? "Unknown",
+                taxon: taxon,
                 observedTime: result.observedOnString,
                 photos: result.observationPhotos.compactMap({ .init(photoResponse: $0.photo) }),
                 coordinates: (lat: result.geojson.coordinates[1], lng: result.geojson.coordinates[0])

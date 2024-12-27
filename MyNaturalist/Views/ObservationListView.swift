@@ -13,7 +13,7 @@ struct ObservationListView: View {
     @State private var observations: [Observation] = []
     @State private var isLoading = true
     
-    var taxons: [Taxon] = []
+    @EnvironmentObject private var filterManager: FilterManager
     
     var body: some View {
         NavigationStack {
@@ -36,6 +36,8 @@ struct ObservationListView: View {
             }
             .task {
                 guard isLoading else { return }
+                
+                let taxons = filterManager.taxonFilter.filter({ $0.isSelected }).map({ $0.taxon })
                 
                 await observationViewModel.fetchData(taxons: taxons)
                 observations = observationViewModel.observations

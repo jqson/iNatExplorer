@@ -10,9 +10,10 @@ import SwiftUI
 struct UpdateFilterButtonView: View {
     
     @EnvironmentObject private var filterManager: FilterManager
+    @State private var showButton: Bool = false
     @State private var inFilter: Bool = false
     
-    var species: Species
+    var taxon: Taxon?
     
     var body: some View {
         Button {
@@ -20,16 +21,24 @@ struct UpdateFilterButtonView: View {
         } label: {
             Text(inFilter ? "Remove Filter" : "Add Filter")
         }
+        .opacity(showButton ? 1 : 0)
         .onAppear() {
-            inFilter = filterManager.taxonInFilter(species.taxon)
+            guard let taxon = taxon else {
+                showButton = false
+                return
+            }
+            showButton = true
+            inFilter = filterManager.taxonInFilter(taxon)
         }
     }
     
     private func updateSpeciesFilter() {
+        guard let taxon = taxon else { return }
+        
         if inFilter {
-            filterManager.removeTaxon(species.taxon)
+            filterManager.removeTaxon(taxon)
         } else {
-            filterManager.addTaxon(species.taxon)
+            filterManager.addTaxon(taxon)
         }
         
         inFilter.toggle()
@@ -37,6 +46,6 @@ struct UpdateFilterButtonView: View {
 }
 
 #Preview {
-    UpdateFilterButtonView(species: Species.Constants.preview)
+    UpdateFilterButtonView(taxon: Taxon.Constants.greatHornedOwl)
         .environmentObject(FilterManager())
 }

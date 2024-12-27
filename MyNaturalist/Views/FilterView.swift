@@ -7,23 +7,31 @@
 
 import SwiftUI
 
-protocol SelectableItem {
-    var text: String { get }
-    var isSelected: Bool { get set }
-}
-
-struct SelectableTaxon: SelectableItem {
-    let taxon: Taxon
-    
-    var text: String { taxon.name }
-    var isSelected: Bool = false
-}
-
 struct FilterView: View {
-    @Binding var filterItems: [SelectableItem]
     
-    var filterTitle: String?
-    var isMultipleSelection: Bool = false
+    enum FilterType {
+        case taxon
+        
+        var title: String {
+            switch self {
+            case .taxon:
+                "Species"
+            }
+        }
+        
+        var isMultipleSelection: Bool {
+            switch self {
+            case .taxon:
+                true
+            }
+        }
+    }
+    
+    @EnvironmentObject private var filterManager: FilterManager
+    
+    var filterType: FilterType
+    
+    @State private var filterItems: [SelectableItem] = []
     
     var body: some View {
         Section {
@@ -32,26 +40,45 @@ struct FilterView: View {
                     .listRowSeparator(.hidden)
                     .listRowInsets(.init(top: 6, leading: 20, bottom: 6, trailing: 20))
                     .onChange(of: filterItem.isSelected) {
-                        guard !isMultipleSelection, filterItem.isSelected else { return }
+                        guard !filterType.isMultipleSelection, filterItem.isSelected else {
+                            saveFilter()
+                            return
+                        }
                         
+                        var skipSave = false
                         for index in filterItems.indices {
                             guard filterItems[index].text != filterItem.text else { continue }
-                            filterItems[index].isSelected = false
+                            if (filterItems[index].isSelected) {
+                                skipSave = true
+                                filterItems[index].isSelected = false
+                            }
+                        }
+                        
+                        if !skipSave {
+                            saveFilter()
                         }
                     }
             }
             .scrollDisabled(true)
         } header: {
-            if let title = filterTitle {
-                Text(title)
-                    .font(.title2)
-                    .bold()
-                    .foregroundStyle(Color.accentColor)
-                    .padding(.leading, 20)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
+            Text(filterType.title)
+                .font(.title2)
+                .bold()
+                .foregroundStyle(Color.accentColor)
+                .padding(.leading, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .listStyle(.plain)
+        .onAppear() {
+            switch filterType {
+            case .taxon:
+                filterItems = filterManager.taxonFilter
+            }
+        }
+    }
+    
+    private func saveFilter() {
+        filterManager.taxonFilter = filterItems.compactMap { $0 as? SelectableTaxon }
     }
 }
 
@@ -79,11 +106,5 @@ struct SelectionView: View {
 }
 
 #Preview {
-    @Previewable @State var selections: [SelectableItem] = [
-        SelectableTaxon(taxon: Taxon.Constants.greatHornedOwl),
-        SelectableTaxon(taxon: Taxon.Constants.shortEaredOwl),
-        SelectableTaxon(taxon: Taxon.Constants.americanBarnOwl),
-    ]
-    
-    FilterView(filterItems: $selections, filterTitle: "Species")
+    FilterView(filterType: .taxon)
 }

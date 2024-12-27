@@ -9,23 +9,12 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @EnvironmentObject var filterManager: FilterManager
-    @State var taxonFilterItems: [SelectableItem] = []
-    
-    var taxons: [Taxon] {
-        taxonFilterItems.filter({ $0.isSelected }).compactMap { ($0 as? SelectableTaxon)?.taxon }
-    }
-    
     var body: some View {
         NavigationStack {
             VStack() {
-                FilterView(
-                    filterItems: $taxonFilterItems,
-                    filterTitle: "Species",
-                    isMultipleSelection: true
-                )
+                FilterView(filterType: .taxon)
                 
-                NavigationLink(destination: ObservationListView(taxons: taxons)) {
+                NavigationLink(destination: ObservationListView()) {
                     Text("Search")
                         .font(.title2)
                         .frame(height: 50)
@@ -38,9 +27,6 @@ struct SearchView: View {
                 .navigationTitle("Filter")
                 .navigationBarHidden(true)
             }
-        }
-        .onAppear() {
-            taxonFilterItems = filterManager.taxonFilter.map { SelectableTaxon(taxon: $0) }
         }
     }
 }
