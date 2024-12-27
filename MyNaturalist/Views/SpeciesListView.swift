@@ -37,10 +37,16 @@ struct SpeciesListView: View {
                                     .navigationTitle("Species List")
                                 }
                             } header: {
-                                Text(family.taxon.name)
-                                    .bold()
-                                    .foregroundStyle(.primary)
-                                    .padding([.leading, .top], 10)
+                                HStack {
+                                    Text(family.taxon.name)
+                                        .bold()
+                                    
+                                    Spacer()
+                                    
+                                    UpdateFilterButtonView(taxon: family.taxon)
+                                }
+                                .padding([.leading, .top])
+                                .padding(.bottom, 8)
                             }
                         }
                     }
@@ -68,4 +74,5 @@ struct SpeciesListView: View {
 
 #Preview {
     SpeciesListView()
+        .environmentObject(FilterManager())
 }

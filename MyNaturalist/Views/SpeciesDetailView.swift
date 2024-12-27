@@ -16,6 +16,7 @@ struct SpeciesDetailView: View {
             HStack {
                 Text(species.name)
                     .padding(.leading)
+                    .bold()
                 
                 Spacer()
                 
