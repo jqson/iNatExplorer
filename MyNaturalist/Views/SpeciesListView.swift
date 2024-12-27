@@ -45,7 +45,7 @@ struct SpeciesListView: View {
                                     
                                     UpdateFilterButtonView(taxon: family.taxon)
                                 }
-                                .padding([.leading, .top])
+                                .padding([.leading, .trailing, .top])
                                 .padding(.bottom, 8)
                             }
                         }

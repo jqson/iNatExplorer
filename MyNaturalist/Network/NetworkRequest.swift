@@ -28,7 +28,7 @@ class NetworkRequest {
     enum SpeciesCounts {
         static let endPoint = "/observations/species_counts?verifiable=true&spam=false"
             + "&nelat=37.8764014352312&nelng=-121.57421471187659&swlat=36.89876283035327&swlng=-122.64812828609534"
-            + "&iconic_taxa%5B%5D=Aves&locale=en-US&include_ancestors=true"
+            + "&iconic_taxa=Aves&locale=en-US&include_ancestors=true"
         
         static let perPageKey = "per_page"
         static let fromDate = "d1"
