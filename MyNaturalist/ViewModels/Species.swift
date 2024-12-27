@@ -43,15 +43,17 @@ struct Family: Identifiable {
     @Published var families: [Family] = []
     private(set) var speciesCount: Int = 0
     
-    func fetchData() async {
-        guard let response = await NetworkRequest.getSpeciesCounts() else { return }
+    func fetchData(category: CategoryStruct) async {
+        guard let response = await NetworkRequest.getSpeciesCounts(category: category) else { return }
         
         var species: [Species] = response.results.map { result in
             .init(
                 taxon: .init(taxonResponse: result.taxon),
                 photo: .init(photoResponse: result.taxon.defaultPhoto),
                 count: result.count,
-                ancestors: result.taxon.ancestors?.map({ .init(ancestorResponse: $0) }) ?? []
+                ancestors: (result.taxon.ancestors ?? [])
+                    .map({ .init(ancestorResponse: $0) })
+                    .filter({ $0.rank != .others })
             )
         }
         

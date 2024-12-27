@@ -17,13 +17,11 @@ struct SearchView: View {
                 NavigationLink(destination: ObservationListView()) {
                     Text("Search")
                         .font(.title2)
-                        .frame(height: 50)
+                        .frame(height: 40)
                         .frame(maxWidth: .infinity)
-                        .foregroundStyle(Color.white)
-                        .background(Color.accentColor)
-                        .cornerRadius(10)
-                        .padding()
                 }
+                .padding()
+                .buttonStyle(.borderedProminent)
                 .navigationTitle("Filter")
                 .navigationBarHidden(true)
             }
@@ -33,4 +31,5 @@ struct SearchView: View {
 
 #Preview {
     SearchView()
+        .environmentObject(FilterManager())
 }

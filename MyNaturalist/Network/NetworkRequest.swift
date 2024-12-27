@@ -28,8 +28,9 @@ class NetworkRequest {
     enum SpeciesCounts {
         static let endPoint = "/observations/species_counts?verifiable=true&spam=false"
             + "&nelat=37.8764014352312&nelng=-121.57421471187659&swlat=36.89876283035327&swlng=-122.64812828609534"
-            + "&iconic_taxa=Aves&locale=en-US&include_ancestors=true"
+            + "&locale=en-US&include_ancestors=true"
         
+        static let iconicTaxon = "iconic_taxa"
         static let perPageKey = "per_page"
         static let fromDate = "d1"
     }
@@ -55,9 +56,10 @@ class NetworkRequest {
         return try? await NetworkService.sendRequest(url: requestUrl)
     }
     
-    static func getSpeciesCounts() async -> SpeciesCountsResponse? {
+    static func getSpeciesCounts(category: CategoryStruct) async -> SpeciesCountsResponse? {
         var requestUrl = URL(string: Constants.iNatBaseUrl + SpeciesCounts.endPoint)
         let queryItems: [URLQueryItem] = [
+            .init(name: SpeciesCounts.iconicTaxon, value: category.paramValue),
 //            .init(name: SpeciesCounts.perPageKey, value: "5"),
             .init(name: SpeciesCounts.fromDate, value: "2024-01-01"),
         ]

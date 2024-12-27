@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selection) {
             Tab("Species", systemImage: "bird", value: .species) {
-                SpeciesListView()
+                CategorySelectionView()
             }
             
             Tab("Search", systemImage: "magnifyingglass", value: .search) {
