@@ -31,6 +31,11 @@ struct ObservationItemView: View {
             VStack(alignment: .leading) {
                 Text(observation.name)
                 Text(observation.observedTime)
+                if let description = observation.description, !description.isEmpty {
+                    Text("\"\(description)\"")
+                        .lineLimit(2)
+                        .italic()
+                }
             }
         }
     }

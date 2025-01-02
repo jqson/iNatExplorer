@@ -29,6 +29,13 @@ struct ObservationDetailView: View {
             
             Text(locationViewModel.location?.displayAddress ?? "Failed to get address")
             
+            if let description = observation.description, !description.isEmpty {
+                Text("\"\(description)\"")
+                    .italic()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+            }
+            
             List(observation.photos, id: \.id) { photo in
                 AsyncImage(url: photo.getUrl(.medium)) { image in
                     image

@@ -24,6 +24,7 @@ struct ObservationResponse: Codable {
         let taxon: TaxonResponse?
         let observationPhotos: [ObservationPhoto]
         let geojson: GeoJson
+        let description: String?
     }
     
     let results: [Result]

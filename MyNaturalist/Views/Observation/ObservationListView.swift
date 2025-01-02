@@ -49,4 +49,5 @@ struct ObservationListView: View {
 
 #Preview {
     ObservationListView()
+        .environmentObject(FilterManager())
 }
