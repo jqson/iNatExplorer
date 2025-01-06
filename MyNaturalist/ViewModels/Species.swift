@@ -40,7 +40,7 @@ struct Family: Identifiable {
 
 @MainActor class SpeciesViewModel: ObservableObject {
     
-    @Published var families: [Family] = []
+    @Published private(set) var families: [Family] = []
     private(set) var speciesCount: Int = 0
     
     func fetchData(category: CategoryStruct) async {

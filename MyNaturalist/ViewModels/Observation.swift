@@ -35,7 +35,7 @@ struct Observation: Identifiable {
 
 @MainActor class ObservationViewModel: ObservableObject {
     
-    @Published var observations: [Observation] = []
+    @Published private(set) var observations: [Observation] = []
     
     func fetchData(taxons: [Taxon] = []) async {
         guard let observationResponse = await NetworkRequest.getObservations(taxons: taxons) else {

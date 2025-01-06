@@ -11,11 +11,12 @@ struct ObservationDetailView: View {
     
     var observation: Observation
     @StateObject var locationViewModel = LocationViewModel()
+    @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     
     var body: some View {
         VStack {
             HStack {
-                Text(observation.name)
+                Text("\(observation.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
                     .padding(.leading)
                     .bold()
                 
@@ -52,7 +53,14 @@ struct ObservationDetailView: View {
         }
         .onAppear {
             Task {
-                await locationViewModel.fetchData(coordinates: observation.coordinates)
+                async let loadLocation: () = locationViewModel.fetchData(coordinates: observation.coordinates)
+                
+                if let taxonId = observation.taxon?.id {
+                    async let loadTaxonNames: () = taxonNamesViewModel.fetchData(taxonId: taxonId)
+                    let _ = await [loadLocation, loadTaxonNames]
+                } else {
+                    await loadLocation
+                }
             }
         }
     }

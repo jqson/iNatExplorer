@@ -61,6 +61,12 @@ struct PhotoResponse: Codable {
     let url: String
 }
 
+struct TaxonNameResponse: Codable {
+    let id: Int
+    let parameterizedLexicon: String
+    let name: String
+}
+
 struct ReverseGeoResponse: Codable {
     struct Result: Codable {
         struct AddressComponent: Codable {

@@ -10,11 +10,12 @@ import SwiftUI
 struct SpeciesDetailView: View {
     
     var species: Species
+    @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     
     var body: some View {
         VStack {
             HStack {
-                Text(species.name)
+                Text("\(species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
                     .padding(.leading)
                     .bold()
                 
@@ -47,6 +48,11 @@ struct SpeciesDetailView: View {
                 }
             }
             .padding()
+        }
+        .onAppear {
+            Task {
+                await taxonNamesViewModel.fetchData(taxonId: species.taxon.id)
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ struct Location {
 
 @MainActor class LocationViewModel: ObservableObject {
     
-    @Published var location: Location? = nil
+    @Published private(set) var location: Location? = nil
     
     func fetchData(coordinates: Coordinates) async {
         guard let addressResponse = await NetworkRequest.reverseGeo(coordinates: coordinates) else {

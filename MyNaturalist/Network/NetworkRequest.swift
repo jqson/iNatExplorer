@@ -11,13 +11,14 @@ class NetworkRequest {
     
     enum Constants {
         static let iNatBaseUrl = "https://api.inaturalist.org/v1"
+        static let iNatLegacyBaseUrl = "https://www.inaturalist.org"
         
         static let gmsKey = "AIzaSyDQPAmqBULGhHwOj8LPrsHSTn-r-bYfKo4"
         static let geoCodeBaseUrl = "https://maps.googleapis.com/maps/api/geocode/json"
     }
     
     enum Observation {
-        static let endPoint = "/observations?verifiable=true&order_by=observed_on&order=desc&page=1&photos=true"
+        static let endpoint = "/observations?verifiable=true&order_by=observed_on&order=desc&page=1&photos=true"
             + "&nelat=37.8764014352312&nelng=-121.57421471187659&swlat=36.89876283035327&swlng=-122.64812828609534"
             + "&locale=en-US&return_bounds=true"
         
@@ -26,7 +27,7 @@ class NetworkRequest {
     }
     
     enum SpeciesCounts {
-        static let endPoint = "/observations/species_counts?verifiable=true&spam=false"
+        static let endpoint = "/observations/species_counts?verifiable=true&spam=false"
             + "&nelat=37.8764014352312&nelng=-121.57421471187659&swlat=36.89876283035327&swlng=-122.64812828609534"
             + "&locale=en-US&include_ancestors=true"
         
@@ -35,13 +36,20 @@ class NetworkRequest {
         static let fromDate = "d1"
     }
     
+    enum TaxonNames {
+        static let endpoint = "/taxon_names.json"
+        
+        static let perPageKey = "per_page"
+        static let taxonIdKey = "taxon_id"
+    }
+    
     enum ReverseGeo {
         static let keyKey = "key"
         static let coordinatesKey = "latlng"
     }
     
     static func getObservations(taxons: [Taxon]) async -> ObservationResponse? {
-        var requestUrl = URL(string: Constants.iNatBaseUrl + Observation.endPoint)
+        var requestUrl = URL(string: Constants.iNatBaseUrl + Observation.endpoint)
         var queryItems: [URLQueryItem] = []
         
         if !taxons.isEmpty {
@@ -57,7 +65,7 @@ class NetworkRequest {
     }
     
     static func getSpeciesCounts(category: CategoryStruct) async -> SpeciesCountsResponse? {
-        var requestUrl = URL(string: Constants.iNatBaseUrl + SpeciesCounts.endPoint)
+        var requestUrl = URL(string: Constants.iNatBaseUrl + SpeciesCounts.endpoint)
         let queryItems: [URLQueryItem] = [
             .init(name: SpeciesCounts.iconicTaxon, value: category.paramValue),
 //            .init(name: SpeciesCounts.perPageKey, value: "5"),
@@ -65,6 +73,18 @@ class NetworkRequest {
         ]
         
         requestUrl?.append(queryItems: queryItems)
+        
+        return try? await NetworkService.sendRequest(url: requestUrl)
+    }
+    
+    static func getTaxonNames(taxonId: Int) async -> [TaxonNameResponse]? {
+        var requestUrl = URL(string: Constants.iNatLegacyBaseUrl + TaxonNames.endpoint)
+        requestUrl?.append(
+            queryItems: [
+                .init(name: TaxonNames.perPageKey, value: "400"),
+                .init(name: TaxonNames.taxonIdKey, value: String(taxonId)),
+            ]
+        )
         
         return try? await NetworkService.sendRequest(url: requestUrl)
     }
