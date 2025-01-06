@@ -11,8 +11,12 @@ struct SearchView: View {
     
     var body: some View {
         NavigationStack {
-            VStack() {
-                FilterView(filterType: .taxon)
+            VStack {
+                ScrollView {
+                    VStack {
+                        FilterView(filterType: .taxon)
+                    }
+                }
                 
                 NavigationLink(destination: ObservationListView()) {
                     Text("Search")

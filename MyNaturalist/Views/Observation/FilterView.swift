@@ -35,7 +35,7 @@ struct FilterView: View {
     
     var body: some View {
         Section {
-            List($filterItems, id: \.text) { $filterItem in
+            ForEach($filterItems, id: \.text) { $filterItem in
                 SelectionView(selectionItem: $filterItem)
                     .listRowSeparator(.hidden)
                     .listRowInsets(.init(top: 6, leading: 20, bottom: 6, trailing: 20))
@@ -59,7 +59,6 @@ struct FilterView: View {
                         }
                     }
             }
-            .scrollDisabled(true)
         } header: {
             Text(filterType.title)
                 .font(.title2)
@@ -107,4 +106,5 @@ struct SelectionView: View {
 
 #Preview {
     FilterView(filterType: .taxon)
+        .environmentObject(FilterManager())
 }
