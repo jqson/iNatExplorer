@@ -15,6 +15,7 @@ struct Observation: Identifiable {
             taxon: Taxon.Constants.greatHornedOwl,
             observedTime: "2024-09-12T18:10:00+09:30",
             description: "Some description.",
+            webLink: URL(string: "https://www.inaturalist.org/observations/252658676"),
             photos: [.init(id: 363572869, urlStr: "https://inaturalist-open-data.s3.amazonaws.com/photos/363572869/square.jpeg")!],
             coordinates: (lat: 38.20608, lng: -122.75155)
         )
@@ -25,6 +26,7 @@ struct Observation: Identifiable {
     let taxon: Taxon?
     let observedTime: String
     let description: String?
+    let webLink: URL?
     let photos: [CdnImage]
     let coordinates: Coordinates
     
@@ -52,6 +54,7 @@ struct Observation: Identifiable {
                 taxon: taxon,
                 observedTime: result.observedOnString,
                 description: result.description,
+                webLink: URL(string: result.uri),
                 photos: result.observationPhotos.compactMap({ .init(photoResponse: $0.photo) }),
                 coordinates: (lat: result.geojson.coordinates[1], lng: result.geojson.coordinates[0])
             )

@@ -25,6 +25,7 @@ struct ObservationResponse: Codable {
         let observationPhotos: [ObservationPhoto]
         let geojson: GeoJson
         let description: String?
+        let uri: String
     }
     
     let results: [Result]

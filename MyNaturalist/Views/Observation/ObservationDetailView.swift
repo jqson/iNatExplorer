@@ -37,6 +37,10 @@ struct ObservationDetailView: View {
                     .padding(.horizontal)
             }
             
+            if let link = observation.webLink {
+                Link("inaturalist.org", destination: link)
+            }
+            
             List(observation.photos, id: \.id) { photo in
                 AsyncImage(url: photo.getUrl(.medium)) { image in
                     image
