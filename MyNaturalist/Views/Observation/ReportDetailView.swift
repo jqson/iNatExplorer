@@ -1,5 +1,5 @@
 //
-//  ObservationDetailView.swift
+//  ReportDetailView.swift
 //  MyNaturalist
 //
 //  Created by Yuanfeng Jiao on 12/9/24.
@@ -7,41 +7,41 @@
 
 import SwiftUI
 
-struct ObservationDetailView: View {
+struct ReportDetailView: View {
     
-    var observation: Observation
+    var report: Report
     @StateObject var locationViewModel = LocationViewModel()
     @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     
     var body: some View {
         VStack {
             HStack {
-                Text("\(observation.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
+                Text("\(report.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
                     .padding(.leading)
                     .bold()
                 
                 Spacer()
                 
-                UpdateFilterButtonView(taxon: observation.taxon)
+                UpdateFilterButtonView(taxon: report.taxon)
             }
             .padding()
             
-            Text(observation.observedTime)
+            Text(report.observedTime)
             
             Text(locationViewModel.location?.displayAddress ?? "Failed to get address")
             
-            if let description = observation.description, !description.isEmpty {
+            if let description = report.description, !description.isEmpty {
                 Text("\"\(description)\"")
                     .italic()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
             }
             
-            if let link = observation.webLink {
+            if let link = report.webLink {
                 Link("inaturalist.org", destination: link)
             }
             
-            List(observation.photos, id: \.id) { photo in
+            List(report.photos, id: \.id) { photo in
                 AsyncImage(url: photo.getUrl(.medium)) { image in
                     image
                         .resizable()
@@ -57,9 +57,9 @@ struct ObservationDetailView: View {
         }
         .onAppear {
             Task {
-                async let loadLocation: () = locationViewModel.fetchData(coordinates: observation.coordinates)
+                async let loadLocation: () = locationViewModel.fetchData(coordinates: report.coordinates)
                 
-                if let taxonId = observation.taxon?.id {
+                if let taxonId = report.taxon?.id {
                     async let loadTaxonNames: () = taxonNamesViewModel.fetchData(taxonId: taxonId)
                     let _ = await [loadLocation, loadTaxonNames]
                 } else {
@@ -71,6 +71,6 @@ struct ObservationDetailView: View {
 }
 
 #Preview {
-    ObservationDetailView(observation: Observation.Constants.preview)
+    ReportDetailView(report: Report.Constants.preview)
         .environmentObject(FilterManager())
 }

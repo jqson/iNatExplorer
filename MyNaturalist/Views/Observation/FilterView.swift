@@ -1,5 +1,5 @@
 //
-//  FilterSelectionView.swift
+//  FilterView.swift
 //  MyNaturalist
 //
 //  Created by Yuanfeng Jiao on 12/12/24.

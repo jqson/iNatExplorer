@@ -1,5 +1,5 @@
 //
-//  UpdateFIlterButton.swift
+//  UpdateFilterButtonView.swift
 //  MyNaturalist
 //
 //  Created by Yuanfeng Jiao on 12/25/24.

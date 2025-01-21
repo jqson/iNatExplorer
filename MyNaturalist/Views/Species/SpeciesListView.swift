@@ -1,5 +1,5 @@
 //
-//  SpeciesView.swift
+//  SpeciesListView.swift
 //  MyNaturalist
 //
 //  Created by Yuanfeng Jiao on 12/19/24.

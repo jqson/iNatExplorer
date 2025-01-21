@@ -1,5 +1,5 @@
 //
-//  ItemView.swift
+//  ReportItemView.swift
 //  MyNaturalist
 //
 //  Created by Yuanfeng Jiao on 12/4/24.
@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct ObservationItemView: View {
+struct ReportItemView: View {
     
     enum Constants {
         static let imageSize: CGFloat = 100
     }
     
-    var observation: Observation
+    var report: Report
     
     var body: some View {
         HStack {
-            AsyncImage(url: observation.photos.first?.getUrl(.small)) { image in
+            AsyncImage(url: report.photos.first?.getUrl(.small)) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -29,9 +29,9 @@ struct ObservationItemView: View {
             
             
             VStack(alignment: .leading) {
-                Text(observation.name)
-                Text(observation.observedTime)
-                if let description = observation.description, !description.isEmpty {
+                Text(report.name)
+                Text(report.observedTime)
+                if let description = report.description, !description.isEmpty {
                     Text("\"\(description)\"")
                         .lineLimit(2)
                         .italic()
@@ -42,5 +42,5 @@ struct ObservationItemView: View {
 }
 
 #Preview {
-    ObservationItemView(observation: Observation.Constants.preview)
+    ReportItemView(report: Report.Constants.preview)
 }

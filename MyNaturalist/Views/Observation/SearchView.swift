@@ -18,7 +18,7 @@ struct SearchView: View {
                     }
                 }
                 
-                NavigationLink(destination: ObservationListView()) {
+                NavigationLink(destination: ReportListView()) {
                     Text("Search")
                         .font(.title2)
                         .frame(height: 40)

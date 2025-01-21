@@ -1,5 +1,5 @@
 //
-//  Observation.swift
+//  Report.swift
 //  MyNaturalist
 //
 //  Created by Yuanfeng Jiao on 12/4/24.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct Observation: Identifiable {
+struct Report: Identifiable {
     
     enum Constants {
-        static let preview: Observation = .init(
+        static let preview: Report = .init(
             id: 252658676,
             taxon: Taxon.Constants.greatHornedOwl,
             observedTime: "2024-09-12T18:10:00+09:30",
@@ -35,16 +35,16 @@ struct Observation: Identifiable {
     }
 }
 
-@MainActor class ObservationViewModel: ObservableObject {
+@MainActor class ReportViewModel: ObservableObject {
     
-    @Published private(set) var observations: [Observation] = []
+    @Published private(set) var reports: [Report] = []
     
     func fetchData(taxons: [Taxon] = []) async {
         guard let observationResponse = await NetworkRequest.getObservations(taxons: taxons) else {
             return
         }
         
-        observations = observationResponse.results.map { result in
+        reports = observationResponse.results.map { result in
             var taxon: Taxon?
             if let observationTaxon = result.taxon {
                 taxon = .init(taxonResponse: observationTaxon)

@@ -1,5 +1,5 @@
 //
-//  ListView.swift
+//  ReportListView.swift
 //  MyNaturalist
 //
 //  Created by Yuanfeng Jiao on 12/4/24.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct ObservationListView: View {
+struct ReportListView: View {
     
-    @StateObject private var observationViewModel = ObservationViewModel()
-    @State private var observations: [Observation] = []
+    @StateObject private var reportViewModel = ReportViewModel()
+    @State private var reports: [Report] = []
     @State private var isLoading = true
     
     @EnvironmentObject private var filterManager: FilterManager
@@ -18,9 +18,9 @@ struct ObservationListView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                List(observations) { observation in
-                    NavigationLink(destination: ObservationDetailView(observation: observation)) {
-                        ObservationItemView(observation: observation)
+                List(reports) { report in
+                    NavigationLink(destination: ReportDetailView(report: report)) {
+                        ReportItemView(report: report)
                     }
                     .navigationTitle("Search Results")
                 }
@@ -39,8 +39,8 @@ struct ObservationListView: View {
                 
                 let taxons = filterManager.taxonFilter.filter({ $0.isSelected }).map({ $0.taxon })
                 
-                await observationViewModel.fetchData(taxons: taxons)
-                observations = observationViewModel.observations
+                await reportViewModel.fetchData(taxons: taxons)
+                reports = reportViewModel.reports
                 isLoading = false
             }
         }
@@ -48,6 +48,6 @@ struct ObservationListView: View {
 }
 
 #Preview {
-    ObservationListView()
+    ReportListView()
         .environmentObject(FilterManager())
 }
