@@ -74,5 +74,4 @@ struct SpeciesListView: View {
 
 #Preview {
     SpeciesListView(category: Category.bird.category)
-        .environmentObject(FilterManager())
 }

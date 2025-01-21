@@ -6,10 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct UpdateFilterButtonView: View {
     
-    @EnvironmentObject private var filterManager: FilterManager
+    @Environment(\.modelContext) var modelContext
+    @Query private var filters: [Filter]
+    
+    private var taxonFilter: Filter? {
+        guard let taxon = taxon else { return nil }
+        return filters.first {
+            $0.filterType == .taxon(taxon)
+        }
+    }
+    
     @State private var showButton: Bool = false
     @State private var inFilter: Bool = false
     
@@ -23,12 +33,13 @@ struct UpdateFilterButtonView: View {
         }
         .opacity(showButton ? 1 : 0)
         .onAppear() {
-            guard let taxon = taxon else {
+            guard taxon != nil else {
                 showButton = false
                 return
             }
             showButton = true
-            inFilter = filterManager.taxonInFilter(taxon)
+            
+            inFilter = taxonFilter != nil
         }
     }
     
@@ -36,9 +47,12 @@ struct UpdateFilterButtonView: View {
         guard let taxon = taxon else { return }
         
         if inFilter {
-            filterManager.removeTaxon(taxon)
+            if let taxonFilter = taxonFilter {
+                modelContext.delete(taxonFilter)
+            }
         } else {
-            filterManager.addTaxon(taxon)
+            modelContext.insert(Filter(filterType: .taxon(taxon), isSelected: false))
+            try? modelContext.save()
         }
         
         inFilter.toggle()
@@ -47,5 +61,4 @@ struct UpdateFilterButtonView: View {
 
 #Preview {
     UpdateFilterButtonView(taxon: Taxon.Constants.greatHornedOwl)
-        .environmentObject(FilterManager())
 }

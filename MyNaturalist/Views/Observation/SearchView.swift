@@ -14,7 +14,7 @@ struct SearchView: View {
             VStack {
                 ScrollView {
                     VStack {
-                        FilterView(filterType: .taxon)
+                        FilterView(filterSection: .taxon)
                     }
                 }
                 
@@ -35,5 +35,4 @@ struct SearchView: View {
 
 #Preview {
     SearchView()
-        .environmentObject(FilterManager())
 }

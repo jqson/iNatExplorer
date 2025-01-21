@@ -72,5 +72,4 @@ struct ReportDetailView: View {
 
 #Preview {
     ReportDetailView(report: Report.Constants.preview)
-        .environmentObject(FilterManager())
 }

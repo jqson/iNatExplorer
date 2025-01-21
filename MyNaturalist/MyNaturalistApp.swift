@@ -6,16 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct MyNaturalistApp: App {
-    
-    @StateObject var filterManager = FilterManager()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .environmentObject(filterManager)
+        .modelContainer(for: Filter.self)
     }
 }

@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct FilterView: View {
     
-    enum FilterType {
+    enum FilterSection {
         case taxon
         
         var title: String {
@@ -27,10 +28,11 @@ struct FilterView: View {
         }
     }
     
-    @EnvironmentObject private var filterManager: FilterManager
+    @Environment(\.modelContext) var modelContext
     
-    var filterType: FilterType
+    var filterSection: FilterSection
     
+    @Query private var filters: [Filter]
     @State private var filterItems: [SelectableItem] = []
     
     var body: some View {
@@ -40,27 +42,20 @@ struct FilterView: View {
                     .listRowSeparator(.hidden)
                     .listRowInsets(.init(top: 6, leading: 20, bottom: 6, trailing: 20))
                     .onChange(of: filterItem.isSelected) {
-                        guard !filterType.isMultipleSelection, filterItem.isSelected else {
-                            saveFilter()
+                        guard !filterSection.isMultipleSelection, filterItem.isSelected else {
                             return
                         }
                         
-                        var skipSave = false
                         for index in filterItems.indices {
                             guard filterItems[index].text != filterItem.text else { continue }
                             if (filterItems[index].isSelected) {
-                                skipSave = true
                                 filterItems[index].isSelected = false
                             }
-                        }
-                        
-                        if !skipSave {
-                            saveFilter()
                         }
                     }
             }
         } header: {
-            Text(filterType.title)
+            Text(filterSection.title)
                 .font(.title2)
                 .bold()
                 .foregroundStyle(Color.accentColor)
@@ -69,19 +64,16 @@ struct FilterView: View {
         }
         .listStyle(.plain)
         .onAppear() {
-            switch filterType {
+            switch filterSection {
             case .taxon:
-                filterItems = filterManager.taxonFilter
+                filterItems = filters.filter({ $0.filterType.section == .taxon })
             }
         }
-    }
-    
-    private func saveFilter() {
-        filterManager.taxonFilter = filterItems.compactMap { $0 as? SelectableTaxon }
     }
 }
 
 struct SelectionView: View {
+    
     @Binding var selectionItem: SelectableItem
     
     var body: some View {
@@ -105,6 +97,5 @@ struct SelectionView: View {
 }
 
 #Preview {
-    FilterView(filterType: .taxon)
-        .environmentObject(FilterManager())
+    FilterView(filterSection: .taxon)
 }

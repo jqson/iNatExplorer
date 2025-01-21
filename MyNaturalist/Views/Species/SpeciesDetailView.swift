@@ -59,5 +59,4 @@ struct SpeciesDetailView: View {
 
 #Preview {
     SpeciesDetailView(species: Species.Constants.preview)
-        .environmentObject(FilterManager())
 }

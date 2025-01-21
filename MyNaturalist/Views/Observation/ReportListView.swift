@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ReportListView: View {
     
@@ -13,7 +14,7 @@ struct ReportListView: View {
     @State private var reports: [Report] = []
     @State private var isLoading = true
     
-    @EnvironmentObject private var filterManager: FilterManager
+    @Query private var filters: [Filter]
     
     var body: some View {
         NavigationStack {
@@ -37,7 +38,11 @@ struct ReportListView: View {
             .task {
                 guard isLoading else { return }
                 
-                let taxons = filterManager.taxonFilter.filter({ $0.isSelected }).map({ $0.taxon })
+                let taxons: [Taxon] = filters.compactMap {
+                    guard case .taxon(let taxon) = $0.filterType, $0.isSelected else { return nil }
+                    
+                    return taxon
+                }
                 
                 await reportViewModel.fetchData(taxons: taxons)
                 reports = reportViewModel.reports
@@ -49,5 +54,4 @@ struct ReportListView: View {
 
 #Preview {
     ReportListView()
-        .environmentObject(FilterManager())
 }

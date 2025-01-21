@@ -13,7 +13,7 @@
 		378AF5C22D1557FC00AC77A8 /* SpeciesItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */; };
 		378AF5C42D15580D00AC77A8 /* Species.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C32D15580D00AC77A8 /* Species.swift */; };
 		378AF5C62D16104D00AC77A8 /* SpeciesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */; };
-		37F62C902D19323400FECE1A /* FilterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C8F2D19323400FECE1A /* FilterManager.swift */; };
+		37BCA9262D3B089800AA10CA /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9252D3B089800AA10CA /* Filter.swift */; };
 		37F62C922D1CC93A00FECE1A /* UpdateFilterButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C912D1CC93A00FECE1A /* UpdateFilterButtonView.swift */; };
 		37F62C942D1F568600FECE1A /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C932D1F568600FECE1A /* CategorySelectionView.swift */; };
 		37F62C962D1F655700FECE1A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C952D1F655700FECE1A /* Category.swift */; };
@@ -58,7 +58,7 @@
 		378AF5C12D1557FC00AC77A8 /* SpeciesItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesItemView.swift; sourceTree = "<group>"; };
 		378AF5C32D15580D00AC77A8 /* Species.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Species.swift; sourceTree = "<group>"; };
 		378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesDetailView.swift; sourceTree = "<group>"; };
-		37F62C8F2D19323400FECE1A /* FilterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterManager.swift; sourceTree = "<group>"; };
+		37BCA9252D3B089800AA10CA /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		37F62C912D1CC93A00FECE1A /* UpdateFilterButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFilterButtonView.swift; sourceTree = "<group>"; };
 		37F62C932D1F568600FECE1A /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		37F62C952D1F655700FECE1A /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -120,14 +120,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		37F62C8E2D19322400FECE1A /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-				37F62C8F2D19323400FECE1A /* FilterManager.swift */,
-			);
-			path = Manager;
-			sourceTree = "<group>";
-		};
 		37F62C992D1F6EE100FECE1A /* Observation */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,7 +178,6 @@
 				37F888682D01295400258BDC /* Views */,
 				37F8886D2D01937C00258BDC /* ViewModels */,
 				37F888972D0B63FB00258BDC /* Models */,
-				37F62C8E2D19322400FECE1A /* Manager */,
 				37F888732D04163C00258BDC /* Network */,
 				37F888602D0128BA00258BDC /* Assets.xcassets */,
 				37F8885F2D0128BA00258BDC /* Preview Content */,
@@ -232,6 +223,7 @@
 			children = (
 				37F8889A2D0B643400258BDC /* Taxon.swift */,
 				37F8887B2D041BE400258BDC /* RespnoseModels.swift */,
+				37BCA9252D3B089800AA10CA /* Filter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -394,10 +386,10 @@
 				37F8886C2D0190EB00258BDC /* ReportItemView.swift in Sources */,
 				37F62C942D1F568600FECE1A /* CategorySelectionView.swift in Sources */,
 				37F888802D082BB400258BDC /* ReportDetailView.swift in Sources */,
+				37BCA9262D3B089800AA10CA /* Filter.swift in Sources */,
 				37F62C922D1CC93A00FECE1A /* UpdateFilterButtonView.swift in Sources */,
 				378AF5C62D16104D00AC77A8 /* SpeciesDetailView.swift in Sources */,
 				371122D42D2BBC2300B42D28 /* TaxonNames.swift in Sources */,
-				37F62C902D19323400FECE1A /* FilterManager.swift in Sources */,
 				378AF5BE2D1405B600AC77A8 /* SearchView.swift in Sources */,
 				37F888762D0416A200258BDC /* NetworkService.swift in Sources */,
 				37F8886F2D0193B900258BDC /* Report.swift in Sources */,
