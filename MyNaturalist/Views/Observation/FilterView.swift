@@ -38,9 +38,7 @@ struct FilterView: View {
     var body: some View {
         Section {
             ForEach($filterItems, id: \.text) { $filterItem in
-                SelectionView(selectionItem: $filterItem)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(.init(top: 6, leading: 20, bottom: 6, trailing: 20))
+                SelectionView(selectionItem: $filterItem, onDelete: deleteItem)
                     .onChange(of: filterItem.isSelected) {
                         guard !filterSection.isMultipleSelection, filterItem.isSelected else {
                             return
@@ -62,7 +60,6 @@ struct FilterView: View {
                 .padding(.leading, 20)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .listStyle(.plain)
         .onAppear() {
             switch filterSection {
             case .taxon:
@@ -70,32 +67,59 @@ struct FilterView: View {
             }
         }
     }
+    
+    private func deleteItem(itemToDelete: SelectableItem) {
+        if let filterToRemove = itemToDelete as? Filter {
+            modelContext.delete(filterToRemove)
+        }
+        
+        if let index = filterItems.firstIndex(where: { $0.text == itemToDelete.text }) {
+            filterItems.remove(at: index)
+        }
+    }
 }
 
 struct SelectionView: View {
     
     @Binding var selectionItem: SelectableItem
+    var onDelete: (SelectableItem) -> Void
     
     var body: some View {
-        Text(selectionItem.text)
-            .font(.title3)
-            .padding()
-            .frame(height: 40)
-            .foregroundStyle(selectionItem.isSelected ? Color.white : Color.accentColor)
-            .background(
-                selectionItem.isSelected ? Color.accentColor : Color(UIColor.systemBackground)
-            )
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.accentColor, lineWidth: 1)
-            )
-            .onTapGesture {
-                selectionItem.isSelected.toggle()
+        HStack {
+            Text(selectionItem.text)
+                .font(.title3)
+                .padding()
+                .frame(height: 40)
+                .foregroundStyle(selectionItem.isSelected ? Color.white : Color.accentColor)
+                .background(
+                    selectionItem.isSelected ? Color.accentColor : Color(UIColor.systemBackground)
+                )
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.accentColor, lineWidth: 1)
+                )
+                .onTapGesture {
+                    selectionItem.isSelected.toggle()
+                }
+            
+            Spacer()
+            
+            Button {
+                onDelete(selectionItem)
+            } label: {
+                Image(systemName: "xmark")
             }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 1)
     }
 }
 
 #Preview {
+    @Previewable @State var example: SelectableItem =
+        Filter(filterType: .taxon(.Constants.greatHornedOwl), isSelected: false)
+    
     FilterView(filterSection: .taxon)
+    SelectionView(selectionItem: $example, onDelete: { _ in })
 }
