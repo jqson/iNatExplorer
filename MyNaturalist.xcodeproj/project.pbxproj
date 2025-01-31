@@ -14,6 +14,7 @@
 		378AF5C42D15580D00AC77A8 /* Species.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C32D15580D00AC77A8 /* Species.swift */; };
 		378AF5C62D16104D00AC77A8 /* SpeciesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */; };
 		37BCA9262D3B089800AA10CA /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9252D3B089800AA10CA /* Filter.swift */; };
+		37BCA9342D4CA5DC00AA10CA /* ReportHistogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9332D4CA5DC00AA10CA /* ReportHistogram.swift */; };
 		37F62C922D1CC93A00FECE1A /* UpdateFilterButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C912D1CC93A00FECE1A /* UpdateFilterButtonView.swift */; };
 		37F62C942D1F568600FECE1A /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C932D1F568600FECE1A /* CategorySelectionView.swift */; };
 		37F62C962D1F655700FECE1A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C952D1F655700FECE1A /* Category.swift */; };
@@ -59,6 +60,7 @@
 		378AF5C32D15580D00AC77A8 /* Species.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Species.swift; sourceTree = "<group>"; };
 		378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesDetailView.swift; sourceTree = "<group>"; };
 		37BCA9252D3B089800AA10CA /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		37BCA9332D4CA5DC00AA10CA /* ReportHistogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportHistogram.swift; sourceTree = "<group>"; };
 		37F62C912D1CC93A00FECE1A /* UpdateFilterButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFilterButtonView.swift; sourceTree = "<group>"; };
 		37F62C932D1F568600FECE1A /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		37F62C952D1F655700FECE1A /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -120,7 +122,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		37F62C992D1F6EE100FECE1A /* Observation */ = {
+		37F62C992D1F6EE100FECE1A /* Report */ = {
 			isa = PBXGroup;
 			children = (
 				378AF5BD2D1405B600AC77A8 /* SearchView.swift */,
@@ -129,7 +131,7 @@
 				37F8886B2D0190EB00258BDC /* ReportItemView.swift */,
 				37F8887F2D082BB400258BDC /* ReportDetailView.swift */,
 			);
-			path = Observation;
+			path = Report;
 			sourceTree = "<group>";
 		};
 		37F62C9A2D1F6EF600FECE1A /* Species */ = {
@@ -189,7 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				37F888612D0128BA00258BDC /* ContentView.swift */,
-				37F62C992D1F6EE100FECE1A /* Observation */,
+				37F62C992D1F6EE100FECE1A /* Report */,
 				37F62C9A2D1F6EF600FECE1A /* Species */,
 				37F62C912D1CC93A00FECE1A /* UpdateFilterButtonView.swift */,
 			);
@@ -204,6 +206,7 @@
 				37F62C952D1F655700FECE1A /* Category.swift */,
 				37F888912D0A1E1C00258BDC /* Location.swift */,
 				371122D32D2BBC2300B42D28 /* TaxonNames.swift */,
+				37BCA9332D4CA5DC00AA10CA /* ReportHistogram.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -211,8 +214,8 @@
 		37F888732D04163C00258BDC /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				37F888752D0416A200258BDC /* NetworkService.swift */,
 				37F888772D041B0900258BDC /* NetworkRequest.swift */,
+				37F888752D0416A200258BDC /* NetworkService.swift */,
 				37F888872D083A4600258BDC /* CdnImage.swift */,
 			);
 			path = Network;
@@ -375,6 +378,7 @@
 			files = (
 				378AF5C02D1557B800AC77A8 /* SpeciesListView.swift in Sources */,
 				37F888782D041B0A00258BDC /* NetworkRequest.swift in Sources */,
+				37BCA9342D4CA5DC00AA10CA /* ReportHistogram.swift in Sources */,
 				37F888882D083A4600258BDC /* CdnImage.swift in Sources */,
 				37F888662D0128BA00258BDC /* ContentView.swift in Sources */,
 				37F8889B2D0B643400258BDC /* Taxon.swift in Sources */,

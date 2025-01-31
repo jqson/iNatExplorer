@@ -68,6 +68,14 @@ struct TaxonNameResponse: Codable {
     let name: String
 }
 
+struct HistogramResponse: Codable {
+    struct Result: Codable {
+        let day: [String: Int]
+    }
+    
+    let results: Result
+}
+
 struct ReverseGeoResponse: Codable {
     struct Result: Codable {
         struct AddressComponent: Codable {

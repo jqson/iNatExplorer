@@ -11,6 +11,7 @@ struct SpeciesDetailView: View {
     
     var species: Species
     @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
+    @StateObject var histogramViewModel = ReportHistogramViewModel()
     
     var body: some View {
         VStack {
@@ -51,7 +52,10 @@ struct SpeciesDetailView: View {
         }
         .onAppear {
             Task {
-                await taxonNamesViewModel.fetchData(taxonId: species.taxon.id)
+                async let loadTaxonNames: () = taxonNamesViewModel.fetchData(taxonId: species.taxon.id)
+                async let loadHistogram: () = histogramViewModel.fetchData(taxonId: species.taxon.id)
+                
+                let _ = await [loadTaxonNames, loadHistogram]
             }
         }
     }
