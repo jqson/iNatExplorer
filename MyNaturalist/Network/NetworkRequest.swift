@@ -46,7 +46,7 @@ class NetworkRequest {
     }
     
     enum Histogram {
-        static let endpoint = "/observations/histogram?verifiable=true&taxon_id=19350&date_field=observed&interval=day"
+        static let endpoint = "/observations/histogram?verifiable=true&date_field=observed"
         
         static let taxonIdKey = "taxon_id"
         static let intervalKey = "interval"
@@ -109,6 +109,8 @@ class NetworkRequest {
         ]
         
         queryItems += Constants.commonParams
+        
+        requestUrl?.append(queryItems: queryItems)
         
         return try? await NetworkService.sendRequest(url: requestUrl)
     }

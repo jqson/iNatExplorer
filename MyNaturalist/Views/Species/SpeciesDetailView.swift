@@ -5,6 +5,7 @@
 //  Created by Yuanfeng Jiao on 12/20/24.
 //
 
+import Charts
 import SwiftUI
 
 struct SpeciesDetailView: View {
@@ -49,6 +50,13 @@ struct SpeciesDetailView: View {
                 }
             }
             .padding()
+            
+            Chart(histogramViewModel.counts, id: \.self.label) {
+                BarMark(
+                    x: .value("Date", $0.label),
+                    y: .value("Count", $0.value)
+                )
+            }
         }
         .onAppear {
             Task {
