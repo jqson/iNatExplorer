@@ -15,8 +15,16 @@ struct Histogram {
 @MainActor class ReportHistogramViewModel: ObservableObject {
     
     @Published private(set) var lastYearCounts: [Histogram] = []
+    @Published private(set) var allYearCounts: [Histogram] = []
     
     func fetchData(taxonId: Int) async {
+        async let lastYear: () = fetchLastYearCounts(taxonId: taxonId)
+        async let allYear: () = fetchAllYearCounts(taxonId: taxonId)
+        
+        let _ = await [lastYear, allYear]
+    }
+    
+    private func fetchLastYearCounts(taxonId: Int) async {
         guard
             let response = await NetworkRequest.getObservationHistogram(
                 taxonId: taxonId, interval: .day
@@ -48,5 +56,24 @@ struct Histogram {
         }
         
         lastYearCounts = weekHists
+    }
+    
+    private func fetchAllYearCounts(taxonId: Int) async {
+        guard
+            let response = await NetworkRequest.getObservationHistogram(
+                taxonId: taxonId, interval: .weekOfYear
+            ),
+            let weekCounts = response.results.weekOfYear
+        else {
+            return
+        }
+        
+        var weekHists: [Histogram] = []
+        for week in 1...52 {
+            let weekStr = String(week)
+            weekHists.append(.init(label: weekStr, value: weekCounts[weekStr] ?? 0))
+        }
+        
+        allYearCounts = weekHists
     }
 }

@@ -51,6 +51,13 @@ struct SpeciesDetailView: View {
             }
             .padding()
             
+            Chart(histogramViewModel.allYearCounts, id: \.self.label) {
+                BarMark(
+                    x: .value("Date", $0.label),
+                    y: .value("Count", $0.value)
+                )
+            }
+            
             Chart(histogramViewModel.lastYearCounts, id: \.self.label) {
                 BarMark(
                     x: .value("Date", $0.label),

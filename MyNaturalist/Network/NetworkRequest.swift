@@ -106,7 +106,7 @@ class NetworkRequest {
         
         var queryItems: [URLQueryItem] = [
             .init(name: Histogram.taxonIdKey, value: String(taxonId)),
-            .init(name: Histogram.intervalKey, value: Histogram.IntervalType.day.rawValue),
+            .init(name: Histogram.intervalKey, value: interval.rawValue),
         ]
         
         queryItems += Constants.commonParams
