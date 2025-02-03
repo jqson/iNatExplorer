@@ -8,20 +8,44 @@
 import Foundation
 
 struct Histogram {
+    enum Period: String {
+        case lastYear = "Last Year"
+        case allYears = "All Years"
+    }
+    
     let label: String
-    let value: Int
+    let period: Period
+    let count: Int
+    
+    var periodStr: String {
+        self.period.rawValue
+    }
 }
 
 @MainActor class ReportHistogramViewModel: ObservableObject {
     
-    @Published private(set) var lastYearCounts: [Histogram] = []
-    @Published private(set) var allYearCounts: [Histogram] = []
+    @Published private(set) var weeklyCounts: [Histogram] = []
+    
+    private var lastYearCounts: [Int] = []
+    private var allYearsCounts: [Int] = []
     
     func fetchData(taxonId: Int) async {
         async let lastYear: () = fetchLastYearCounts(taxonId: taxonId)
         async let allYear: () = fetchAllYearCounts(taxonId: taxonId)
         
         let _ = await [lastYear, allYear]
+        
+        guard lastYearCounts.count >= 52, allYearsCounts.count >= 52 else {
+            print("Histogram data error!")
+            return
+        }
+        
+        weeklyCounts = Array(1...52).flatMap {
+            [
+                Histogram(label: String($0), period: .allYears, count: allYearsCounts[$0 - 1]),
+                Histogram(label: String($0), period: .lastYear, count: lastYearCounts[$0 - 1]),
+            ]
+        }
     }
     
     private func fetchLastYearCounts(taxonId: Int) async {
@@ -34,28 +58,25 @@ struct Histogram {
             return
         }
         
-        let dayHists = DateUtil.getPastYearDateList().map {
-            Histogram(label: $0, value: dayCounts[$0] ?? 0)
-        }
+        let lastYearDayCounts = DateUtil.getPastYearDateList().map({ dayCounts[$0] ?? 0 })
         
-        
-        var weekHists: [Histogram] = []
+        var lastYearWeekCounts: [Int] = []
         var days = 0
         var weekSum = 0
         var weekCount = 0
-        for dayHist in dayHists {
+        for dayCount in lastYearDayCounts {
             days += 1;
-            weekSum += dayHist.value
+            weekSum += dayCount
             
             if days == 7 {
                 weekCount += 1;
-                weekHists.append(.init(label: String(weekCount), value: weekSum))
+                lastYearWeekCounts.append(weekSum)
                 days = 0
                 weekSum = 0
             }
         }
         
-        lastYearCounts = weekHists
+        lastYearCounts = lastYearWeekCounts
     }
     
     private func fetchAllYearCounts(taxonId: Int) async {
@@ -68,12 +89,6 @@ struct Histogram {
             return
         }
         
-        var weekHists: [Histogram] = []
-        for week in 1...52 {
-            let weekStr = String(week)
-            weekHists.append(.init(label: weekStr, value: weekCounts[weekStr] ?? 0))
-        }
-        
-        allYearCounts = weekHists
+        allYearsCounts = Array(1...52).map({ weekCounts[String($0)] ?? 0 })
     }
 }

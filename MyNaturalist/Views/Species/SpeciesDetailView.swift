@@ -51,19 +51,17 @@ struct SpeciesDetailView: View {
             }
             .padding()
             
-            Chart(histogramViewModel.allYearCounts, id: \.self.label) {
-                BarMark(
-                    x: .value("Date", $0.label),
-                    y: .value("Count", $0.value)
-                )
+            Chart {
+                ForEach(histogramViewModel.weeklyCounts, id: \.period) {
+                    BarMark(
+                        x: .value("Date", $0.label),
+                        y: .value("Count", $0.count)
+                    )
+                    .foregroundStyle(by: .value("Period", $0.periodStr))
+                    .position(by: .value("Period", $0.periodStr), span: .ratio(1))
+                }
             }
-            
-            Chart(histogramViewModel.lastYearCounts, id: \.self.label) {
-                BarMark(
-                    x: .value("Date", $0.label),
-                    y: .value("Count", $0.value)
-                )
-            }
+            .frame(height: 200)
         }
         .onAppear {
             Task {
