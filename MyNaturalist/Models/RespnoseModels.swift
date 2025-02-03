@@ -70,7 +70,8 @@ struct TaxonNameResponse: Codable {
 
 struct HistogramResponse: Codable {
     struct Result: Codable {
-        let day: [String: Int]
+        let day: [String: Int]?
+        let weekOfYear: [String: Int]?
     }
     
     let results: Result

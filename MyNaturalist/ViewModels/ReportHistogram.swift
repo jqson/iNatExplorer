@@ -14,15 +14,39 @@ struct Histogram {
 
 @MainActor class ReportHistogramViewModel: ObservableObject {
     
-    @Published private(set) var counts: [Histogram] = []
+    @Published private(set) var lastYearCounts: [Histogram] = []
     
     func fetchData(taxonId: Int) async {
-        guard let response = await NetworkRequest.getObservationHistogram(taxonId: taxonId) else {
+        guard
+            let response = await NetworkRequest.getObservationHistogram(
+                taxonId: taxonId, interval: .day
+            ),
+            let dayCounts = response.results.day
+        else {
             return
         }
         
-        counts = response.results.day.map({
-            .init(label: $0.key, value: $0.value)
-        }).sorted(by: { $0.label < $1.label })
+        let dayHists = DateUtil.getPastYearDateList().map {
+            Histogram(label: $0, value: dayCounts[$0] ?? 0)
+        }
+        
+        
+        var weekHists: [Histogram] = []
+        var days = 0
+        var weekSum = 0
+        var weekCount = 0
+        for dayHist in dayHists {
+            days += 1;
+            weekSum += dayHist.value
+            
+            if days == 7 {
+                weekCount += 1;
+                weekHists.append(.init(label: String(weekCount), value: weekSum))
+                days = 0
+                weekSum = 0
+            }
+        }
+        
+        lastYearCounts = weekHists
     }
 }

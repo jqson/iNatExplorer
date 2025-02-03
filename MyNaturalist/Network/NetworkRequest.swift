@@ -53,6 +53,7 @@ class NetworkRequest {
         
         enum IntervalType: String {
             case day = "day"
+            case weekOfYear = "week_of_year"
         }
     }
     
@@ -100,7 +101,7 @@ class NetworkRequest {
         return try? await NetworkService.sendRequest(url: requestUrl)
     }
     
-    static func getObservationHistogram(taxonId: Int) async -> HistogramResponse? {
+    static func getObservationHistogram(taxonId: Int, interval: Histogram.IntervalType) async -> HistogramResponse? {
         var requestUrl = URL(string: Constants.iNatBaseUrl + Histogram.endpoint)
         
         var queryItems: [URLQueryItem] = [
