@@ -13,7 +13,7 @@ struct Histogram {
         case allYears = "All Years"
     }
     
-    let label: String
+    let date: Date
     let period: Period
     let count: Int
     
@@ -26,7 +26,7 @@ struct Histogram {
     
     @Published private(set) var weeklyCounts: [Histogram] = []
     
-    private var lastYearCounts: [Int] = []
+    private var lastYearCounts: [(Date, Int)] = []
     private var allYearsCounts: [Int] = []
     
     func fetchData(taxonId: Int) async {
@@ -40,10 +40,12 @@ struct Histogram {
             return
         }
         
-        weeklyCounts = Array(1...52).flatMap {
-            [
-                Histogram(label: String($0), period: .allYears, count: allYearsCounts[$0 - 1]),
-                Histogram(label: String($0), period: .lastYear, count: lastYearCounts[$0 - 1]),
+        weeklyCounts = Array(0..<52).flatMap {
+            let date = lastYearCounts[$0].0
+            print(date)
+            return [
+                Histogram(date: date, period: .allYears, count: allYearsCounts[$0]),
+                Histogram(date: date, period: .lastYear, count: lastYearCounts[$0].1),
             ]
         }
     }
@@ -58,19 +60,23 @@ struct Histogram {
             return
         }
         
-        let lastYearDayCounts = DateUtil.getPastYearDateList().map({ dayCounts[$0] ?? 0 })
+        let lastYearDates = DateUtil.getPastYearDateList()
         
-        var lastYearWeekCounts: [Int] = []
+        var lastYearWeekCounts: [(Date, Int)] = []
         var days = 0
         var weekSum = 0
         var weekCount = 0
-        for dayCount in lastYearDayCounts {
+        var weekDate: Date = .now
+        for dateWithStr in lastYearDates {
+            if days == 0 {
+                weekDate = dateWithStr.date
+            }
             days += 1;
-            weekSum += dayCount
+            weekSum += dayCounts[dateWithStr.str] ?? 0
             
             if days == 7 {
                 weekCount += 1;
-                lastYearWeekCounts.append(weekSum)
+                lastYearWeekCounts.append((weekDate, weekSum))
                 days = 0
                 weekSum = 0
             }

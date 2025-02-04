@@ -15,7 +15,7 @@ struct SpeciesDetailView: View {
     @StateObject var histogramViewModel = ReportHistogramViewModel()
     
     var body: some View {
-        VStack {
+        ScrollView {
             HStack {
                 Text("\(species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
                     .padding(.leading)
@@ -35,6 +35,30 @@ struct SpeciesDetailView: View {
                 Color.gray
             }
             
+            let dateFormatter = DateFormatter()
+            let _ = dateFormatter.dateFormat = "MM-dd"
+            Chart(histogramViewModel.weeklyCounts, id: \.period) {
+                BarMark(
+                    x: .value("Date", $0.date, unit: .weekOfYear),
+                    y: .value("Count", $0.count)
+                )
+                .foregroundStyle(by: .value("Period", $0.periodStr))
+                .position(by: .value("Period", $0.periodStr), axis: .horizontal, span: .ratio(1))
+            }
+            .chartForegroundStyleScale([
+                Histogram.Period.allYears.rawValue : .blue,
+                Histogram.Period.lastYear.rawValue : .orange
+            ])
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .month, count: 1)) { value in
+                    AxisValueLabel(format: .dateTime.month())
+                    AxisGridLine()
+                }
+            }
+            .frame(height: 200)
+            .padding(.horizontal)
+            .padding(.top)
+            
             let columns: [GridItem] = [
                 GridItem(.fixed(120), alignment: .init(horizontal: .trailing, vertical: .top)),
                 GridItem(.flexible(), alignment: .leading)
@@ -49,19 +73,6 @@ struct SpeciesDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .padding()
-            
-            Chart {
-                ForEach(histogramViewModel.weeklyCounts, id: \.period) {
-                    BarMark(
-                        x: .value("Date", $0.label),
-                        y: .value("Count", $0.count)
-                    )
-                    .foregroundStyle(by: .value("Period", $0.periodStr))
-                    .position(by: .value("Period", $0.periodStr), span: .ratio(1))
-                }
-            }
-            .frame(height: 200)
         }
         .onAppear {
             Task {

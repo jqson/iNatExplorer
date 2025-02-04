@@ -7,14 +7,17 @@
 
 import Foundation
 
+typealias DateWithString = (date: Date, str: String)
+
 class DateUtil {
     
     enum Constants {
         static let dateFormat = "yyyy-MM-dd"
-        static let dateFormatDayLen = "MM-dd".count
+        static let mdFormat = "MM-dd"
+        static let dateFormatDayLen = mdFormat.count
     }
     
-    static func getPastYearDateList() -> [String] {
+    static func getPastYearDateList() -> [DateWithString] {
         let calendar = Calendar.current
         let today = Date()
         let fromDate = calendar.date(byAdding: DateComponents(year: -1, day: -1), to: today)!
@@ -23,8 +26,11 @@ class DateUtil {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = .autoupdatingCurrent
         dateFormatter.dateFormat = Constants.dateFormat
+        
+        let mdDateFormatter = DateFormatter()
+        mdDateFormatter.dateFormat = Constants.mdFormat
 
-        var dateStrs: [String] = []
+        var dates: [DateWithString] = []
         let components = DateComponents(hour: 0, minute: 0, second: 0)
         calendar.enumerateDates(startingAfter: fromDate, matching: components, matchingPolicy: .nextTime) { date, strict, stop in
             guard let date = date else { return }
@@ -34,13 +40,18 @@ class DateUtil {
                 return
             }
             
-            dateStrs.append(dateFormatter.string(from: date))
+            let dateStr = dateFormatter.string(from: date)
+            let axisDate = mdDateFormatter.date(
+                from: String(dateStr.suffix(Constants.dateFormatDayLen))
+            )!
+            
+            dates.append((date: axisDate, str: dateFormatter.string(from: date)))
         }
         
-        dateStrs.sort {
-            $0.suffix(Constants.dateFormatDayLen) < $1.suffix(Constants.dateFormatDayLen)
+        dates.sort {
+            $0.str.suffix(Constants.dateFormatDayLen) < $1.str.suffix(Constants.dateFormatDayLen)
         }
         
-        return dateStrs
+        return dates
     }
 }
