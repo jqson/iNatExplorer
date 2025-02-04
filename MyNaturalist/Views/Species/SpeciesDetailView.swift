@@ -49,10 +49,12 @@ struct SpeciesDetailView: View {
                 Histogram.Period.allYears.rawValue : .blue,
                 Histogram.Period.lastYear.rawValue : .orange
             ])
+            .chartXScale(domain: histogramViewModel.dateRange)
             .chartXAxis {
                 AxisMarks(values: .stride(by: .month, count: 1)) { value in
                     AxisValueLabel(format: .dateTime.month())
                     AxisGridLine()
+                    AxisTick()
                 }
             }
             .frame(height: 200)

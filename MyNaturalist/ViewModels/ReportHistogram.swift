@@ -26,6 +26,8 @@ struct Histogram {
     
     @Published private(set) var weeklyCounts: [Histogram] = []
     
+    private(set) var dateRange: ClosedRange<Date> = Date.now...Date.now
+    
     private var lastYearCounts: [(Date, Int)] = []
     private var allYearsCounts: [Int] = []
     
@@ -48,6 +50,15 @@ struct Histogram {
                 Histogram(date: date, period: .lastYear, count: lastYearCounts[$0].1),
             ]
         }
+        
+        guard let startDate = weeklyCounts.first?.date else { return }
+        
+        let calendar = Calendar.current
+        let startYear = calendar.component(.year, from: startDate)
+        let firstDayOfYear = DateComponents(calendar: calendar, year: startYear).date!
+        let lastDayOfYear = DateComponents(calendar: calendar, year: startYear + 1).date!
+        
+        dateRange = firstDayOfYear...lastDayOfYear
     }
     
     private func fetchLastYearCounts(taxonId: Int) async {
@@ -68,7 +79,7 @@ struct Histogram {
         var weekCount = 0
         var weekDate: Date = .now
         for dateWithStr in lastYearDates {
-            if days == 0 {
+            if days == 1 {
                 weekDate = dateWithStr.date
             }
             days += 1;
