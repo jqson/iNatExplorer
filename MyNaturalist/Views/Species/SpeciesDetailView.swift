@@ -42,12 +42,12 @@ struct SpeciesDetailView: View {
                     x: .value("Date", $0.date, unit: .weekOfYear),
                     y: .value("Count", $0.count)
                 )
-                .foregroundStyle(by: .value("Period", $0.periodStr))
-                .position(by: .value("Period", $0.periodStr), axis: .horizontal, span: .ratio(1))
+                .foregroundStyle(by: .value("Period", $0.period))
+                .position(by: .value("Period", $0.period), axis: .horizontal, span: .ratio(1))
             }
             .chartForegroundStyleScale([
-                Histogram.Period.allYears.rawValue : .blue,
-                Histogram.Period.lastYear.rawValue : .orange
+                histogramViewModel.historicalLegend : .blue,
+                histogramViewModel.lastYearLegend : .orange
             ])
             .chartXScale(domain: histogramViewModel.dateRange)
             .chartXAxis {

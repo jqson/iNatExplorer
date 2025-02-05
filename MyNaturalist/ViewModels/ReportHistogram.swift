@@ -8,24 +8,22 @@
 import Foundation
 
 struct Histogram {
-    enum Period: String {
-        case lastYear = "Last Year"
-        case allYears = "All Years"
+    enum Constants {
+        static let historicalLegend = "Historical (scale: 1/%d)"
+        static let lastYearLegend = "Last Year"
     }
     
     let date: Date
-    let period: Period
+    let period: String
     let count: Double
-    
-    var periodStr: String {
-        self.period.rawValue
-    }
 }
 
 @MainActor class ReportHistogramViewModel: ObservableObject {
     
     @Published private(set) var weeklyCounts: [Histogram] = []
     
+    private(set) var historicalLegend: String = ""
+    private(set) var lastYearLegend: String = ""
     private(set) var dateRange: ClosedRange<Date> = Date.now...Date.now
     
     private var lastYearCounts: [(Date, Int)] = []
@@ -42,21 +40,34 @@ struct Histogram {
             return
         }
         
+        let historicalCounts = Array(0..<52).map {
+            max(allYearsCounts[$0] - lastYearCounts[$0].1, 0)
+        }
+        
         guard
             let lastYearMax = lastYearCounts.map({ $0.1 }).max(),
-            let allYearsMax = allYearsCounts.max()
+            let historicalMax = historicalCounts.max()
         else {
             print("Histogram data error!")
             return
         }
         
-        let scale: Double = Double(allYearsMax / lastYearMax)
+        let lastYearSum = lastYearCounts.map({ $0.1 }).reduce(0, +)
+        let historicalSum = historicalCounts.reduce(0, +)
         
+        let maxCountScale = max(historicalMax / lastYearMax, 1)
+        let averageCountScale = max(historicalSum / lastYearSum, 1)
+        
+        let scale = min(maxCountScale, averageCountScale)
+        
+        historicalLegend = String(format: Histogram.Constants.historicalLegend, scale)
+        lastYearLegend = Histogram.Constants.lastYearLegend
         weeklyCounts = Array(0..<52).flatMap {
             let date = lastYearCounts[$0].0
+            let historicalDisplay = Double(historicalCounts[$0]) / Double(scale)
             return [
-                Histogram(date: date, period: .allYears, count: Double(allYearsCounts[$0]) / scale),
-                Histogram(date: date, period: .lastYear, count: Double(lastYearCounts[$0].1)),
+                Histogram(date: date, period: historicalLegend, count: historicalDisplay),
+                Histogram(date: date, period: lastYearLegend, count: Double(lastYearCounts[$0].1)),
             ]
         }
         
