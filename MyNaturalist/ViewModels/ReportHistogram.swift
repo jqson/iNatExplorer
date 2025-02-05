@@ -15,7 +15,7 @@ struct Histogram {
     
     let date: Date
     let period: Period
-    let count: Int
+    let count: Double
     
     var periodStr: String {
         self.period.rawValue
@@ -42,12 +42,21 @@ struct Histogram {
             return
         }
         
+        guard
+            let lastYearMax = lastYearCounts.map({ $0.1 }).max(),
+            let allYearsMax = allYearsCounts.max()
+        else {
+            print("Histogram data error!")
+            return
+        }
+        
+        let scale: Double = Double(allYearsMax / lastYearMax)
+        
         weeklyCounts = Array(0..<52).flatMap {
             let date = lastYearCounts[$0].0
-            print(date)
             return [
-                Histogram(date: date, period: .allYears, count: allYearsCounts[$0]),
-                Histogram(date: date, period: .lastYear, count: lastYearCounts[$0].1),
+                Histogram(date: date, period: .allYears, count: Double(allYearsCounts[$0]) / scale),
+                Histogram(date: date, period: .lastYear, count: Double(lastYearCounts[$0].1)),
             ]
         }
         

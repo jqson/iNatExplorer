@@ -57,6 +57,12 @@ struct SpeciesDetailView: View {
                     AxisTick()
                 }
             }
+            .chartYAxis {
+                AxisMarks() {
+                    AxisValueLabel().foregroundStyle(Color.orange)
+                    AxisGridLine()
+                }
+            }
             .frame(height: 200)
             .padding(.horizontal)
             .padding(.top)
