@@ -35,21 +35,34 @@ struct SpeciesDetailView: View {
                 Color.gray
             }
             
-            let dateFormatter = DateFormatter()
-            let _ = dateFormatter.dateFormat = "MM-dd"
-            Chart(histogramViewModel.weeklyCounts, id: \.period) {
-                BarMark(
-                    x: .value("Date", $0.date, unit: .weekOfYear),
-                    y: .value("Count", $0.count)
-                )
-                .foregroundStyle(by: .value("Period", $0.period))
-                .position(by: .value("Period", $0.period), axis: .horizontal, span: .ratio(1))
+            let lastYearHistogram = histogramViewModel.lastYearHistogram
+            let historicalHistogram = histogramViewModel.historicalHistogram
+            let dateRange = histogramViewModel.dateRange
+            
+            Chart() {
+                ForEach(historicalHistogram.counts, id: \.self) {
+                    BarMark(
+                        x: .value("Date", $0.date, unit: .weekOfYear),
+                        y: .value("Count", $0.count),
+                        width: .ratio(1.05)
+                    )
+                    .foregroundStyle(by: .value("Period", historicalHistogram.legend))
+                }
+                ForEach(lastYearHistogram.counts, id: \.self) {
+                    BarMark(
+                        x: .value("Date", $0.date, unit: .weekOfYear),
+                        y: .value("Count", $0.count),
+                        width: .ratio(0.4)
+                    )
+                    .foregroundStyle(by: .value("Period", lastYearHistogram.legend))
+                    .position(by: .value("Period", lastYearHistogram.legend), axis: .horizontal, span: .ratio(1))
+                }
             }
             .chartForegroundStyleScale([
-                histogramViewModel.historicalLegend : .blue,
-                histogramViewModel.lastYearLegend : .orange
+                historicalHistogram.legend : Color.chartBarSecondary,
+                lastYearHistogram.legend : Color.chartBarPrimary
             ])
-            .chartXScale(domain: histogramViewModel.dateRange)
+            .chartXScale(domain: dateRange)
             .chartXAxis {
                 AxisMarks(values: .stride(by: .month, count: 1)) { value in
                     AxisValueLabel(format: .dateTime.month())
@@ -59,7 +72,7 @@ struct SpeciesDetailView: View {
             }
             .chartYAxis {
                 AxisMarks() {
-                    AxisValueLabel().foregroundStyle(Color.orange)
+                    AxisValueLabel().foregroundStyle(Color.chartBarPrimary)
                     AxisGridLine()
                 }
             }

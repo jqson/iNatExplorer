@@ -13,17 +13,20 @@ struct Histogram {
         static let lastYearLegend = "Last Year"
     }
     
+    let legend: String
+    let counts: [ReportCount]
+}
+
+struct ReportCount: Hashable {
     let date: Date
-    let period: String
     let count: Double
 }
 
 @MainActor class ReportHistogramViewModel: ObservableObject {
     
-    @Published private(set) var weeklyCounts: [Histogram] = []
+    @Published private(set) var historicalHistogram: Histogram = .init(legend: "", counts: [])
+    @Published private(set) var lastYearHistogram: Histogram = .init(legend: "", counts: [])
     
-    private(set) var historicalLegend: String = ""
-    private(set) var lastYearLegend: String = ""
     private(set) var dateRange: ClosedRange<Date> = Date.now...Date.now
     
     private var lastYearCounts: [(Date, Int)] = []
@@ -39,6 +42,22 @@ struct Histogram {
             print("Histogram data error!")
             return
         }
+        
+        guard let startDate = lastYearCounts.first?.0 else { return }
+        
+        let calendar = Calendar.current
+        let startYear = calendar.component(.year, from: startDate)
+        let firstDayOfYear = DateComponents(calendar: calendar, year: startYear).date!
+        let lastDayOfYear = DateComponents(calendar: calendar, year: startYear + 1).date!
+        
+        dateRange = firstDayOfYear...lastDayOfYear
+        
+        lastYearHistogram = .init(
+            legend: Histogram.Constants.lastYearLegend,
+            counts: Array(0..<52).map {
+                .init(date: lastYearCounts[$0].0, count: Double(lastYearCounts[$0].1))
+            }
+        )
         
         let historicalCounts = Array(0..<52).map {
             max(allYearsCounts[$0] - lastYearCounts[$0].1, 0)
@@ -60,25 +79,13 @@ struct Histogram {
         
         let scale = min(maxCountScale, averageCountScale)
         
-        historicalLegend = String(format: Histogram.Constants.historicalLegend, scale)
-        lastYearLegend = Histogram.Constants.lastYearLegend
-        weeklyCounts = Array(0..<52).flatMap {
-            let date = lastYearCounts[$0].0
-            let historicalDisplay = Double(historicalCounts[$0]) / Double(scale)
-            return [
-                Histogram(date: date, period: historicalLegend, count: historicalDisplay),
-                Histogram(date: date, period: lastYearLegend, count: Double(lastYearCounts[$0].1)),
-            ]
-        }
-        
-        guard let startDate = weeklyCounts.first?.date else { return }
-        
-        let calendar = Calendar.current
-        let startYear = calendar.component(.year, from: startDate)
-        let firstDayOfYear = DateComponents(calendar: calendar, year: startYear).date!
-        let lastDayOfYear = DateComponents(calendar: calendar, year: startYear + 1).date!
-        
-        dateRange = firstDayOfYear...lastDayOfYear
+        historicalHistogram = .init(
+            legend: String(format: Histogram.Constants.historicalLegend, scale),
+            counts: Array(0..<52).map {
+                let historicalDisplay = Double(historicalCounts[$0]) / Double(scale)
+                return .init(date: lastYearCounts[$0].0, count: historicalDisplay)
+            }
+        )
     }
     
     private func fetchLastYearCounts(taxonId: Int) async {
