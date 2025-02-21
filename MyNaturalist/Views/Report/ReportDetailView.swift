@@ -26,34 +26,36 @@ struct ReportDetailView: View {
             }
             .padding()
             
-            Text(report.observedTime)
-            
-            Text(locationViewModel.location?.displayAddress ?? "Failed to get address")
-            
-            if let description = report.description, !description.isEmpty {
-                Text("\"\(description)\"")
-                    .italic()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-            }
-            
-            if let link = report.webLink {
-                Link("inaturalist.org", destination: link)
-            }
-            
-            List(report.photos, id: \.id) { photo in
-                AsyncImage(url: photo.getUrl(.medium)) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                } placeholder: {
-                    Color.gray
+            ScrollView {
+                Text(report.observedTime)
+                
+                Text(locationViewModel.location?.displayAddress ?? "Failed to get address")
+                
+                if let description = report.description, !description.isEmpty {
+                    Text("\"\(description)\"")
+                        .italic()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
                 }
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
+                
+                if let link = report.webLink {
+                    Link("inaturalist.org", destination: link)
+                }
+                
+                ForEach(report.photos, id: \.id) { photo in
+                    AsyncImage(url: photo.getUrl(.medium)) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        Color.gray
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowSeparator(.hidden)
+                }
+                .listRowSpacing(5)
+                .listStyle(PlainListStyle())
             }
-            .listRowSpacing(5)
-            .listStyle(PlainListStyle())
         }
         .onAppear {
             Task {
