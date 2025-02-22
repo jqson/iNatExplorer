@@ -10,11 +10,11 @@ import Foundation
 struct Taxon: Identifiable, Hashable, Codable {
     
     enum Constants {
-        static let unknownTaxon: Taxon = .init(id: -1, name: "Unknown", rank: .others)
+        static let unknownTaxon: Taxon = .init(id: -1, name: "Unknown", displayName: "Unknown", rank: .others)
         
-        static let greatHornedOwl: Taxon = .init(id: 20044, name: "Great Horned Owl", rank: .species)
-        static let shortEaredOwl: Taxon = .init(id: 20315, name: "Short-eared Owl", rank: .species)
-        static let americanBarnOwl: Taxon = .init(id: 1578502, name: "American Barn Owl", rank: .species)
+        static let greatHornedOwl: Taxon = .init(id: 20044, name: "", displayName: "Great Horned Owl", rank: .species)
+        static let shortEaredOwl: Taxon = .init(id: 20315, name: "", displayName: "Short-eared Owl", rank: .species)
+        static let americanBarnOwl: Taxon = .init(id: 1578502, name: "", displayName: "American Barn Owl", rank: .species)
     }
     
     enum Rank: String, Codable {
@@ -33,19 +33,22 @@ struct Taxon: Identifiable, Hashable, Codable {
     
     let id: Int
     let name: String
+    let displayName: String
     let rank: Rank
 }
 
 extension Taxon {
     init(taxonResponse: TaxonResponse) {
         id = taxonResponse.id
-        name = taxonResponse.englishCommonName ?? taxonResponse.name
+        name = taxonResponse.name
+        displayName = taxonResponse.englishCommonName ?? taxonResponse.name
         rank = Taxon.Rank(rawValue: taxonResponse.rank) ?? .others
     }
     
     init(ancestorResponse: TaxonResponse.Ancestor) {
         id = ancestorResponse.id
-        name = ancestorResponse.englishCommonName ?? ancestorResponse.name
+        name = ancestorResponse.name
+        displayName = ancestorResponse.englishCommonName ?? ancestorResponse.name
         rank = Taxon.Rank(rawValue: ancestorResponse.rank) ?? .others
     }
 }

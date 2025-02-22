@@ -31,7 +31,7 @@ struct Report: Identifiable {
     let coordinates: Coordinates
     
     var name: String {
-        taxon?.name ?? "Unknown"
+        taxon?.displayName ?? "Unknown"
     }
 }
 

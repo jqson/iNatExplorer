@@ -39,7 +39,7 @@ struct SpeciesListView: View {
                             }
                         } header: {
                             HStack {
-                                Text(family.taxon.name)
+                                Text(family.taxon.displayName)
                                     .bold()
                                 
                                 Spacer()

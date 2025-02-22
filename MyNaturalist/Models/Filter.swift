@@ -19,7 +19,7 @@ enum FilterType: Codable, Equatable {
     var text: String {
         switch self {
         case .taxon(let taxon):
-            return taxon.name
+            return taxon.displayName
         }
     }
     

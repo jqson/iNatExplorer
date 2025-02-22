@@ -11,13 +11,13 @@ struct Species: Identifiable {
     
     enum Constants {
         static let preview: Species = .init(
-            taxon: .init(id: 6317, name: "Anna's Hummingbird", rank: .species),
+            taxon: .init(id: 6317, name: "", displayName: "Anna's Hummingbird", rank: .species),
             photo: .init(id: 256649705, urlStr: "https://static.inaturalist.org/photos/256649705/square.jpg"),
             count: 1234,
             ancestors: [
-                .init(id: 1, name: "Animals", rank: .kingdom),
-                .init(id: 5562, name: "Hummingbirds", rank: .family),
-                .init(id: 1542294, name: "Bee Hummingbirds and Allies", rank: .tribe),
+                .init(id: 1, name: "", displayName: "Animals", rank: .kingdom),
+                .init(id: 5562, name: "", displayName: "Hummingbirds", rank: .family),
+                .init(id: 1542294, name: "", displayName: "Bee Hummingbirds and Allies", rank: .tribe),
             ]
         )
     }
@@ -28,7 +28,7 @@ struct Species: Identifiable {
     let ancestors: [Taxon]
     
     var id: Int { taxon.id }
-    var name: String { taxon.name }
+    var name: String { taxon.displayName }
 }
 
 struct Family: Identifiable {
@@ -37,6 +37,29 @@ struct Family: Identifiable {
     
     var id: Int { taxon.id }
 }
+
+//extension Family: Comparable {
+//    static func == (lhs: Family, rhs: Family) -> Bool {
+//        lhs.taxon == rhs.taxon
+//    }
+//    
+//    static func < (lhs: Family, rhs: Family) -> Bool {
+//        for rank in Taxon.Constants.rankOrder {
+//            guard
+//                let lRank = lhs.ancestors.first(where: { $0.rank == rank }),
+//                let rRank = rhs.ancestors.first(where: { $0.rank == rank })
+//            else {
+//                break
+//            }
+//            
+//            if lRank != rRank {
+//                return lRank.id < rRank.id
+//            }
+//        }
+//        
+//        return lhs.id < rhs.id
+//    }
+//}
 
 @MainActor class SpeciesViewModel: ObservableObject {
     

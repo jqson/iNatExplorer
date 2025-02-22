@@ -90,7 +90,7 @@ struct SpeciesDetailView: View {
             LazyVGrid(columns: columns) {
                 ForEach(classification) { taxon in
                     Text("\(taxon.rank.rawValue.capitalized):")
-                    Text(taxon.name)
+                    Text(taxon.displayName)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
