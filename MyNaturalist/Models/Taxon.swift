@@ -10,6 +10,20 @@ import Foundation
 struct Taxon: Identifiable, Hashable, Codable {
     
     enum Constants {
+        static let rankOrder: [Rank] = [
+            .kingdom,
+            .phylum,
+            .subphylum,
+            .classRank,
+            .order,
+            .family,
+            .subfamily,
+            .tribe,
+            .genus,
+            .species,
+            .others
+        ]
+        
         static let unknownTaxon: Taxon = .init(id: -1, name: "Unknown", displayName: "Unknown", rank: .others)
         
         static let greatHornedOwl: Taxon = .init(id: 20044, name: "", displayName: "Great Horned Owl", rank: .species)
@@ -17,7 +31,7 @@ struct Taxon: Identifiable, Hashable, Codable {
         static let americanBarnOwl: Taxon = .init(id: 1578502, name: "", displayName: "American Barn Owl", rank: .species)
     }
     
-    enum Rank: String, Codable {
+    enum Rank: String, Codable, Comparable {
         case kingdom
         case phylum
         case subphylum
@@ -29,6 +43,10 @@ struct Taxon: Identifiable, Hashable, Codable {
         case genus
         case species
         case others
+        
+        static func < (lhs: Rank, rhs: Rank) -> Bool {
+            Constants.rankOrder.firstIndex(of: lhs)! > Constants.rankOrder.firstIndex(of: rhs)!
+        }
     }
     
     let id: Int

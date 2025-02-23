@@ -33,33 +33,45 @@ struct Species: Identifiable {
 
 struct Family: Identifiable {
     let taxon: Taxon
+    let ancestors: [Taxon]
     let species: [Species]
     
     var id: Int { taxon.id }
 }
 
-//extension Family: Comparable {
-//    static func == (lhs: Family, rhs: Family) -> Bool {
-//        lhs.taxon == rhs.taxon
-//    }
-//    
-//    static func < (lhs: Family, rhs: Family) -> Bool {
-//        for rank in Taxon.Constants.rankOrder {
-//            guard
-//                let lRank = lhs.ancestors.first(where: { $0.rank == rank }),
-//                let rRank = rhs.ancestors.first(where: { $0.rank == rank })
-//            else {
-//                break
-//            }
-//            
-//            if lRank != rRank {
-//                return lRank.id < rRank.id
-//            }
-//        }
-//        
-//        return lhs.id < rhs.id
-//    }
-//}
+extension Family: Comparable {
+    static func == (lhs: Family, rhs: Family) -> Bool {
+        lhs.taxon == rhs.taxon
+    }
+    
+    static func < (lhs: Family, rhs: Family) -> Bool {
+        let lRankIdx = AosFamilyOrder.shared.familyOrder[lhs.taxon.name]
+        let rRankIdx = AosFamilyOrder.shared.familyOrder[rhs.taxon.name]
+        
+        if let lRankIdx = lRankIdx, let rRankIdx = rRankIdx {
+            return lRankIdx < rRankIdx
+        }
+        
+        guard lRankIdx == nil, rRankIdx == nil else {
+            return rRankIdx == nil
+        }
+        
+        for rank in Taxon.Constants.rankOrder {
+            guard
+                let lRank = lhs.ancestors.first(where: { $0.rank == rank }),
+                let rRank = rhs.ancestors.first(where: { $0.rank == rank })
+            else {
+                break
+            }
+            
+            if lRank != rRank {
+                return lRank.id < rRank.id
+            }
+        }
+        
+        return lhs.id < rhs.id
+    }
+}
 
 @MainActor class SpeciesViewModel: ObservableObject {
     
@@ -87,9 +99,8 @@ struct Family: Identifiable {
         families = Dictionary(grouping: species) {
             $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
         }.map {
-            .init(taxon: $0, species: $1)
-        }.sorted {
-            $0.taxon.id < $1.taxon.id
-        }
+            let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
+            return .init(taxon: $0, ancestors: familyAncestors, species: $1)
+        }.sorted()
     }
 }
