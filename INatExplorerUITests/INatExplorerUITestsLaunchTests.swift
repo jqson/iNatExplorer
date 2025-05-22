@@ -1,13 +1,13 @@
 //
-//  MyNaturalistUITestsLaunchTests.swift
-//  MyNaturalistUITests
+//  INatExplorerUITestsLaunchTests.swift
+//  INatExplorerUITests
 //
 //  Created by Yuanfeng Jiao on 12/3/24.
 //
 
 import XCTest
 
-final class MyNaturalistUITestsLaunchTests: XCTestCase {
+final class INatExplorerUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
