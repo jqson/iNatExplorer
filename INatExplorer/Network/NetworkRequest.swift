@@ -91,7 +91,7 @@ class NetworkRequest {
         var requestUrl = URL(string: Constants.iNatBaseUrl + SpeciesCounts.endpoint)
         var queryItems: [URLQueryItem] = [
             .init(name: SpeciesCounts.iconicTaxon, value: category.paramValue),
-            .init(name: SpeciesCounts.fromDate, value: "2024-01-01"),
+            .init(name: SpeciesCounts.fromDate, value: DateUtil.getPastYearDateString()),
         ]
         
         queryItems += Constants.commonParams
