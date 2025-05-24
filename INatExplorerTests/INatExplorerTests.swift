@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import INatExplorer
+@testable import iNatExplorer
 
 struct INatExplorerTests {
 

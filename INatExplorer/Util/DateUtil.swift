@@ -17,6 +17,16 @@ class DateUtil {
         static let dateFormatDayLen = mdFormat.count
     }
     
+    static func getPastYearDateString() -> String {
+        let calendar = Calendar.current
+        let today = Date()
+        let lastYearDate = calendar.date(byAdding: DateComponents(year: -1, day: -1), to: today)!
+        
+        let DateFormatter = DateFormatter()
+        DateFormatter.dateFormat = Constants.dateFormat
+        return DateFormatter.string(from: lastYearDate)
+    }
+    
     static func getPastYearDateList() -> [DateWithString] {
         let calendar = Calendar.current
         let today = Date()
