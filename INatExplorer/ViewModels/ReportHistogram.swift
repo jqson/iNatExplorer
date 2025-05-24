@@ -65,6 +65,7 @@ struct ReportCount: Hashable {
         
         guard
             let lastYearMax = lastYearCounts.map({ $0.1 }).max(),
+            lastYearMax > 0,
             let historicalMax = historicalCounts.max()
         else {
             print("Histogram data error!")
