@@ -10,7 +10,7 @@ import SwiftData
 
 struct UpdateFilterButtonView: View {
     
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
     @Query private var filters: [Filter]
     
     private var taxonFilter: Filter? {

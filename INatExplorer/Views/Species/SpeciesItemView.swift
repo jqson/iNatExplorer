@@ -28,14 +28,26 @@ struct SpeciesItemView: View {
             )
             .aspectRatio(1, contentMode: .fit)
             .clipped()
-            
-            VStack {
+            .overlay(alignment: .bottom) {
                 Text(verbatim: "\(species.name)\n\(species.count)")
                     .font(.callout)
                     .accentColor(.white)
                     .shadow(color: .black, radius: 2)
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 4)
+            }
+            .overlay(alignment: .topTrailing) {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "binoculars.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(4)
+                        .shadow(color: .gray, radius: 2)
+                }
+                .frame(width: 35, height: 35)
+                .tint(.gray)
             }
         }
     }

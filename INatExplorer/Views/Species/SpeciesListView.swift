@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SpeciesListView: View {
     
@@ -14,10 +15,16 @@ struct SpeciesListView: View {
     @State private var speciesCount: Int = 0
     @State private var isLoading: Bool = true
     
+    @Query private var savedSpecies: [SavedSpecies]
+    
     var category: CategoryStruct
     
     private var speciesCountDisplay: String {
         speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+    }
+    
+    private var savedSpeciesDict: [Int: SavedSpecies] {
+        Dictionary(uniqueKeysWithValues: savedSpecies.map { ($0.taxonId, $0) })
     }
     
     var body: some View {

@@ -15,6 +15,6 @@ struct INatExplorerApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Filter.self)
+        .modelContainer(for: [Filter.self, SavedSpecies.self])
     }
 }
