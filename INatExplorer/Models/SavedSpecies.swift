@@ -22,4 +22,18 @@ class SavedSpecies {
         self.taxonId = taxonId
         self.labels = labels
     }
+    
+    func hasLabel(_ label: Label) -> Bool {
+        return labels.contains(label)
+    }
+    
+    func addLabel(_ label: Label) {
+        guard !labels.contains(label) else { return }
+        
+        self.labels.append(label)
+    }
+    
+    func removeLabel(_ label: Label) {
+        self.labels.removeAll(where: { $0 == label })
+    }
 }

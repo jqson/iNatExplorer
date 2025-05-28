@@ -10,14 +10,16 @@ import SwiftData
 
 struct SpeciesListView: View {
     
+    var category: CategoryStruct
+    
+    @Environment(\.modelContext) private var modelContext
+    
     @StateObject private var speciesViewModel = SpeciesViewModel()
     @State private var families: [Family] = []
     @State private var speciesCount: Int = 0
     @State private var isLoading: Bool = true
     
     @Query private var savedSpecies: [SavedSpecies]
-    
-    var category: CategoryStruct
     
     private var speciesCountDisplay: String {
         speciesCount <= 500 ? String(speciesCount) : "500 (max)"
@@ -40,7 +42,21 @@ struct SpeciesListView: View {
                         Section {
                             ForEach(family.species) { species in
                                 NavigationLink(destination: SpeciesDetailView(species: species)) {
-                                    SpeciesItemView(species: species)
+                                    SpeciesItemView(
+                                        species: species,
+                                        isSighted: Binding(
+                                            get: {
+                                                savedSpeciesDict[species.id]?.hasLabel(.sighted) ?? false
+                                            },
+                                            set: { newValue in
+                                                if newValue {
+                                                    addLabel(for: species, label: .sighted)
+                                                } else {
+                                                    removeLabel(for: species, label: .sighted)
+                                                }
+                                            }
+                                        )
+                                    )
                                 }
                                 .navigationTitle("Species List")
                             }
@@ -76,6 +92,26 @@ struct SpeciesListView: View {
             }
             .opacity(isLoading ? 1 : 0)
         }
+    }
+    
+    private func addLabel(for species: Species, label: SavedSpecies.Label) {
+        let taxonId = species.taxon.id
+        if savedSpeciesDict[taxonId] != nil {
+            savedSpecies.first(where: { $0.taxonId == taxonId })?.addLabel(label)
+        } else {
+            modelContext.insert(SavedSpecies(taxonId: taxonId, labels: [label]))
+        }
+    }
+    
+    private func removeLabel(for species: Species, label: SavedSpecies.Label) {
+        guard let savedSpeciesItem = savedSpecies.first(where: { $0.taxonId == species.taxon.id })
+        else { return }
+        
+        savedSpeciesItem.removeLabel(label)
+        if savedSpeciesItem.labels.isEmpty {
+            modelContext.delete(savedSpeciesItem)
+        }
+        try? modelContext.save()
     }
 }
 

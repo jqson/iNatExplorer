@@ -11,6 +11,8 @@ struct SpeciesItemView: View {
     
     var species: Species
     
+    @Binding var isSighted: Bool
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             AsyncImage(url: species.photo?.getUrl(.small)) { image in
@@ -38,7 +40,7 @@ struct SpeciesItemView: View {
             }
             .overlay(alignment: .topTrailing) {
                 Button {
-                    
+                    isSighted.toggle()
                 } label: {
                     Image(systemName: "binoculars.fill")
                         .resizable()
@@ -47,12 +49,14 @@ struct SpeciesItemView: View {
                         .shadow(color: .gray, radius: 2)
                 }
                 .frame(width: 35, height: 35)
-                .tint(.gray)
+                .tint(isSighted ? .orange : .gray)
             }
         }
     }
 }
 
 #Preview {
-    SpeciesItemView(species: Species.Constants.preview)
+    @Previewable @State var isSighted: Bool = false
+    
+    SpeciesItemView(species: Species.Constants.preview, isSighted: $isSighted)
 }
