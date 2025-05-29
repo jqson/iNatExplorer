@@ -14,43 +14,41 @@ struct SpeciesItemView: View {
     @Binding var observed: Bool
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            AsyncImage(url: species.photo?.getUrl(.small)) { image in
-                image
+        AsyncImage(url: species.photo?.getUrl(.small)) { image in
+            image
+                .resizable()
+                .scaledToFill()
+        } placeholder: {
+            Color.gray
+        }
+        .frame(
+            minWidth: 0,
+            maxWidth: .infinity,
+            minHeight: 0,
+            maxHeight: .infinity
+        )
+        .aspectRatio(1, contentMode: .fit)
+        .clipped()
+        .overlay(alignment: .bottom) {
+            Text(verbatim: "\(species.name)\n\(species.count)")
+                .font(.callout)
+                .accentColor(.white)
+                .shadow(color: .black, radius: 2)
+                .multilineTextAlignment(.center)
+                .padding(.bottom, 4)
+        }
+        .overlay(alignment: .topTrailing) {
+            Button {
+                observed.toggle()
+            } label: {
+                Image(systemName: SpeciesListView.Constants.observedIcon)
                     .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                Color.gray
+                    .scaledToFit()
+                    .padding(4)
+                    .shadow(color: .gray, radius: 2)
             }
-            .frame(
-                minWidth: 0,
-                maxWidth: .infinity,
-                minHeight: 0,
-                maxHeight: .infinity
-            )
-            .aspectRatio(1, contentMode: .fit)
-            .clipped()
-            .overlay(alignment: .bottom) {
-                Text(verbatim: "\(species.name)\n\(species.count)")
-                    .font(.callout)
-                    .accentColor(.white)
-                    .shadow(color: .black, radius: 2)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 4)
-            }
-            .overlay(alignment: .topTrailing) {
-                Button {
-                    observed.toggle()
-                } label: {
-                    Image(systemName: SpeciesListView.Constants.observedIcon)
-                        .resizable()
-                        .scaledToFit()
-                        .padding(4)
-                        .shadow(color: .gray, radius: 2)
-                }
-                .frame(width: 35, height: 35)
-                .tint(observed ? .orange : .gray)
-            }
+            .frame(width: 35, height: 35)
+            .tint(observed ? .orange : .gray)
         }
     }
 }
