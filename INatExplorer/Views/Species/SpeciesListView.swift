@@ -15,30 +15,55 @@ struct SpeciesListView: View {
     @Environment(\.modelContext) private var modelContext
     
     @StateObject private var speciesViewModel = SpeciesViewModel()
-    @State private var families: [Family] = []
-    @State private var speciesCount: Int = 0
     @State private var isLoading: Bool = true
     
     @Query private var savedSpecies: [SavedSpecies]
     
+    @AppStorage("hideObserved") private var hideObserved: Bool = false
+    
     private var speciesCountDisplay: String {
-        speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+        let speciesCount = speciesViewModel.speciesCount
+        return speciesCount <= 500 ? String(speciesCount) : "500 (max)"
     }
     
     private var savedSpeciesDict: [Int: SavedSpecies] {
         Dictionary(uniqueKeysWithValues: savedSpecies.map { ($0.taxonId, $0) })
     }
     
+    private var filteredFamilies: [Family] {
+        guard hideObserved else { return speciesViewModel.families }
+        
+        return speciesViewModel.families.compactMap { family in
+            let filteredSpecies: [Species] = family.species.filter {
+                !savedSpeciesDict.keys.contains($0.id)
+            }
+            
+            if filteredSpecies.isEmpty { return nil }
+            
+            return Family(
+                taxon: family.taxon,
+                ancestors: family.ancestors,
+                species: filteredSpecies
+            )
+        }
+    }
+    
     var body: some View {
         ZStack {
             ScrollView {
-                Text("Total species: \(speciesCount)")
+                Text("Total species: \(speciesCountDisplay)")
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.horizontal)
+                
+                Toggle("Only Show Unobserved", isOn: $hideObserved)
+                    .padding(.horizontal)
+                    .listRowSeparator(.hidden)
                 
                 LazyVGrid(
                     columns: .init(repeating: GridItem(),count: 3),
                     alignment: .leading
                 ) {
-                    ForEach(families) { family in
+                    ForEach(filteredFamilies) { family in
                         Section {
                             ForEach(family.species) { species in
                                 NavigationLink(destination: SpeciesDetailView(species: species)) {
@@ -78,8 +103,6 @@ struct SpeciesListView: View {
                     guard isLoading else { return }
                     
                     await speciesViewModel.fetchData(category: category)
-                    families = speciesViewModel.families
-                    speciesCount = speciesViewModel.speciesCount
                     isLoading = false
                 }
             }
