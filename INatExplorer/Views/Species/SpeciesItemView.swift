@@ -42,7 +42,7 @@ struct SpeciesItemView: View {
                 Button {
                     observed.toggle()
                 } label: {
-                    Image(systemName: "binoculars.fill")
+                    Image(systemName: SpeciesListView.Constants.observedIcon)
                         .resizable()
                         .scaledToFit()
                         .padding(4)

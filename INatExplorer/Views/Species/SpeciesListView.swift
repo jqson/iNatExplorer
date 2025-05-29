@@ -10,6 +10,10 @@ import SwiftData
 
 struct SpeciesListView: View {
     
+    enum Constants {
+        static let observedIcon: String = "binoculars.fill"
+    }
+    
     var category: CategoryStruct
     
     @Environment(\.modelContext) private var modelContext
@@ -66,21 +70,28 @@ struct SpeciesListView: View {
                     ForEach(filteredFamilies) { family in
                         Section {
                             ForEach(family.species) { species in
-                                NavigationLink(destination: SpeciesDetailView(species: species)) {
+                                let observedStatusBinding = Binding(
+                                    get: {
+                                        savedSpeciesDict[species.id]?.hasLabel(.observed) ?? false
+                                    },
+                                    set: { newValue in
+                                        if newValue {
+                                            addLabel(for: species, label: .observed)
+                                        } else {
+                                            removeLabel(for: species, label: .observed)
+                                        }
+                                    }
+                                )
+                                
+                                NavigationLink {
+                                    SpeciesDetailView(
+                                        species: species,
+                                        observed: observedStatusBinding
+                                    )
+                                } label: {
                                     SpeciesItemView(
                                         species: species,
-                                        observed: Binding(
-                                            get: {
-                                                savedSpeciesDict[species.id]?.hasLabel(.observed) ?? false
-                                            },
-                                            set: { newValue in
-                                                if newValue {
-                                                    addLabel(for: species, label: .observed)
-                                                } else {
-                                                    removeLabel(for: species, label: .observed)
-                                                }
-                                            }
-                                        )
+                                        observed: observedStatusBinding
                                     )
                                 }
                                 .navigationTitle("Species List")
