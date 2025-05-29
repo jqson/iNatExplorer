@@ -12,7 +12,7 @@ import SwiftData
 class SavedSpecies {
     
     enum Label: Codable {
-        case sighted
+        case observed
     }
     
     var taxonId: Int

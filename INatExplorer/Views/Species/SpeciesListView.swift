@@ -44,15 +44,15 @@ struct SpeciesListView: View {
                                 NavigationLink(destination: SpeciesDetailView(species: species)) {
                                     SpeciesItemView(
                                         species: species,
-                                        isSighted: Binding(
+                                        observed: Binding(
                                             get: {
-                                                savedSpeciesDict[species.id]?.hasLabel(.sighted) ?? false
+                                                savedSpeciesDict[species.id]?.hasLabel(.observed) ?? false
                                             },
                                             set: { newValue in
                                                 if newValue {
-                                                    addLabel(for: species, label: .sighted)
+                                                    addLabel(for: species, label: .observed)
                                                 } else {
-                                                    removeLabel(for: species, label: .sighted)
+                                                    removeLabel(for: species, label: .observed)
                                                 }
                                             }
                                         )
