@@ -6,34 +6,93 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SpeciesListView: View {
     
-    @StateObject private var speciesViewModel = SpeciesViewModel()
-    @State private var families: [Family] = []
-    @State private var speciesCount: Int = 0
-    @State private var isLoading: Bool = true
+    enum Constants {
+        static let observedIcon: String = "binoculars.fill"
+    }
     
     var category: CategoryStruct
     
+    @Environment(\.modelContext) private var modelContext
+    
+    @StateObject private var speciesViewModel = SpeciesViewModel()
+    @State private var isLoading: Bool = true
+    
+    @Query private var savedSpecies: [SavedSpecies]
+    
+    @AppStorage("hideObserved") private var hideObserved: Bool = false
+    
     private var speciesCountDisplay: String {
-        speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+        let speciesCount = speciesViewModel.speciesCount
+        return speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+    }
+    
+    private var savedSpeciesDict: [Int: SavedSpecies] {
+        Dictionary(uniqueKeysWithValues: savedSpecies.map { ($0.taxonId, $0) })
+    }
+    
+    private var filteredFamilies: [Family] {
+        guard hideObserved else { return speciesViewModel.families }
+        
+        return speciesViewModel.families.compactMap { family in
+            let filteredSpecies: [Species] = family.species.filter {
+                !savedSpeciesDict.keys.contains($0.id)
+            }
+            
+            if filteredSpecies.isEmpty { return nil }
+            
+            return Family(
+                taxon: family.taxon,
+                ancestors: family.ancestors,
+                species: filteredSpecies
+            )
+        }
     }
     
     var body: some View {
         ZStack {
             ScrollView {
-                Text("Total species: \(speciesCount)")
+                Text("Total species: \(speciesCountDisplay)")
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.horizontal)
+                
+                Toggle("Only Show Unobserved", isOn: $hideObserved)
+                    .padding(.horizontal)
+                    .listRowSeparator(.hidden)
                 
                 LazyVGrid(
                     columns: .init(repeating: GridItem(),count: 3),
                     alignment: .leading
                 ) {
-                    ForEach(families) { family in
+                    ForEach(filteredFamilies) { family in
                         Section {
                             ForEach(family.species) { species in
-                                NavigationLink(destination: SpeciesDetailView(species: species)) {
-                                    SpeciesItemView(species: species)
+                                let observedStatusBinding = Binding(
+                                    get: {
+                                        savedSpeciesDict[species.id]?.hasLabel(.observed) ?? false
+                                    },
+                                    set: { newValue in
+                                        if newValue {
+                                            addLabel(for: species, label: .observed)
+                                        } else {
+                                            removeLabel(for: species, label: .observed)
+                                        }
+                                    }
+                                )
+                                
+                                NavigationLink {
+                                    SpeciesDetailView(
+                                        species: species,
+                                        observed: observedStatusBinding
+                                    )
+                                } label: {
+                                    SpeciesItemView(
+                                        species: species,
+                                        observed: observedStatusBinding
+                                    )
                                 }
                                 .navigationTitle("Species List")
                             }
@@ -55,8 +114,6 @@ struct SpeciesListView: View {
                     guard isLoading else { return }
                     
                     await speciesViewModel.fetchData(category: category)
-                    families = speciesViewModel.families
-                    speciesCount = speciesViewModel.speciesCount
                     isLoading = false
                 }
             }
@@ -69,6 +126,26 @@ struct SpeciesListView: View {
             }
             .opacity(isLoading ? 1 : 0)
         }
+    }
+    
+    private func addLabel(for species: Species, label: SavedSpecies.Label) {
+        let taxonId = species.taxon.id
+        if savedSpeciesDict[taxonId] != nil {
+            savedSpecies.first(where: { $0.taxonId == taxonId })?.addLabel(label)
+        } else {
+            modelContext.insert(SavedSpecies(taxonId: taxonId, labels: [label]))
+        }
+    }
+    
+    private func removeLabel(for species: Species, label: SavedSpecies.Label) {
+        guard let savedSpeciesItem = savedSpecies.first(where: { $0.taxonId == species.taxon.id })
+        else { return }
+        
+        savedSpeciesItem.removeLabel(label)
+        if savedSpeciesItem.labels.isEmpty {
+            modelContext.delete(savedSpeciesItem)
+        }
+        try? modelContext.save()
     }
 }
 

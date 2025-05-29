@@ -14,6 +14,8 @@ struct SpeciesDetailView: View {
     @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     @StateObject var histogramViewModel = ReportHistogramViewModel()
     
+    @Binding var observed: Bool
+    
     var body: some View {
         ScrollView {
             HStack {
@@ -33,6 +35,19 @@ struct SpeciesDetailView: View {
                     .scaledToFit()
             } placeholder: {
                 Color.gray
+            }
+            .overlay(alignment: .topTrailing) {
+                Button {
+                    observed.toggle()
+                } label: {
+                    Image(systemName: SpeciesListView.Constants.observedIcon)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(4)
+                        .shadow(color: .gray, radius: 2)
+                }
+                .frame(width: 35, height: 35)
+                .tint(observed ? .orange : .gray)
             }
             
             let lastYearHistogram = histogramViewModel.lastYearHistogram
@@ -107,5 +122,7 @@ struct SpeciesDetailView: View {
 }
 
 #Preview {
-    SpeciesDetailView(species: Species.Constants.preview)
+    @Previewable @State var observed: Bool = false
+    
+    SpeciesDetailView(species: Species.Constants.preview, observed: $observed)
 }

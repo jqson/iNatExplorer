@@ -28,7 +28,7 @@ struct FilterView: View {
         }
     }
     
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
     
     var filterSection: FilterSection
     

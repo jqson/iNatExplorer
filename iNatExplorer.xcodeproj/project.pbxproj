@@ -15,6 +15,7 @@
 		378AF5C62D16104D00AC77A8 /* SpeciesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */; };
 		3793E1152D6AFDE000113EF5 /* aos_family_order.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3793E1142D6AFDE000113EF5 /* aos_family_order.txt */; };
 		3793E1172D6AFE1000113EF5 /* AosFamilyOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3793E1162D6AFE1000113EF5 /* AosFamilyOrder.swift */; };
+		37A0EA182DE6DDD800E052A0 /* SavedSpecies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0EA172DE6DDD800E052A0 /* SavedSpecies.swift */; };
 		37BCA9262D3B089800AA10CA /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9252D3B089800AA10CA /* Filter.swift */; };
 		37BCA9342D4CA5DC00AA10CA /* ReportHistogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9332D4CA5DC00AA10CA /* ReportHistogram.swift */; };
 		37BCA9372D506DB700AA10CA /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9362D506DB700AA10CA /* DateUtil.swift */; };
@@ -64,6 +65,7 @@
 		378AF5C52D16104D00AC77A8 /* SpeciesDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesDetailView.swift; sourceTree = "<group>"; };
 		3793E1142D6AFDE000113EF5 /* aos_family_order.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = aos_family_order.txt; sourceTree = "<group>"; };
 		3793E1162D6AFE1000113EF5 /* AosFamilyOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AosFamilyOrder.swift; sourceTree = "<group>"; };
+		37A0EA172DE6DDD800E052A0 /* SavedSpecies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSpecies.swift; sourceTree = "<group>"; };
 		37BCA9252D3B089800AA10CA /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		37BCA9332D4CA5DC00AA10CA /* ReportHistogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportHistogram.swift; sourceTree = "<group>"; };
 		37BCA9362D506DB700AA10CA /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				37F8889A2D0B643400258BDC /* Taxon.swift */,
 				37F8887B2D041BE400258BDC /* RespnoseModels.swift */,
 				37BCA9252D3B089800AA10CA /* Filter.swift */,
+				37A0EA172DE6DDD800E052A0 /* SavedSpecies.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				378AF5C22D1557FC00AC77A8 /* SpeciesItemView.swift in Sources */,
 				37F888922D0A1E1C00258BDC /* Location.swift in Sources */,
 				37F888672D0128BA00258BDC /* INatExplorerApp.swift in Sources */,
+				37A0EA182DE6DDD800E052A0 /* SavedSpecies.swift in Sources */,
 				37F8886A2D01297D00258BDC /* ReportListView.swift in Sources */,
 				37F8886C2D0190EB00258BDC /* ReportItemView.swift in Sources */,
 				37F62C942D1F568600FECE1A /* CategorySelectionView.swift in Sources */,
