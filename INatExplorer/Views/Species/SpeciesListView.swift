@@ -25,25 +25,36 @@ struct SpeciesListView: View {
     
     @AppStorage("hideObserved") private var hideObserved: Bool = false
     
-    private var speciesCountDisplay: String {
+    private var speciesCountText: String {
+        var displayText: String = "Total Species: "
+        
         let speciesCount = speciesViewModel.species.count
-        return speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+        displayText += speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+        
+        if hideObserved {
+            displayText += ", Unobserved: \(filteredSpecies.count)"
+        }
+        
+        return displayText
     }
     
     private var savedSpeciesDict: [Int: SavedSpecies] {
         Dictionary(uniqueKeysWithValues: savedSpecies.map { ($0.taxonId, $0) })
     }
     
-    private var filteredFamilies: [Family] {
-        let filteredSpecies: [Species]
+    private var filteredSpecies: [Species] {
+        print("filteredSpecies")
         if hideObserved {
-            filteredSpecies = speciesViewModel.species.filter {
+            return speciesViewModel.species.filter {
                 !savedSpeciesDict.keys.contains($0.id)
             }
         } else {
-            filteredSpecies = speciesViewModel.species
+            return speciesViewModel.species
         }
-        
+    }
+    
+    private var filteredFamilies: [Family] {
+        print("filteredFamilies")
         return Dictionary(grouping: filteredSpecies) {
             $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
         }.map {
@@ -55,8 +66,8 @@ struct SpeciesListView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                Text("Total species: \(speciesCountDisplay)")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                Text(speciesCountText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                 
                 Toggle("Only Show Unobserved", isOn: $hideObserved)
