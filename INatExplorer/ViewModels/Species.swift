@@ -75,13 +75,12 @@ extension Family: Comparable {
 
 @MainActor class SpeciesViewModel: ObservableObject {
     
-    @Published private(set) var families: [Family] = []
-    private(set) var speciesCount: Int = 0
+    @Published private(set) var species: [Species] = []
     
     func fetchData(category: CategoryStruct) async {
         guard let response = await NetworkRequest.getSpeciesCounts(category: category) else { return }
         
-        var species: [Species] = response.results.map { result in
+        species = response.results.map { result in
             .init(
                 taxon: .init(taxonResponse: result.taxon),
                 photo: .init(photoResponse: result.taxon.defaultPhoto),
@@ -90,17 +89,6 @@ extension Family: Comparable {
                     .map({ .init(ancestorResponse: $0) })
                     .filter({ $0.rank != .others })
             )
-        }
-        
-        speciesCount = species.count
-        
-        species.sort(by: { $0.count > $1.count})
-        
-        families = Dictionary(grouping: species) {
-            $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
-        }.map {
-            let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
-            return .init(taxon: $0, ancestors: familyAncestors, species: $1)
-        }.sorted()
+        }.sorted(by: { $0.count > $1.count})
     }
 }

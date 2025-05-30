@@ -26,7 +26,7 @@ struct SpeciesListView: View {
     @AppStorage("hideObserved") private var hideObserved: Bool = false
     
     private var speciesCountDisplay: String {
-        let speciesCount = speciesViewModel.speciesCount
+        let speciesCount = speciesViewModel.species.count
         return speciesCount <= 500 ? String(speciesCount) : "500 (max)"
     }
     
@@ -35,21 +35,21 @@ struct SpeciesListView: View {
     }
     
     private var filteredFamilies: [Family] {
-        guard hideObserved else { return speciesViewModel.families }
-        
-        return speciesViewModel.families.compactMap { family in
-            let filteredSpecies: [Species] = family.species.filter {
+        let filteredSpecies: [Species]
+        if hideObserved {
+            filteredSpecies = speciesViewModel.species.filter {
                 !savedSpeciesDict.keys.contains($0.id)
             }
-            
-            if filteredSpecies.isEmpty { return nil }
-            
-            return Family(
-                taxon: family.taxon,
-                ancestors: family.ancestors,
-                species: filteredSpecies
-            )
+        } else {
+            filteredSpecies = speciesViewModel.species
         }
+        
+        return Dictionary(grouping: filteredSpecies) {
+            $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
+        }.map {
+            let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
+            return .init(taxon: $0, ancestors: familyAncestors, species: $1)
+        }.sorted()
     }
     
     var body: some View {
