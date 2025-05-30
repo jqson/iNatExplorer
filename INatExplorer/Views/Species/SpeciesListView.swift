@@ -25,38 +25,49 @@ struct SpeciesListView: View {
     
     @AppStorage("hideObserved") private var hideObserved: Bool = false
     
-    private var speciesCountDisplay: String {
-        let speciesCount = speciesViewModel.speciesCount
-        return speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+    private var speciesCountText: String {
+        var displayText: String = "Total Species: "
+        
+        let speciesCount = speciesViewModel.species.count
+        displayText += speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+        
+        if hideObserved {
+            displayText += ", Unobserved: \(filteredSpecies.count)"
+        }
+        
+        return displayText
     }
     
     private var savedSpeciesDict: [Int: SavedSpecies] {
         Dictionary(uniqueKeysWithValues: savedSpecies.map { ($0.taxonId, $0) })
     }
     
-    private var filteredFamilies: [Family] {
-        guard hideObserved else { return speciesViewModel.families }
-        
-        return speciesViewModel.families.compactMap { family in
-            let filteredSpecies: [Species] = family.species.filter {
+    private var filteredSpecies: [Species] {
+        print("filteredSpecies")
+        if hideObserved {
+            return speciesViewModel.species.filter {
                 !savedSpeciesDict.keys.contains($0.id)
             }
-            
-            if filteredSpecies.isEmpty { return nil }
-            
-            return Family(
-                taxon: family.taxon,
-                ancestors: family.ancestors,
-                species: filteredSpecies
-            )
+        } else {
+            return speciesViewModel.species
         }
+    }
+    
+    private var filteredFamilies: [Family] {
+        print("filteredFamilies")
+        return Dictionary(grouping: filteredSpecies) {
+            $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
+        }.map {
+            let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
+            return .init(taxon: $0, ancestors: familyAncestors, species: $1)
+        }.sorted()
     }
     
     var body: some View {
         ZStack {
             ScrollView {
-                Text("Total species: \(speciesCountDisplay)")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                Text(speciesCountText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                 
                 Toggle("Only Show Unobserved", isOn: $hideObserved)
