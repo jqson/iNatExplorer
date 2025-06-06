@@ -1,19 +1,18 @@
 //
 //  Species.swift
-//  INatExplorer
+//  iNatExplorer
 //
-//  Created by Yuanfeng Jiao on 12/19/24.
+//  Created by Yuanfeng Jiao on 5/30/25.
 //
 
 import Foundation
 
-struct Species: Identifiable {
+struct Species: Codable {
     
     enum Constants {
         static let preview: Species = .init(
             taxon: .init(id: 6317, name: "", displayName: "Anna's Hummingbird", rank: .species),
             photo: .init(id: 256649705, urlStr: "https://static.inaturalist.org/photos/256649705/square.jpg"),
-            count: 1234,
             ancestors: [
                 .init(id: 1, name: "", displayName: "Animals", rank: .kingdom),
                 .init(id: 5562, name: "", displayName: "Hummingbirds", rank: .family),
@@ -24,14 +23,12 @@ struct Species: Identifiable {
     
     let taxon: Taxon
     let photo: CdnImage?
-    let count: Int
     let ancestors: [Taxon]
     
-    var id: Int { taxon.id }
     var name: String { taxon.displayName }
 }
 
-struct Family: Identifiable {
+struct Family {
     let taxon: Taxon
     let ancestors: [Taxon]
     let species: [Species]
@@ -70,25 +67,5 @@ extension Family: Comparable {
         }
         
         return lhs.id < rhs.id
-    }
-}
-
-@MainActor class SpeciesViewModel: ObservableObject {
-    
-    @Published private(set) var species: [Species] = []
-    
-    func fetchData(category: CategoryStruct) async {
-        guard let response = await NetworkRequest.getSpeciesCounts(category: category) else { return }
-        
-        species = response.results.map { result in
-            .init(
-                taxon: .init(taxonResponse: result.taxon),
-                photo: .init(photoResponse: result.taxon.defaultPhoto),
-                count: result.count,
-                ancestors: (result.taxon.ancestors ?? [])
-                    .map({ .init(ancestorResponse: $0) })
-                    .filter({ $0.rank != .others })
-            )
-        }.sorted(by: { $0.count > $1.count})
     }
 }

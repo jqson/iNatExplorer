@@ -15,11 +15,11 @@ class SavedSpecies {
         case observed
     }
     
-    var taxonId: Int
+    var species: Species
     var labels: [Label]
     
-    init(taxonId: Int, labels: [Label]) {
-        self.taxonId = taxonId
+    init(species: Species, labels: [Label]) {
+        self.species = species
         self.labels = labels
     }
     

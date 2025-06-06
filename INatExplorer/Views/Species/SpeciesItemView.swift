@@ -9,12 +9,12 @@ import SwiftUI
 
 struct SpeciesItemView: View {
     
-    var species: Species
+    var speciesItem: SpeciesItem
     
-    @Binding var observed: Bool
+    /*@Binding */var observed: Bool = false
     
     var body: some View {
-        AsyncImage(url: species.photo?.getUrl(.small)) { image in
+        AsyncImage(url: speciesItem.species.photo?.getUrl(.small)) { image in
             image
                 .resizable()
                 .scaledToFill()
@@ -30,7 +30,7 @@ struct SpeciesItemView: View {
         .aspectRatio(1, contentMode: .fit)
         .clipped()
         .overlay(alignment: .bottom) {
-            Text(verbatim: "\(species.name)\n\(species.count)")
+            Text(verbatim: "\(speciesItem.species.name)\n\(speciesItem.count ?? 0)")
                 .font(.callout)
                 .accentColor(.white)
                 .shadow(color: .black, radius: 2)
@@ -39,7 +39,7 @@ struct SpeciesItemView: View {
         }
         .overlay(alignment: .topTrailing) {
             Button {
-                observed.toggle()
+//                observed.toggle()
             } label: {
                 Image(systemName: SpeciesListView.Constants.observedIcon)
                     .resizable()
@@ -56,5 +56,5 @@ struct SpeciesItemView: View {
 #Preview {
     @Previewable @State var observed: Bool = false
     
-    SpeciesItemView(species: Species.Constants.preview, observed: $observed)
+    SpeciesItemView(speciesItem: SpeciesItem.Constants.preview/*, observed: $observed*/)
 }

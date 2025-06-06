@@ -1,0 +1,117 @@
+//
+//  SpeciesCount.swift
+//  INatExplorer
+//
+//  Created by Yuanfeng Jiao on 12/19/24.
+//
+
+import Foundation
+import SwiftData
+
+struct SpeciesItem: Identifiable {
+    
+    enum Constants {
+        static let preview: SpeciesItem = .init(
+            species: Species.Constants.preview,
+            count: 1234,
+            labels: []
+        )
+    }
+    
+    let species: Species
+    let count: Int?
+    let labels: [SavedSpecies.Label]
+    
+    var id: Int { species.taxon.id }
+}
+
+struct SpeciesSection: Identifiable {
+    let title: String
+    let speciesItem: [SpeciesItem]
+    
+    var id: String { title }
+}
+
+
+@MainActor class SpeciesItemViewModel: ObservableObject {
+    
+    @Published private(set) var speciesSections: [SpeciesSection] = []
+    
+    var speciesCountText: String {
+        var displayText: String = "Total Species: "
+        
+        let speciesCount = speciesCountsDict.count
+        displayText += speciesCount <= 500 ? String(speciesCount) : "500 (max)"
+        
+//        if hideObserved {
+//            displayText += ", Unobserved: \(filteredSpecies.count)"
+//        }
+        
+        return displayText
+    }
+    
+    private let dataService: SwiftDataService
+    
+    private var speciesCountsDict: [Int: (Species, Int)] = [:]  // From server
+    private var savedSpeciesDict: [Int: SavedSpecies] = [:]  // Synced with saved data
+    private var speciesItemDict: [Int: SpeciesItem] = [:]  // Full species items
+    
+    init(dataService: SwiftDataService) {
+        self.dataService = dataService
+    }
+    
+    func fetchSpeciesCounts(category: CategoryStruct) async {
+        guard let response = await NetworkRequest.getSpeciesCounts(category: category) else { return }
+        
+        speciesCountsDict = response.results.reduce(into: [Int: (Species, Int)]()) {
+            $0[$1.taxon.id] = (
+                Species(
+                    taxon: .init(taxonResponse: $1.taxon),
+                    photo: .init(photoResponse: $1.taxon.defaultPhoto),
+                    ancestors: ($1.taxon.ancestors ?? [])
+                        .map({ .init(ancestorResponse: $0) })
+                        .filter({ $0.rank != .others })
+                ),
+                $1.count
+            )
+        }
+        
+        print("Species with counts: \(speciesCountsDict.count)")
+    }
+    
+    func loadSavedSpecies() {
+        savedSpeciesDict = dataService.fetchSavedSpecies().reduce(into: [Int: SavedSpecies]()) {
+            $0[$1.species.taxon.id] = $1
+        }
+        
+        print("Total saved species: \(savedSpeciesDict.count)")
+    }
+    
+    func generateFullSpeciesItems() {
+        // TODO
+        speciesItemDict = speciesCountsDict.mapValues {
+            .init(species: $0.0, count: $0.1, labels: [])
+        }
+    }
+    
+    func updateSpeciesSections() {
+        let families: [Family] = Dictionary(grouping: speciesItemDict.values.map(\.species)) {
+            $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
+        }.map {
+            let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
+            return .init(taxon: $0, ancestors: familyAncestors, species: $1)
+        }.sorted()
+        
+        speciesSections = families.map { family in
+            let speciesItems: [SpeciesItem] = family.species.map { species in
+                    .init(
+                        species: species,
+                        count: speciesCountsDict[species.taxon.id]?.1,
+                        labels: speciesItemDict[species.taxon.id]?.labels ?? []
+                    )
+            }.sorted { $0.count ?? -1 > $1.count ?? -1}
+            
+            return .init(title: family.taxon.displayName, speciesItem: speciesItems)
+        }
+    }
+}

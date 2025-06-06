@@ -15,15 +15,11 @@ struct ReportDetailView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text("\(report.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
-                    .padding(.leading)
-                    .bold()
+            Text("\(report.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
+                .multilineTextAlignment(.center)
+                .padding(.leading)
+                .bold()
                 
-                Spacer()
-                
-                UpdateFilterButtonView(taxon: report.taxon)
-            }
             .padding()
             
             ScrollView {

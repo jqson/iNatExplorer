@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CdnImage {
+struct CdnImage: Codable {
     
     enum ImageSize: String {
         case square
