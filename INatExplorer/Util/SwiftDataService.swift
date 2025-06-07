@@ -18,8 +18,9 @@ class SwiftDataService {
     
     @MainActor
     private init() {
-        self.modelContainer = try! ModelContainer(for: SavedSpecies.self, configurations: ModelConfiguration())
+        self.modelContainer = try! ModelContainer(for: SavedSpecies.self, configurations: .init())
         self.modelContext = modelContainer.mainContext
+        self.modelContext.autosaveEnabled = false
     }
     
     func fetchSavedSpecies() -> [SavedSpecies] {
@@ -30,10 +31,31 @@ class SwiftDataService {
         }
     }
     
-    func addSavedSpecies(_ savedSpecies: SavedSpecies) {
-        modelContext.insert(savedSpecies)
+    func addSavedSpecies(_ savedSpecies: [SavedSpecies]) {
+        guard !savedSpecies.isEmpty else { return }
+        
+        for item in savedSpecies {
+            modelContext.insert(item)
+        }
+        
         do {
             try modelContext.save()
+            print("Saved \(savedSpecies.count) species")
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    func removeSavedSpecies(_ savedSpecies: [SavedSpecies]) {
+        guard !savedSpecies.isEmpty else { return }
+        
+        for item in savedSpecies {
+            modelContext.delete(item)
+        }
+        
+        do {
+            try modelContext.save()
+            print("Deleted \(savedSpecies.count) species")
         } catch {
             fatalError(error.localizedDescription)
         }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Species: Codable {
+struct Species: Codable, Equatable {
     
     enum Constants {
         static let preview: Species = .init(

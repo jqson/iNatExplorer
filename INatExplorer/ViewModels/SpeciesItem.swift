@@ -90,10 +90,35 @@ struct SpeciesSection: Identifiable {
     }
     
     func generateFullSpeciesItems() {
-        // TODO
-        speciesItemDict = speciesCountsDict.mapValues {
-            .init(species: $0.0, count: $0.1, labels: [])
+        var savedSpeciesToAdd: [SavedSpecies] = []
+        var savedSpeciesToDelete: [SavedSpecies] = []
+        
+        var itemDict: [Int: SpeciesItem] = [:]
+        for (taxonId, speciesCount) in speciesCountsDict {
+            let species = speciesCount.0
+            var labels: [SavedSpecies.Label] = []
+            if let savedSpecies = savedSpeciesDict[taxonId] {
+                labels = savedSpecies.labels
+                
+                if savedSpecies.species != species {
+                    savedSpeciesToAdd.append(
+                        SavedSpecies(species: species, labels: savedSpecies.labels)
+                    )
+                    savedSpeciesToDelete.append(savedSpecies)
+                }
+            } else {
+                savedSpeciesToAdd.append(.init(species: species, labels: []))
+            }
+            
+            itemDict[taxonId] = .init(species: species, count: speciesCount.1, labels: labels)
         }
+        
+        dataService.removeSavedSpecies(savedSpeciesToDelete)
+        dataService.addSavedSpecies(savedSpeciesToAdd)
+        
+        speciesItemDict = itemDict
+        
+        print("Total species items: \(speciesItemDict.count)")
     }
     
     func updateSpeciesSections() {
