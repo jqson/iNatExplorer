@@ -17,14 +17,29 @@ class DateUtil {
         static let dateFormatDayLen = mdFormat.count
     }
     
-    static func getPastYearDateString() -> String {
+    enum TimeRange {
+        case week
+        case month
+        case year
+    }
+    
+    static func getPastDateString(for timeRange: TimeRange) -> String {
         let calendar = Calendar.current
         let today = Date()
-        let lastYearDate = calendar.date(byAdding: DateComponents(year: -1, day: -1), to: today)!
+        let dateOffset: DateComponents
+        switch timeRange {
+        case .week:
+            dateOffset = DateComponents(weekOfYear: -1)
+        case .month:
+            dateOffset = DateComponents(month: -1)
+        case .year:
+            dateOffset = DateComponents(year: -1)
+        }
+        let pastDate = calendar.date(byAdding: dateOffset, to: today)!
         
         let DateFormatter = DateFormatter()
         DateFormatter.dateFormat = Constants.dateFormat
-        return DateFormatter.string(from: lastYearDate)
+        return DateFormatter.string(from: pastDate)
     }
     
     static func getPastYearDateList() -> [DateWithString] {

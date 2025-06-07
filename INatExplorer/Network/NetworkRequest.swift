@@ -87,11 +87,13 @@ class NetworkRequest {
         return try? await NetworkService.sendRequest(url: requestUrl)
     }
     
-    static func getSpeciesCounts(category: CategoryStruct) async -> SpeciesCountsResponse? {
+    static func getSpeciesCounts(
+        category: CategoryStruct, timeRange: DateUtil.TimeRange
+    ) async -> SpeciesCountsResponse? {
         var requestUrl = URL(string: Constants.iNatBaseUrl + SpeciesCounts.endpoint)
         var queryItems: [URLQueryItem] = [
             .init(name: SpeciesCounts.iconicTaxon, value: category.paramValue),
-            .init(name: SpeciesCounts.fromDate, value: DateUtil.getPastYearDateString()),
+            .init(name: SpeciesCounts.fromDate, value: DateUtil.getPastDateString(for: timeRange)),
         ]
         
         queryItems += Constants.commonParams

@@ -61,7 +61,9 @@ struct SpeciesSection: Identifiable {
     }
     
     func fetchSpeciesCounts(category: CategoryStruct) async {
-        guard let response = await NetworkRequest.getSpeciesCounts(category: category) else { return }
+        guard let response = await NetworkRequest.getSpeciesCounts(
+            category: category, timeRange: .year
+        ) else { return }
         
         speciesCountsDict = response.results.reduce(into: [Int: (Species, Int)]()) {
             $0[$1.taxon.id] = (
