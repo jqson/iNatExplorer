@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SpeciesDetailView: View {
     
-    var species: Species
+    var speciesItem: SpeciesItem
     @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     @StateObject var histogramViewModel = ReportHistogramViewModel()
     
@@ -18,18 +18,12 @@ struct SpeciesDetailView: View {
     
     var body: some View {
         ScrollView {
-            HStack {
-                Text("\(species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
-                    .padding(.leading)
-                    .bold()
-                
-                Spacer()
-                
-                UpdateFilterButtonView(taxon: species.taxon)
-            }
-            .padding(.horizontal)
+            Text("\(speciesItem.species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
+                .multilineTextAlignment(.center)
+                .bold()
+                .padding(.horizontal)
             
-            AsyncImage(url: species.photo?.getUrl(.medium)) { image in
+            AsyncImage(url: speciesItem.species.photo?.getUrl(.medium)) { image in
                 image
                     .resizable()
                     .scaledToFit()
@@ -100,10 +94,10 @@ struct SpeciesDetailView: View {
                 GridItem(.flexible(), alignment: .leading)
             ]
             
-            let classification: [Taxon] = species.ancestors + [species.taxon]
+            let taxons: [Taxon] = speciesItem.species.ancestors + [speciesItem.species.taxon]
             
             LazyVGrid(columns: columns) {
-                ForEach(classification) { taxon in
+                ForEach(taxons) { taxon in
                     Text("\(taxon.rank.rawValue.capitalized):")
                     Text(taxon.displayName)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -112,8 +106,10 @@ struct SpeciesDetailView: View {
         }
         .onAppear {
             Task {
-                async let loadTaxonNames: () = taxonNamesViewModel.fetchData(taxonId: species.taxon.id)
-                async let loadHistogram: () = histogramViewModel.fetchData(taxonId: species.taxon.id)
+                let taxonId = speciesItem.species.taxon.id
+                
+                async let loadTaxonNames: () = taxonNamesViewModel.fetchData(taxonId: taxonId)
+                async let loadHistogram: () = histogramViewModel.fetchData(taxonId: taxonId)
                 
                 let _ = await [loadTaxonNames, loadHistogram]
             }
@@ -124,5 +120,5 @@ struct SpeciesDetailView: View {
 #Preview {
     @Previewable @State var observed: Bool = false
     
-    SpeciesDetailView(species: Species.Constants.preview, observed: $observed)
+    SpeciesDetailView(speciesItem: SpeciesItem.Constants.preview, observed: $observed)
 }

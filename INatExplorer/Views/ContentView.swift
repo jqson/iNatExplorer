@@ -14,7 +14,7 @@ struct ContentView: View {
         case search
     }
     
-    @State private var selection: Tabs = .search
+    @State private var selection: Tabs = .species
     
     var body: some View {
         TabView(selection: $selection) {
