@@ -19,8 +19,6 @@ struct SpeciesListView: View {
         = SpeciesItemViewModel(dataService: .shared)
     @State private var isLoading: Bool = true
     
-    @AppStorage("hideObserved") private var hideObserved: Bool = false
-    
     var body: some View {
         ZStack {
             ScrollView {
@@ -28,7 +26,7 @@ struct SpeciesListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                 
-                Toggle("Only Show Unobserved", isOn: $hideObserved)
+                Toggle("Only Show Unobserved", isOn: $speciesItemViewModel.hideObserved)
                     .padding(.horizontal)
                     .listRowSeparator(.hidden)
                 

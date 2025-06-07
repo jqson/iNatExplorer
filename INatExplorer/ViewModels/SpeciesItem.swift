@@ -35,17 +35,29 @@ struct SpeciesSection: Identifiable {
 
 @MainActor class SpeciesItemViewModel: ObservableObject {
     
+    enum Constants {
+        static let hideObservedKey = "hideObserved"
+    }
+    
     @Published private(set) var speciesSections: [SpeciesSection] = []
+    
+    var hideObserved: Bool = false {
+        didSet {
+            UserDefaults.standard.set(hideObserved, forKey: Constants.hideObservedKey)
+            updateSpeciesSections()
+        }
+    }
     
     var speciesCountText: String {
         var displayText: String = "Total Species: "
         
-        let speciesCount = speciesCountsDict.count
+        let speciesCount = speciesItemDict.count
         displayText += speciesCount <= 500 ? String(speciesCount) : "500 (max)"
         
-//        if hideObserved {
-//            displayText += ", Unobserved: \(filteredSpecies.count)"
-//        }
+        if hideObserved {
+            let currentCount = speciesSections.reduce(0) { $0 + $1.speciesItem.count }
+            displayText += ", Showing: \(currentCount)"
+        }
         
         return displayText
     }
@@ -58,6 +70,7 @@ struct SpeciesSection: Identifiable {
     
     init(dataService: SwiftDataService) {
         self.dataService = dataService
+        self.hideObserved = UserDefaults.standard.bool(forKey: Constants.hideObservedKey)
     }
     
     func fetchSpeciesCounts(category: CategoryStruct) async {
@@ -129,7 +142,12 @@ struct SpeciesSection: Identifiable {
     }
     
     func updateSpeciesSections() {
-        let families: [Family] = Dictionary(grouping: speciesItemDict.values.map(\.species)) {
+        var speciesToShow: [SpeciesItem] = Array(speciesItemDict.values)
+        if hideObserved {
+            speciesToShow.removeAll(where: { $0.labels.contains(.observed) })
+        }
+        
+        let families: [Family] = Dictionary(grouping: speciesToShow.map(\.species)) {
             $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
         }.map {
             let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
@@ -143,7 +161,13 @@ struct SpeciesSection: Identifiable {
                         count: speciesCountsDict[species.taxon.id]?.1,
                         labels: speciesItemDict[species.taxon.id]?.labels ?? []
                     )
-            }.sorted { $0.count ?? -1 > $1.count ?? -1}
+            }.sorted {
+                if $0.count == $1.count {
+                    return $0.species.taxon.id < $1.species.taxon.id
+                }
+                
+                return $0.count ?? -1 > $1.count ?? -1
+            }
             
             return .init(title: family.taxon.displayName, speciesItem: speciesItems)
         }
