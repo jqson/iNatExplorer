@@ -116,6 +116,13 @@ struct SpeciesSection: Identifiable {
         dataService.removeSavedSpecies(savedSpeciesToDelete)
         dataService.addSavedSpecies(savedSpeciesToAdd)
         
+        for savedSpecies in savedSpeciesToDelete {
+            savedSpeciesDict[savedSpecies.species.taxon.id] = nil
+        }
+        for savedSpecies in savedSpeciesToAdd {
+            savedSpeciesDict[savedSpecies.species.taxon.id] = savedSpecies
+        }
+        
         speciesItemDict = itemDict
         
         print("Total species items: \(speciesItemDict.count)")
