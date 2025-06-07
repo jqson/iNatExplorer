@@ -148,4 +148,37 @@ struct SpeciesSection: Identifiable {
             return .init(title: family.taxon.displayName, speciesItem: speciesItems)
         }
     }
+    
+    func addLabel(speciesItem: SpeciesItem, label: SavedSpecies.Label) {
+        var labels = speciesItem.labels
+        guard !labels.contains(label) else { return }
+        
+        labels.append(label)
+        updateSpeciesLabels(speciesItem: speciesItem, labels: labels)
+    }
+    
+    func removeLabel(speciesItem: SpeciesItem, label: SavedSpecies.Label) {
+        var labels = speciesItem.labels
+        guard labels.contains(label) else { return }
+        
+        labels.removeAll(where: { $0 == label })
+        updateSpeciesLabels(speciesItem: speciesItem, labels: labels)
+    }
+    
+    private func updateSpeciesLabels(speciesItem: SpeciesItem, labels: [SavedSpecies.Label]) {
+        guard let oldSavedSpecies = savedSpeciesDict[speciesItem.species.taxon.id] else {
+            print("Species missing from saved species dictionary!")
+            return
+        }
+        
+        let newSavedSpecies: SavedSpecies = .init(species: speciesItem.species, labels: labels)
+        
+        dataService.removeSavedSpecies([oldSavedSpecies])
+        dataService.addSavedSpecies([newSavedSpecies])
+        
+        savedSpeciesDict[newSavedSpecies.species.taxon.id] = newSavedSpecies
+        
+        generateFullSpeciesItems()
+        updateSpeciesSections()
+    }
 }

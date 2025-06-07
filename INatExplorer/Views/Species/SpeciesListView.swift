@@ -21,31 +21,6 @@ struct SpeciesListView: View {
     
     @AppStorage("hideObserved") private var hideObserved: Bool = false
     
-//    private var savedSpeciesDict: [Int: SavedSpecies] {
-//        Dictionary(uniqueKeysWithValues: savedSpecies.map { ($0.taxonId, $0) })
-//    }
-//    
-//    private var filteredSpecies: [Species] {
-//        print("filteredSpecies")
-//        if hideObserved {
-//            return speciesViewModel.species.filter {
-//                !savedSpeciesDict.keys.contains($0.id)
-//            }
-//        } else {
-//            return speciesViewModel.species
-//        }
-//    }
-//    
-//    private var filteredFamilies: [Family] {
-//        print("filteredFamilies")
-//        return Dictionary(grouping: filteredSpecies) {
-//            $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
-//        }.map {
-//            let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
-//            return .init(taxon: $0, ancestors: familyAncestors, species: $1)
-//        }.sorted()
-//    }
-//    
     var body: some View {
         ZStack {
             ScrollView {
@@ -64,41 +39,34 @@ struct SpeciesListView: View {
                     ForEach(speciesItemViewModel.speciesSections) { section in
                         Section {
                             ForEach(section.speciesItem) { speciesItem in
+                                let observedStatusBinding = Binding(
+                                    get: {
+                                        speciesItem.labels.contains(.observed)
+                                    },
+                                    set: { newValue in
+                                        if newValue {
+                                            speciesItemViewModel.addLabel(
+                                                speciesItem: speciesItem, label: .observed
+                                            )
+                                        } else {
+                                            speciesItemViewModel.removeLabel(
+                                                speciesItem: speciesItem, label: .observed
+                                            )
+                                        }
+                                    }
+                                )
+                                
                                 NavigationLink {
-                                    SpeciesDetailView(speciesItem: speciesItem)
+                                    SpeciesDetailView(
+                                        speciesItem: speciesItem, observed: observedStatusBinding
+                                    )
                                 } label: {
-                                    SpeciesItemView(speciesItem: speciesItem)
+                                    SpeciesItemView(
+                                        speciesItem: speciesItem, observed: observedStatusBinding
+                                    )
                                 }
                                 .navigationTitle("Species List")
                             }
-////                                let observedStatusBinding = Binding(
-////                                    get: {
-////                                        /*savedSpeciesDict[species.id]?.hasLabel(.observed) ??*/ false
-////                                    },
-////                                    set: { newValue in
-////                                        if newValue {
-////                                            addLabel(for: species, label: .observed)
-////                                        } else {
-////                                            removeLabel(for: species, label: .observed)
-////                                        }
-////                                    }
-////                                )
-//                                
-//                                NavigationLink {
-//                                    EmptyView()
-////                                    SpeciesDetailView(species: species
-//////                                        species: species,
-//////                                        observed: observedStatusBinding
-////                                    )
-//                                } label: {
-//                                    EmptyView()
-////                                    SpeciesItemView(species: species
-////                                        species: species,
-////                                        observed: observedStatusBinding
-//                                    )
-//                                }
-//                                .navigationTitle("Species List")
-//                            }
                         } header: {
                             Text(section.title)
                                 .bold()
@@ -127,26 +95,6 @@ struct SpeciesListView: View {
             }
             .opacity(isLoading ? 1 : 0)
         }
-    }
-    
-    private func addLabel(for species: Species, label: SavedSpecies.Label) {
-//        let taxonId = species.taxon.id
-//        if savedSpeciesDict[taxonId] != nil {
-//            savedSpecies.first(where: { $0.taxonId == taxonId })?.addLabel(label)
-//        } else {
-//            modelContext.insert(SavedSpecies(taxonId: taxonId, labels: [label]))
-//        }
-    }
-    
-    private func removeLabel(for species: Species, label: SavedSpecies.Label) {
-//        guard let savedSpeciesItem = savedSpecies.first(where: { $0.taxonId == species.taxon.id })
-//        else { return }
-//        
-//        savedSpeciesItem.removeLabel(label)
-//        if savedSpeciesItem.labels.isEmpty {
-//            modelContext.delete(savedSpeciesItem)
-//        }
-//        try? modelContext.save()
     }
 }
 

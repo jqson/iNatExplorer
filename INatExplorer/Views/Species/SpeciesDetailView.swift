@@ -14,7 +14,7 @@ struct SpeciesDetailView: View {
     @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     @StateObject var histogramViewModel = ReportHistogramViewModel()
     
-    /*@Binding */var observed: Bool = false
+    @Binding var observed: Bool
     
     var body: some View {
         ScrollView {
@@ -32,7 +32,7 @@ struct SpeciesDetailView: View {
             }
             .overlay(alignment: .topTrailing) {
                 Button {
-//                    observed.toggle()
+                    observed.toggle()
                 } label: {
                     Image(systemName: SpeciesListView.Constants.observedIcon)
                         .resizable()
@@ -120,5 +120,5 @@ struct SpeciesDetailView: View {
 #Preview {
     @Previewable @State var observed: Bool = false
     
-    SpeciesDetailView(speciesItem: SpeciesItem.Constants.preview/*, observed: $observed*/)
+    SpeciesDetailView(speciesItem: SpeciesItem.Constants.preview, observed: $observed)
 }

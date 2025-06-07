@@ -11,7 +11,7 @@ struct SpeciesItemView: View {
     
     var speciesItem: SpeciesItem
     
-    /*@Binding */var observed: Bool = false
+    @Binding var observed: Bool
     
     var body: some View {
         AsyncImage(url: speciesItem.species.photo?.getUrl(.small)) { image in
@@ -39,7 +39,7 @@ struct SpeciesItemView: View {
         }
         .overlay(alignment: .topTrailing) {
             Button {
-//                observed.toggle()
+                observed.toggle()
             } label: {
                 Image(systemName: SpeciesListView.Constants.observedIcon)
                     .resizable()
@@ -56,5 +56,5 @@ struct SpeciesItemView: View {
 #Preview {
     @Previewable @State var observed: Bool = false
     
-    SpeciesItemView(speciesItem: SpeciesItem.Constants.preview/*, observed: $observed*/)
+    SpeciesItemView(speciesItem: SpeciesItem.Constants.preview, observed: $observed)
 }
