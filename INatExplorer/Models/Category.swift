@@ -14,15 +14,16 @@ enum Category: CaseIterable {
     var category: CategoryStruct {
         switch self {
         case .bird:
-            .init(id: 0, name: "Bird", systemIcon: "bird", paramValue: "Aves")
+            .init(id: 0, classId: 3, name: "Bird", systemIcon: "bird", paramValue: "Aves")
         case .mammal:
-            .init(id: 1, name: "Mammal", systemIcon: "cat", paramValue: "Mammalia")
+            .init(id: 1, classId: 40151, name: "Mammal", systemIcon: "cat", paramValue: "Mammalia")
         }
     }
 }
 
 struct CategoryStruct: Identifiable {
     let id: Int
+    let classId: Int
     let name: String
     let systemIcon: String
     let paramValue: String
