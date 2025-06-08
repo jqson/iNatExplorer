@@ -44,11 +44,11 @@ struct SpeciesListView: View {
                                     set: { newValue in
                                         if newValue {
                                             speciesItemViewModel.addLabel(
-                                                speciesItem: speciesItem, label: .observed
+                                                species: speciesItem.species, label: .observed
                                             )
                                         } else {
                                             speciesItemViewModel.removeLabel(
-                                                speciesItem: speciesItem, label: .observed
+                                                species: speciesItem.species, label: .observed
                                             )
                                         }
                                     }
@@ -56,7 +56,8 @@ struct SpeciesListView: View {
                                 
                                 NavigationLink {
                                     SpeciesDetailView(
-                                        speciesItem: speciesItem, observed: observedStatusBinding
+                                        species: speciesItem.species,
+                                        speciesItemViewModel: speciesItemViewModel
                                     )
                                 } label: {
                                     SpeciesItemView(
