@@ -138,11 +138,7 @@ struct SpeciesSection: Identifiable {
     
     private func loadSavedSpecies(category: CategoryStruct) {
         savedSpeciesDict = dataService.fetchSavedSpecies().filter {
-            guard let rClass = $0.species.ancestors.first(where: { $0.rank == .rankClass }) else {
-                return false
-            }
-            
-            return rClass.id == category.classId
+            $0.species.ancestors.first(where: { $0.rank == .rankClass })?.id == category.classId
         }.reduce(into: [Int: SavedSpecies]()) {
             $0[$1.species.taxon.id] = $1
         }
