@@ -64,7 +64,6 @@ struct SpeciesSection: Identifiable {
     
     private let dataService: SwiftDataService
     
-    private var category: CategoryStruct?
     private var speciesCountsDict: [Int: (Species, Int)] = [:]  // From server
     private var savedSpeciesDict: [Int: SavedSpecies] = [:]  // Synced with saved data
     private var speciesItemDict: [Int: SpeciesItem] = [:]  // Full species items
@@ -74,7 +73,49 @@ struct SpeciesSection: Identifiable {
         self.hideObserved = UserDefaults.standard.bool(forKey: Constants.hideObservedKey)
     }
     
-    func fetchSpeciesCounts(category: CategoryStruct) async {
+    func fetchData(category: CategoryStruct) async {
+        await fetchSpeciesCounts(category: category)
+        loadSavedSpecies(category: category)
+        generateFullSpeciesItems()
+        updateSpeciesSections()
+    }
+    
+    func hasLabel(species: Species, label: SavedSpecies.Label) -> Bool {
+        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
+            print("Species missing from saved species dictionary!")
+            return false
+        }
+        
+        return savedSpecies.hasLabel(label)
+    }
+    
+    func addLabel(species: Species, label: SavedSpecies.Label) {
+        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
+            print("Species missing from saved species dictionary!")
+            return
+        }
+        
+        var labels = savedSpecies.labels
+        guard !labels.contains(label) else { return }
+        
+        labels.append(label)
+        updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
+    }
+    
+    func removeLabel(species: Species, label: SavedSpecies.Label) {
+        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
+            print("Species missing from saved species dictionary!")
+            return
+        }
+        
+        var labels = savedSpecies.labels
+        guard labels.contains(label) else { return }
+        
+        labels.removeAll(where: { $0 == label })
+        updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
+    }
+    
+    private func fetchSpeciesCounts(category: CategoryStruct) async {
         guard let response = await NetworkRequest.getSpeciesCounts(
             category: category, timeRange: .year
         ) else { return }
@@ -92,14 +133,10 @@ struct SpeciesSection: Identifiable {
             )
         }
         
-        self.category = category
-        
         print("Species with counts: \(speciesCountsDict.count)")
     }
     
-    func loadSavedSpecies() {
-        guard let category = category else { return }
-        
+    private func loadSavedSpecies(category: CategoryStruct) {
         savedSpeciesDict = dataService.fetchSavedSpecies().filter {
             guard let rClass = $0.species.ancestors.first(where: { $0.rank == .rankClass }) else {
                 return false
@@ -113,7 +150,7 @@ struct SpeciesSection: Identifiable {
         print("Total saved species: \(savedSpeciesDict.count)")
     }
     
-    func generateFullSpeciesItems() {
+    private func generateFullSpeciesItems() {
         var savedSpeciesToAdd: [SavedSpecies] = []
         var savedSpeciesToDelete: [SavedSpecies] = []
         
@@ -152,7 +189,7 @@ struct SpeciesSection: Identifiable {
         print("Total species items: \(speciesItemDict.count)")
     }
     
-    func updateSpeciesSections() {
+    private func updateSpeciesSections() {
         var speciesToShow: [SpeciesItem] = Array(speciesItemDict.values)
         if hideObserved {
             speciesToShow.removeAll(where: { $0.labels.contains(.observed) })
@@ -182,41 +219,6 @@ struct SpeciesSection: Identifiable {
             
             return .init(title: family.taxon.displayName, speciesItem: speciesItems)
         }
-    }
-    
-    func hasLabel(species: Species, label: SavedSpecies.Label) -> Bool {
-        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
-            print("Species missing from saved species dictionary!")
-            return false
-        }
-        
-        return savedSpecies.hasLabel(label)
-    }
-    
-    func addLabel(species: Species, label: SavedSpecies.Label) {
-        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
-            print("Species missing from saved species dictionary!")
-            return
-        }
-        
-        var labels = savedSpecies.labels
-        guard !labels.contains(label) else { return }
-        
-        labels.append(label)
-        updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
-    }
-    
-    func removeLabel(species: Species, label: SavedSpecies.Label) {
-        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
-            print("Species missing from saved species dictionary!")
-            return
-        }
-        
-        var labels = savedSpecies.labels
-        guard labels.contains(label) else { return }
-        
-        labels.removeAll(where: { $0 == label })
-        updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
     }
     
     private func updateSpeciesLabels(savedSpecies: SavedSpecies, labels: [SavedSpecies.Label]) {

@@ -77,10 +77,7 @@ struct SpeciesListView: View {
                 .task {
                     guard isLoading else { return }
                     
-                    await speciesItemViewModel.fetchSpeciesCounts(category: category)
-                    speciesItemViewModel.loadSavedSpecies()
-                    speciesItemViewModel.generateFullSpeciesItems()
-                    speciesItemViewModel.updateSpeciesSections()
+                    await speciesItemViewModel.fetchData(category: category)
                     
                     isLoading = false
                 }
