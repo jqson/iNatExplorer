@@ -10,20 +10,20 @@ import SwiftUI
 
 struct SpeciesDetailView: View {
     
-    var speciesItem: SpeciesItem
+    var species: Species
+    @StateObject var speciesItemViewModel: SpeciesItemViewModel
+    
     @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     @StateObject var histogramViewModel = ReportHistogramViewModel()
     
-    @Binding var observed: Bool
-    
     var body: some View {
         ScrollView {
-            Text("\(speciesItem.species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
+            Text("\(species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
                 .multilineTextAlignment(.center)
                 .bold()
                 .padding(.horizontal)
             
-            AsyncImage(url: speciesItem.species.photo?.getUrl(.medium)) { image in
+            AsyncImage(url: species.photo?.getUrl(.medium)) { image in
                 image
                     .resizable()
                     .scaledToFit()
@@ -31,8 +31,14 @@ struct SpeciesDetailView: View {
                 Color.gray
             }
             .overlay(alignment: .topTrailing) {
+                let isObserved = speciesItemViewModel.hasLabel(species: species, label: .observed)
+                
                 Button {
-                    observed.toggle()
+                    if isObserved {
+                        speciesItemViewModel.removeLabel(species: species, label: .observed)
+                    } else {
+                        speciesItemViewModel.addLabel(species: species, label: .observed)
+                    }
                 } label: {
                     Image(systemName: SpeciesListView.Constants.observedIcon)
                         .resizable()
@@ -41,7 +47,7 @@ struct SpeciesDetailView: View {
                         .shadow(color: .gray, radius: 2)
                 }
                 .frame(width: 35, height: 35)
-                .tint(observed ? .orange : .gray)
+                .tint(isObserved ? .orange : .gray)
             }
             
             let lastYearHistogram = histogramViewModel.lastYearHistogram
@@ -94,7 +100,7 @@ struct SpeciesDetailView: View {
                 GridItem(.flexible(), alignment: .leading)
             ]
             
-            let taxons: [Taxon] = speciesItem.species.ancestors + [speciesItem.species.taxon]
+            let taxons: [Taxon] = species.ancestors + [species.taxon]
             
             LazyVGrid(columns: columns) {
                 ForEach(taxons) { taxon in
@@ -106,7 +112,7 @@ struct SpeciesDetailView: View {
         }
         .onAppear {
             Task {
-                let taxonId = speciesItem.species.taxon.id
+                let taxonId = species.taxon.id
                 
                 async let loadTaxonNames: () = taxonNamesViewModel.fetchData(taxonId: taxonId)
                 async let loadHistogram: () = histogramViewModel.fetchData(taxonId: taxonId)
@@ -118,7 +124,8 @@ struct SpeciesDetailView: View {
 }
 
 #Preview {
-    @Previewable @State var observed: Bool = false
-    
-    SpeciesDetailView(speciesItem: SpeciesItem.Constants.preview, observed: $observed)
+    SpeciesDetailView(
+        species: Species.Constants.preview,
+        speciesItemViewModel: SpeciesItemViewModel(dataService: .shared)
+    )
 }

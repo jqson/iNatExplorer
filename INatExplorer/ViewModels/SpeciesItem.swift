@@ -173,31 +173,45 @@ struct SpeciesSection: Identifiable {
         }
     }
     
-    func addLabel(speciesItem: SpeciesItem, label: SavedSpecies.Label) {
-        var labels = speciesItem.labels
-        guard !labels.contains(label) else { return }
+    func hasLabel(species: Species, label: SavedSpecies.Label) -> Bool {
+        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
+            print("Species missing from saved species dictionary!")
+            return false
+        }
         
-        labels.append(label)
-        updateSpeciesLabels(speciesItem: speciesItem, labels: labels)
+        return savedSpecies.hasLabel(label)
     }
     
-    func removeLabel(speciesItem: SpeciesItem, label: SavedSpecies.Label) {
-        var labels = speciesItem.labels
-        guard labels.contains(label) else { return }
-        
-        labels.removeAll(where: { $0 == label })
-        updateSpeciesLabels(speciesItem: speciesItem, labels: labels)
-    }
-    
-    private func updateSpeciesLabels(speciesItem: SpeciesItem, labels: [SavedSpecies.Label]) {
-        guard let oldSavedSpecies = savedSpeciesDict[speciesItem.species.taxon.id] else {
+    func addLabel(species: Species, label: SavedSpecies.Label) {
+        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
             print("Species missing from saved species dictionary!")
             return
         }
         
-        let newSavedSpecies: SavedSpecies = .init(species: speciesItem.species, labels: labels)
+        var labels = savedSpecies.labels
+        guard !labels.contains(label) else { return }
         
-        dataService.removeSavedSpecies([oldSavedSpecies])
+        labels.append(label)
+        updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
+    }
+    
+    func removeLabel(species: Species, label: SavedSpecies.Label) {
+        guard let savedSpecies = savedSpeciesDict[species.taxon.id] else {
+            print("Species missing from saved species dictionary!")
+            return
+        }
+        
+        var labels = savedSpecies.labels
+        guard labels.contains(label) else { return }
+        
+        labels.removeAll(where: { $0 == label })
+        updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
+    }
+    
+    private func updateSpeciesLabels(savedSpecies: SavedSpecies, labels: [SavedSpecies.Label]) {
+        let newSavedSpecies: SavedSpecies = .init(species: savedSpecies.species, labels: labels)
+        
+        dataService.removeSavedSpecies([savedSpecies])
         dataService.addSavedSpecies([newSavedSpecies])
         
         savedSpeciesDict[newSavedSpecies.species.taxon.id] = newSavedSpecies
