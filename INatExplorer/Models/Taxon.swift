@@ -14,7 +14,7 @@ struct Taxon: Identifiable, Hashable, Codable {
             .kingdom,
             .phylum,
             .subphylum,
-            .classRank,
+            .rankClass,
             .order,
             .family,
             .subfamily,
@@ -35,7 +35,7 @@ struct Taxon: Identifiable, Hashable, Codable {
         case kingdom
         case phylum
         case subphylum
-        case classRank = "class"
+        case rankClass = "class"
         case order
         case family
         case subfamily

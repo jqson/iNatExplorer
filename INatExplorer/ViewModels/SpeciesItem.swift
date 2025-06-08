@@ -64,6 +64,7 @@ struct SpeciesSection: Identifiable {
     
     private let dataService: SwiftDataService
     
+    private var category: CategoryStruct?
     private var speciesCountsDict: [Int: (Species, Int)] = [:]  // From server
     private var savedSpeciesDict: [Int: SavedSpecies] = [:]  // Synced with saved data
     private var speciesItemDict: [Int: SpeciesItem] = [:]  // Full species items
@@ -91,11 +92,21 @@ struct SpeciesSection: Identifiable {
             )
         }
         
+        self.category = category
+        
         print("Species with counts: \(speciesCountsDict.count)")
     }
     
     func loadSavedSpecies() {
-        savedSpeciesDict = dataService.fetchSavedSpecies().reduce(into: [Int: SavedSpecies]()) {
+        guard let category = category else { return }
+        
+        savedSpeciesDict = dataService.fetchSavedSpecies().filter {
+            guard let rClass = $0.species.ancestors.first(where: { $0.rank == .rankClass }) else {
+                return false
+            }
+            
+            return rClass.id == category.classId
+        }.reduce(into: [Int: SavedSpecies]()) {
             $0[$1.species.taxon.id] = $1
         }
         
