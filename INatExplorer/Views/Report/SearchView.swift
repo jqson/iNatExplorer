@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(*, deprecated)
 struct SearchView: View {
     
     var body: some View {
@@ -18,7 +19,7 @@ struct SearchView: View {
                     }
                 }
                 
-                NavigationLink(destination: ReportListView()) {
+                NavigationLink(destination: ReportListView(taxons: [])) {
                     Text("Search")
                         .font(.title2)
                         .frame(height: 40)
