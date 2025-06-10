@@ -11,6 +11,8 @@ struct SpeciesListView: View {
     
     enum Constants {
         static let observedIcon: String = "binoculars.fill"
+        static let favoriteIcon: String = "heart.fill"
+        static let labelIconSize: CGFloat = 32
     }
     
     var category: CategoryStruct
@@ -37,23 +39,6 @@ struct SpeciesListView: View {
                     ForEach(speciesItemViewModel.speciesSections) { section in
                         Section {
                             ForEach(section.speciesItem) { speciesItem in
-                                let observedStatusBinding = Binding(
-                                    get: {
-                                        speciesItem.labels.contains(.observed)
-                                    },
-                                    set: { newValue in
-                                        if newValue {
-                                            speciesItemViewModel.addLabel(
-                                                species: speciesItem.species, label: .observed
-                                            )
-                                        } else {
-                                            speciesItemViewModel.removeLabel(
-                                                species: speciesItem.species, label: .observed
-                                            )
-                                        }
-                                    }
-                                )
-                                
                                 NavigationLink {
                                     SpeciesDetailView(
                                         species: speciesItem.species,
@@ -61,7 +46,13 @@ struct SpeciesListView: View {
                                     )
                                 } label: {
                                     SpeciesItemView(
-                                        speciesItem: speciesItem, observed: observedStatusBinding
+                                        speciesItem: speciesItem,
+                                        observed: getLabelBinding(
+                                            for: speciesItem, label: .observed
+                                        ),
+                                        favorite: getLabelBinding(
+                                            for: speciesItem, label: .favorite
+                                        )
                                     )
                                 }
                                 .navigationTitle("Species List")
@@ -91,6 +82,27 @@ struct SpeciesListView: View {
             }
             .opacity(isLoading ? 1 : 0)
         }
+    }
+    
+    private func getLabelBinding(for speciesItem: SpeciesItem, label: SavedSpecies.Label)
+        -> Binding<Bool>
+    {
+        return Binding(
+            get: {
+                speciesItem.labels.contains(label)
+            },
+            set: { newValue in
+                if newValue {
+                    speciesItemViewModel.addLabel(
+                        species: speciesItem.species, label: label
+                    )
+                } else {
+                    speciesItemViewModel.removeLabel(
+                        species: speciesItem.species, label: label
+                    )
+                }
+            }
+        )
     }
 }
 
