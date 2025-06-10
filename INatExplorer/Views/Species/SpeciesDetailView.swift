@@ -18,10 +18,22 @@ struct SpeciesDetailView: View {
     
     var body: some View {
         ScrollView {
-            Text("\(species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
-                .multilineTextAlignment(.center)
-                .bold()
+            HStack {
+                Text("\(species.name)\n\(taxonNamesViewModel.selectedTaxonName?.name ?? "-")")
+                    .multilineTextAlignment(.leading)
+                    .bold()
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                NavigationLink {
+                    ReportListView(taxons: [species.taxon])
+                } label: {
+                    Text("Observations")
+                }
                 .padding(.horizontal)
+                .buttonStyle(.borderedProminent)
+            }
             
             AsyncImage(url: species.photo?.getUrl(.medium)) { image in
                 image

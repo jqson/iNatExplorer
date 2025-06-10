@@ -10,11 +10,11 @@ import SwiftData
 
 struct ReportListView: View {
     
+    var taxons: [Taxon]
+    
     @StateObject private var reportViewModel = ReportViewModel()
     @State private var reports: [Report] = []
     @State private var isLoading = true
-    
-    @Query private var filters: [Filter]
     
     var body: some View {
         NavigationStack {
@@ -38,12 +38,6 @@ struct ReportListView: View {
             .task {
                 guard isLoading else { return }
                 
-                let taxons: [Taxon] = filters.compactMap {
-                    guard case .taxon(let taxon) = $0.filterType, $0.isSelected else { return nil }
-                    
-                    return taxon
-                }
-                
                 await reportViewModel.fetchData(taxons: taxons)
                 reports = reportViewModel.reports
                 isLoading = false
@@ -53,5 +47,5 @@ struct ReportListView: View {
 }
 
 #Preview {
-    ReportListView()
+    ReportListView(taxons: [Taxon.Constants.greatHornedOwl])
 }
