@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+@available(*, deprecated)
 struct FilterView: View {
     
     enum FilterSection {

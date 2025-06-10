@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+@available(*, deprecated)
 struct UpdateFilterButtonView: View {
     
     @Environment(\.modelContext) private var modelContext
