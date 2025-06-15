@@ -7,11 +7,30 @@
 
 import SwiftUI
 
+extension SavedSpecies.Label {
+    var iconImage: String {
+        switch self {
+        case .observed:
+            return "binoculars.fill"
+        case .favorite:
+            return "heart.fill"
+        }
+    }
+    
+    var iconActiveColor: Color {
+        switch self {
+        case .observed:
+            return .orange
+        case .favorite:
+            return .pink
+        }
+    }
+}
+
 struct SpeciesListView: View {
     
     enum Constants {
-        static let observedIcon: String = "binoculars.fill"
-        static let favoriteIcon: String = "heart.fill"
+        static let iconLabels: [SavedSpecies.Label] = [.observed, .favorite]
         static let labelIconSize: CGFloat = 32
     }
     
@@ -47,12 +66,7 @@ struct SpeciesListView: View {
                                 } label: {
                                     SpeciesItemView(
                                         speciesItem: speciesItem,
-                                        observed: getLabelBinding(
-                                            for: speciesItem, label: .observed
-                                        ),
-                                        favorite: getLabelBinding(
-                                            for: speciesItem, label: .favorite
-                                        )
+                                        speciesItemViewModel: speciesItemViewModel
                                     )
                                 }
                                 .navigationTitle("Species List")
@@ -82,27 +96,6 @@ struct SpeciesListView: View {
             }
             .opacity(isLoading ? 1 : 0)
         }
-    }
-    
-    private func getLabelBinding(for speciesItem: SpeciesItem, label: SavedSpecies.Label)
-        -> Binding<Bool>
-    {
-        return Binding(
-            get: {
-                speciesItem.labels.contains(label)
-            },
-            set: { newValue in
-                if newValue {
-                    speciesItemViewModel.addLabel(
-                        species: speciesItem.species, label: label
-                    )
-                } else {
-                    speciesItemViewModel.removeLabel(
-                        species: speciesItem.species, label: label
-                    )
-                }
-            }
-        )
     }
 }
 

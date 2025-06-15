@@ -43,23 +43,28 @@ struct SpeciesDetailView: View {
                 Color.gray
             }
             .overlay(alignment: .topTrailing) {
-                let isObserved = speciesItemViewModel.hasLabel(species: species, label: .observed)
-                
-                Button {
-                    if isObserved {
-                        speciesItemViewModel.removeLabel(species: species, label: .observed)
-                    } else {
-                        speciesItemViewModel.addLabel(species: species, label: .observed)
+                let labelIconSize = SpeciesListView.Constants.labelIconSize
+                VStack(spacing: 0) {
+                    ForEach(SpeciesListView.Constants.iconLabels, id: \.self) { label in
+                        let hasLabel = speciesItemViewModel.hasLabel(species: species, label: label)
+                        
+                        Button {
+                            if hasLabel {
+                                speciesItemViewModel.removeLabel(species: species, label: label)
+                            } else {
+                                speciesItemViewModel.addLabel(species: species, label: label)
+                            }
+                        } label: {
+                            Image(systemName: label.iconImage)
+                                .resizable()
+                                .scaledToFit()
+                                .padding(4)
+                                .shadow(color: .gray, radius: 2)
+                        }
+                        .frame(width: labelIconSize, height: labelIconSize)
+                        .tint(hasLabel ? label.iconActiveColor : .gray)
                     }
-                } label: {
-                    Image(systemName: SpeciesListView.Constants.observedIcon)
-                        .resizable()
-                        .scaledToFit()
-                        .padding(4)
-                        .shadow(color: .gray, radius: 2)
                 }
-                .frame(width: 35, height: 35)
-                .tint(isObserved ? .orange : .gray)
             }
             
             let lastYearHistogram = histogramViewModel.lastYearHistogram
