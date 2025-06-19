@@ -7,6 +7,26 @@
 
 import SwiftUI
 
+extension SavedSpecies.Label {
+    var iconImage: String {
+        switch self {
+        case .observed:
+            return "binoculars.fill"
+        case .favorite:
+            return "heart.fill"
+        }
+    }
+    
+    var iconActiveColor: Color {
+        switch self {
+        case .observed:
+            return .orange
+        case .favorite:
+            return .pink
+        }
+    }
+}
+
 struct SpeciesLabelsView: View {
     
     enum Constants {
