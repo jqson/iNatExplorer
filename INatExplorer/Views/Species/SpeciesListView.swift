@@ -29,11 +29,6 @@ extension SavedSpecies.Label {
 
 struct SpeciesListView: View {
     
-    enum Constants {
-        static let iconLabels: [SavedSpecies.Label] = [.observed, .favorite]
-        static let labelIconSize: CGFloat = 32
-    }
-    
     var category: CategoryStruct
     
     @StateObject private var speciesItemViewModel: SpeciesItemViewModel

@@ -37,32 +37,10 @@ struct SpeciesItemView: View {
                 .padding(.bottom, 4)
         }
         .overlay(alignment: .topTrailing) {
-            let labelIconSize = SpeciesListView.Constants.labelIconSize
-            VStack(spacing: 0) {
-                ForEach(SpeciesListView.Constants.iconLabels, id: \.self) { label in
-                    let hasLabel = speciesItem.labels.contains(label)
-                    
-                    Button {
-                        if hasLabel {
-                            speciesItemViewModel.removeLabel(
-                                species: speciesItem.species, label: label
-                            )
-                        } else {
-                            speciesItemViewModel.addLabel(
-                                species: speciesItem.species, label: label
-                            )
-                        }
-                    } label: {
-                        Image(systemName: label.iconImage)
-                            .resizable()
-                            .scaledToFit()
-                            .padding(4)
-                            .shadow(color: .gray, radius: 2)
-                    }
-                    .frame(width: labelIconSize, height: labelIconSize)
-                    .tint(speciesItem.labels.contains(label) ? label.iconActiveColor : .gray)
-                }
-            }
+            SpeciesLabelsView(
+                species: speciesItem.species,
+                speciesItemViewModel: speciesItemViewModel
+            )
         }
     }
 }
