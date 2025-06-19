@@ -10,8 +10,7 @@ import SwiftUI
 struct SpeciesItemView: View {
     
     var speciesItem: SpeciesItem
-    
-    @Binding var observed: Bool
+    var speciesItemViewModel: SpeciesItemViewModel
     
     var body: some View {
         AsyncImage(url: speciesItem.species.photo?.getUrl(.small)) { image in
@@ -38,23 +37,17 @@ struct SpeciesItemView: View {
                 .padding(.bottom, 4)
         }
         .overlay(alignment: .topTrailing) {
-            Button {
-                observed.toggle()
-            } label: {
-                Image(systemName: SpeciesListView.Constants.observedIcon)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(4)
-                    .shadow(color: .gray, radius: 2)
-            }
-            .frame(width: 35, height: 35)
-            .tint(observed ? .orange : .gray)
+            SpeciesLabelsView(
+                species: speciesItem.species,
+                speciesItemViewModel: speciesItemViewModel
+            )
         }
     }
 }
 
 #Preview {
-    @Previewable @State var observed: Bool = false
-    
-    SpeciesItemView(speciesItem: SpeciesItem.Constants.preview, observed: $observed)
+    SpeciesItemView(
+        speciesItem: SpeciesItem.Constants.preview,
+        speciesItemViewModel: SpeciesItemViewModel(dataService: .shared)
+    )
 }

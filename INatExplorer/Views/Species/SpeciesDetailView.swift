@@ -11,7 +11,7 @@ import SwiftUI
 struct SpeciesDetailView: View {
     
     var species: Species
-    @StateObject var speciesItemViewModel: SpeciesItemViewModel
+    var speciesItemViewModel: SpeciesItemViewModel
     
     @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
     @StateObject var histogramViewModel = ReportHistogramViewModel()
@@ -43,23 +43,7 @@ struct SpeciesDetailView: View {
                 Color.gray
             }
             .overlay(alignment: .topTrailing) {
-                let isObserved = speciesItemViewModel.hasLabel(species: species, label: .observed)
-                
-                Button {
-                    if isObserved {
-                        speciesItemViewModel.removeLabel(species: species, label: .observed)
-                    } else {
-                        speciesItemViewModel.addLabel(species: species, label: .observed)
-                    }
-                } label: {
-                    Image(systemName: SpeciesListView.Constants.observedIcon)
-                        .resizable()
-                        .scaledToFit()
-                        .padding(4)
-                        .shadow(color: .gray, radius: 2)
-                }
-                .frame(width: 35, height: 35)
-                .tint(isObserved ? .orange : .gray)
+                SpeciesLabelsView(species: species, speciesItemViewModel: speciesItemViewModel)
             }
             
             let lastYearHistogram = histogramViewModel.lastYearHistogram

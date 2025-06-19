@@ -9,10 +9,6 @@ import SwiftUI
 
 struct SpeciesListView: View {
     
-    enum Constants {
-        static let observedIcon: String = "binoculars.fill"
-    }
-    
     var category: CategoryStruct
     
     @StateObject private var speciesItemViewModel: SpeciesItemViewModel
@@ -37,23 +33,6 @@ struct SpeciesListView: View {
                     ForEach(speciesItemViewModel.speciesSections) { section in
                         Section {
                             ForEach(section.speciesItem) { speciesItem in
-                                let observedStatusBinding = Binding(
-                                    get: {
-                                        speciesItem.labels.contains(.observed)
-                                    },
-                                    set: { newValue in
-                                        if newValue {
-                                            speciesItemViewModel.addLabel(
-                                                species: speciesItem.species, label: .observed
-                                            )
-                                        } else {
-                                            speciesItemViewModel.removeLabel(
-                                                species: speciesItem.species, label: .observed
-                                            )
-                                        }
-                                    }
-                                )
-                                
                                 NavigationLink {
                                     SpeciesDetailView(
                                         species: speciesItem.species,
@@ -61,7 +40,8 @@ struct SpeciesListView: View {
                                     )
                                 } label: {
                                     SpeciesItemView(
-                                        speciesItem: speciesItem, observed: observedStatusBinding
+                                        speciesItem: speciesItem,
+                                        speciesItemViewModel: speciesItemViewModel
                                     )
                                 }
                                 .navigationTitle("Species List")

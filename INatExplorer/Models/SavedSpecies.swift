@@ -13,6 +13,7 @@ class SavedSpecies {
     
     enum Label: Codable {
         case observed
+        case favorite
     }
     
     var species: Species
