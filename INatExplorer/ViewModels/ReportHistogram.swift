@@ -27,6 +27,8 @@ struct ReportCount: Hashable {
     @Published private(set) var historicalHistogram: Histogram = .init(legend: "", counts: [])
     @Published private(set) var pastYearHistogram: Histogram = .init(legend: "", counts: [])
     
+    private(set) var ready: Bool = false
+    private(set) var currMonthDay: Date = Date()
     private(set) var dateRange: ClosedRange<Date> = Date.now...Date.now
     
     private var pastYearCounts: [(Date, Int)] = []
@@ -49,6 +51,10 @@ struct ReportCount: Hashable {
         let startYear = calendar.component(.year, from: startDate)
         let firstDayOfYear = DateComponents(calendar: calendar, year: startYear).date!
         let lastDayOfYear = DateComponents(calendar: calendar, year: startYear + 1).date!
+        
+        var dateComponents = calendar.dateComponents([.month, .day], from: Date())
+        dateComponents.year = startYear
+        currMonthDay = Calendar.current.date(from: dateComponents)!
         
         dateRange = firstDayOfYear...lastDayOfYear
         
@@ -87,6 +93,8 @@ struct ReportCount: Hashable {
                 return .init(date: pastYearCounts[$0].0, count: historicalDisplay)
             }
         )
+        
+        ready = true
     }
     
     private func fetchPastYearCounts(taxonId: Int) async {
@@ -101,6 +109,11 @@ struct ReportCount: Hashable {
         
         let pastYearDates = DateUtil.getPastYearDateList()
         
+        pastYearDates.forEach {
+            print($0.monthDayDate)
+            print($0.str)
+        }
+        
         var pastYearWeekCounts: [(Date, Int)] = []
         var days = 0
         var weekSum = 0
@@ -108,7 +121,7 @@ struct ReportCount: Hashable {
         var weekDate: Date = .now
         for dateWithStr in pastYearDates {
             if days == 1 {
-                weekDate = dateWithStr.date
+                weekDate = dateWithStr.monthDayDate
             }
             days += 1;
             weekSum += dayCounts[dateWithStr.str] ?? 0

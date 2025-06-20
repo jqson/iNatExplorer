@@ -48,7 +48,6 @@ struct SpeciesDetailView: View {
             
             let pastYearHistogram = histogramViewModel.pastYearHistogram
             let historicalHistogram = histogramViewModel.historicalHistogram
-            let dateRange = histogramViewModel.dateRange
             
             Chart() {
                 ForEach(historicalHistogram.counts, id: \.self) {
@@ -68,12 +67,16 @@ struct SpeciesDetailView: View {
                     .foregroundStyle(by: .value("Period", pastYearHistogram.legend))
                     .position(by: .value("Period", pastYearHistogram.legend), axis: .horizontal, span: .ratio(1))
                 }
+                RuleMark(x: .value("Date", histogramViewModel.currMonthDay))
+                    .foregroundStyle(by: .value("Period", "Today"))
+                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [6, 3]))
             }
             .chartForegroundStyleScale([
                 historicalHistogram.legend : Color.chartBarSecondary,
-                pastYearHistogram.legend : Color.chartBarPrimary
+                pastYearHistogram.legend : Color.chartBarPrimary,
+                "Today" : Color.chartToday,
             ])
-            .chartXScale(domain: dateRange)
+            .chartXScale(domain: histogramViewModel.dateRange)
             .chartXAxis {
                 AxisMarks(values: .stride(by: .month, count: 1)) { value in
                     AxisValueLabel(format: .dateTime.month())

@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias DateWithString = (date: Date, str: String)
+typealias DateWithString = (monthDayDate: Date, str: String)
 
 class DateUtil {
     
@@ -70,7 +70,7 @@ class DateUtil {
                 from: String(dateStr.suffix(Constants.dateFormatDayLen))
             )!
             
-            dates.append((date: axisDate, str: dateFormatter.string(from: date)))
+            dates.append((monthDayDate: axisDate, str: dateFormatter.string(from: date)))
         }
         
         dates.sort {
