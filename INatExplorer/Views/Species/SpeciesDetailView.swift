@@ -46,46 +46,59 @@ struct SpeciesDetailView: View {
                 SpeciesLabelsView(species: species, speciesItemViewModel: speciesItemViewModel)
             }
             
-            let lastYearHistogram = histogramViewModel.lastYearHistogram
-            let historicalHistogram = histogramViewModel.historicalHistogram
-            let dateRange = histogramViewModel.dateRange
-            
-            Chart() {
-                ForEach(historicalHistogram.counts, id: \.self) {
-                    BarMark(
-                        x: .value("Date", $0.date, unit: .weekOfYear),
-                        y: .value("Count", $0.count),
-                        width: .ratio(1.05)
-                    )
-                    .foregroundStyle(by: .value("Period", historicalHistogram.legend))
+            ZStack {
+                let pastYearHistogram = histogramViewModel.pastYearHistogram
+                let historicalHistogram = histogramViewModel.historicalHistogram
+                
+                Chart() {
+                    ForEach(historicalHistogram.counts, id: \.self) {
+                        BarMark(
+                            x: .value("Date", $0.date, unit: .weekOfYear),
+                            y: .value("Count", $0.count),
+                            width: .ratio(1.05)
+                        )
+                        .foregroundStyle(by: .value("Period", historicalHistogram.legend))
+                    }
+                    ForEach(pastYearHistogram.counts, id: \.self) {
+                        BarMark(
+                            x: .value("Date", $0.date, unit: .weekOfYear),
+                            y: .value("Count", $0.count),
+                            width: .ratio(0.4)
+                        )
+                        .foregroundStyle(by: .value("Period", pastYearHistogram.legend))
+                        .position(by: .value("Period", pastYearHistogram.legend), axis: .horizontal, span: .ratio(1))
+                    }
+                    RuleMark(x: .value("Date", histogramViewModel.currMonthDay))
+                        .foregroundStyle(by: .value("Period", "Today"))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [6, 3]))
                 }
-                ForEach(lastYearHistogram.counts, id: \.self) {
-                    BarMark(
-                        x: .value("Date", $0.date, unit: .weekOfYear),
-                        y: .value("Count", $0.count),
-                        width: .ratio(0.4)
-                    )
-                    .foregroundStyle(by: .value("Period", lastYearHistogram.legend))
-                    .position(by: .value("Period", lastYearHistogram.legend), axis: .horizontal, span: .ratio(1))
+                .chartForegroundStyleScale([
+                    historicalHistogram.legend : Color.chartBarSecondary,
+                    pastYearHistogram.legend : Color.chartBarPrimary,
+                    "Today" : Color.chartToday,
+                ])
+                .chartXScale(domain: histogramViewModel.dateRange)
+                .chartXAxis {
+                    AxisMarks(values: .stride(by: .month, count: 1)) { value in
+                        AxisValueLabel(format: .dateTime.month())
+                        AxisGridLine()
+                        AxisTick()
+                    }
                 }
-            }
-            .chartForegroundStyleScale([
-                historicalHistogram.legend : Color.chartBarSecondary,
-                lastYearHistogram.legend : Color.chartBarPrimary
-            ])
-            .chartXScale(domain: dateRange)
-            .chartXAxis {
-                AxisMarks(values: .stride(by: .month, count: 1)) { value in
-                    AxisValueLabel(format: .dateTime.month())
-                    AxisGridLine()
-                    AxisTick()
+                .chartYAxis {
+                    AxisMarks() {
+                        AxisValueLabel().foregroundStyle(Color.chartBarPrimary)
+                        AxisGridLine()
+                    }
                 }
-            }
-            .chartYAxis {
-                AxisMarks() {
-                    AxisValueLabel().foregroundStyle(Color.chartBarPrimary)
-                    AxisGridLine()
+                
+                ZStack {
+                    Color(UIColor.systemBackground)
+                        .edgesIgnoringSafeArea(.all)
+                    ProgressView()
+                        .scaleEffect(2)
                 }
+                .opacity(histogramViewModel.ready ? 0 : 1)
             }
             .frame(height: 200)
             .padding(.horizontal)

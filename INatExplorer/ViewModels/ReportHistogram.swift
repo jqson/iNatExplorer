@@ -10,7 +10,7 @@ import Foundation
 struct Histogram {
     enum Constants {
         static let historicalLegend = "Historical (scale: 1/%d)"
-        static let lastYearLegend = "Last Year"
+        static let pastYearLegend = "Past Year"
     }
     
     let legend: String
@@ -25,58 +25,64 @@ struct ReportCount: Hashable {
 @MainActor class ReportHistogramViewModel: ObservableObject {
     
     @Published private(set) var historicalHistogram: Histogram = .init(legend: "", counts: [])
-    @Published private(set) var lastYearHistogram: Histogram = .init(legend: "", counts: [])
+    @Published private(set) var pastYearHistogram: Histogram = .init(legend: "", counts: [])
     
+    private(set) var ready: Bool = false
+    private(set) var currMonthDay: Date = Date()
     private(set) var dateRange: ClosedRange<Date> = Date.now...Date.now
     
-    private var lastYearCounts: [(Date, Int)] = []
+    private var pastYearCounts: [(Date, Int)] = []
     private var allYearsCounts: [Int] = []
     
     func fetchData(taxonId: Int) async {
-        async let lastYear: () = fetchLastYearCounts(taxonId: taxonId)
+        async let pastYear: () = fetchPastYearCounts(taxonId: taxonId)
         async let allYear: () = fetchAllYearCounts(taxonId: taxonId)
         
-        let _ = await [lastYear, allYear]
+        let _ = await [pastYear, allYear]
         
-        guard lastYearCounts.count >= 52, allYearsCounts.count >= 52 else {
+        guard pastYearCounts.count >= 52, allYearsCounts.count >= 52 else {
             print("Histogram data error!")
             return
         }
         
-        guard let startDate = lastYearCounts.first?.0 else { return }
+        guard let startDate = pastYearCounts.first?.0 else { return }
         
         let calendar = Calendar.current
         let startYear = calendar.component(.year, from: startDate)
         let firstDayOfYear = DateComponents(calendar: calendar, year: startYear).date!
         let lastDayOfYear = DateComponents(calendar: calendar, year: startYear + 1).date!
         
+        var dateComponents = calendar.dateComponents([.month, .day], from: Date())
+        dateComponents.year = startYear
+        currMonthDay = Calendar.current.date(from: dateComponents)!
+        
         dateRange = firstDayOfYear...lastDayOfYear
         
-        lastYearHistogram = .init(
-            legend: Histogram.Constants.lastYearLegend,
+        pastYearHistogram = .init(
+            legend: Histogram.Constants.pastYearLegend,
             counts: Array(0..<52).map {
-                .init(date: lastYearCounts[$0].0, count: Double(lastYearCounts[$0].1))
+                .init(date: pastYearCounts[$0].0, count: Double(pastYearCounts[$0].1))
             }
         )
         
         let historicalCounts = Array(0..<52).map {
-            max(allYearsCounts[$0] - lastYearCounts[$0].1, 0)
+            max(allYearsCounts[$0] - pastYearCounts[$0].1, 0)
         }
         
         guard
-            let lastYearMax = lastYearCounts.map({ $0.1 }).max(),
-            lastYearMax > 0,
+            let pastYearMax = pastYearCounts.map({ $0.1 }).max(),
+            pastYearMax > 0,
             let historicalMax = historicalCounts.max()
         else {
             print("Histogram data error!")
             return
         }
         
-        let lastYearSum = lastYearCounts.map({ $0.1 }).reduce(0, +)
+        let pastYearSum = pastYearCounts.map({ $0.1 }).reduce(0, +)
         let historicalSum = historicalCounts.reduce(0, +)
         
-        let maxCountScale = max(historicalMax / lastYearMax, 1)
-        let averageCountScale = max(historicalSum / lastYearSum, 1)
+        let maxCountScale = max(historicalMax / pastYearMax, 1)
+        let averageCountScale = max(historicalSum / pastYearSum, 1)
         
         let scale = min(maxCountScale, averageCountScale)
         
@@ -84,12 +90,14 @@ struct ReportCount: Hashable {
             legend: String(format: Histogram.Constants.historicalLegend, scale),
             counts: Array(0..<52).map {
                 let historicalDisplay = Double(historicalCounts[$0]) / Double(scale)
-                return .init(date: lastYearCounts[$0].0, count: historicalDisplay)
+                return .init(date: pastYearCounts[$0].0, count: historicalDisplay)
             }
         )
+        
+        ready = true
     }
     
-    private func fetchLastYearCounts(taxonId: Int) async {
+    private func fetchPastYearCounts(taxonId: Int) async {
         guard
             let response = await NetworkRequest.getObservationHistogram(
                 taxonId: taxonId, interval: .day
@@ -99,29 +107,34 @@ struct ReportCount: Hashable {
             return
         }
         
-        let lastYearDates = DateUtil.getPastYearDateList()
+        let pastYearDates = DateUtil.getPastYearDateList()
         
-        var lastYearWeekCounts: [(Date, Int)] = []
+        pastYearDates.forEach {
+            print($0.monthDayDate)
+            print($0.str)
+        }
+        
+        var pastYearWeekCounts: [(Date, Int)] = []
         var days = 0
         var weekSum = 0
         var weekCount = 0
         var weekDate: Date = .now
-        for dateWithStr in lastYearDates {
+        for dateWithStr in pastYearDates {
             if days == 1 {
-                weekDate = dateWithStr.date
+                weekDate = dateWithStr.monthDayDate
             }
             days += 1;
             weekSum += dayCounts[dateWithStr.str] ?? 0
             
             if days == 7 {
                 weekCount += 1;
-                lastYearWeekCounts.append((weekDate, weekSum))
+                pastYearWeekCounts.append((weekDate, weekSum))
                 days = 0
                 weekSum = 0
             }
         }
         
-        lastYearCounts = lastYearWeekCounts
+        pastYearCounts = pastYearWeekCounts
     }
     
     private func fetchAllYearCounts(taxonId: Int) async {
