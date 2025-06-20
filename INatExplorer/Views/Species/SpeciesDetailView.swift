@@ -46,7 +46,7 @@ struct SpeciesDetailView: View {
                 SpeciesLabelsView(species: species, speciesItemViewModel: speciesItemViewModel)
             }
             
-            let lastYearHistogram = histogramViewModel.lastYearHistogram
+            let pastYearHistogram = histogramViewModel.pastYearHistogram
             let historicalHistogram = histogramViewModel.historicalHistogram
             let dateRange = histogramViewModel.dateRange
             
@@ -59,19 +59,19 @@ struct SpeciesDetailView: View {
                     )
                     .foregroundStyle(by: .value("Period", historicalHistogram.legend))
                 }
-                ForEach(lastYearHistogram.counts, id: \.self) {
+                ForEach(pastYearHistogram.counts, id: \.self) {
                     BarMark(
                         x: .value("Date", $0.date, unit: .weekOfYear),
                         y: .value("Count", $0.count),
                         width: .ratio(0.4)
                     )
-                    .foregroundStyle(by: .value("Period", lastYearHistogram.legend))
-                    .position(by: .value("Period", lastYearHistogram.legend), axis: .horizontal, span: .ratio(1))
+                    .foregroundStyle(by: .value("Period", pastYearHistogram.legend))
+                    .position(by: .value("Period", pastYearHistogram.legend), axis: .horizontal, span: .ratio(1))
                 }
             }
             .chartForegroundStyleScale([
                 historicalHistogram.legend : Color.chartBarSecondary,
-                lastYearHistogram.legend : Color.chartBarPrimary
+                pastYearHistogram.legend : Color.chartBarPrimary
             ])
             .chartXScale(domain: dateRange)
             .chartXAxis {
