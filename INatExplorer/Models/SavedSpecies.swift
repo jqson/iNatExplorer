@@ -35,6 +35,6 @@ class SavedSpecies {
     }
     
     func removeLabel(_ label: Label) {
-        self.labels.removeAll(where: { $0 == label })
+        self.labels.removeAll { $0 == label }
     }
 }

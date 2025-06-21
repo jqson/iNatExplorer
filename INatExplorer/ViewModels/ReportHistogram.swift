@@ -109,11 +109,6 @@ struct ReportCount: Hashable {
         
         let pastYearDates = DateUtil.getPastYearDateList()
         
-        pastYearDates.forEach {
-            print($0.monthDayDate)
-            print($0.str)
-        }
-        
         var pastYearWeekCounts: [(Date, Int)] = []
         var days = 0
         var weekSum = 0

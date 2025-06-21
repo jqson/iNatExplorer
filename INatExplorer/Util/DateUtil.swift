@@ -42,6 +42,7 @@ class DateUtil {
         return DateFormatter.string(from: pastDate)
     }
     
+    // monthDayDate uses default year (2000), str is actual date
     static func getPastYearDateList() -> [DateWithString] {
         let calendar = Calendar.current
         let today = Date()

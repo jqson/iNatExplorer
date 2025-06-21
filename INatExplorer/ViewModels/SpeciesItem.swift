@@ -37,6 +37,7 @@ struct SpeciesSection: Identifiable {
     
     enum Constants {
         static let hideObservedKey = "hideObserved"
+        static let favoriteOnlyKey = "favoriteOnly"
     }
     
     @Published private(set) var speciesSections: [SpeciesSection] = []
@@ -44,6 +45,13 @@ struct SpeciesSection: Identifiable {
     var hideObserved: Bool = false {
         didSet {
             UserDefaults.standard.set(hideObserved, forKey: Constants.hideObservedKey)
+            updateSpeciesSections()
+        }
+    }
+    
+    var favoriteOnly: Bool = false {
+        didSet {
+            UserDefaults.standard.set(favoriteOnly, forKey: Constants.favoriteOnlyKey)
             updateSpeciesSections()
         }
     }
@@ -111,7 +119,7 @@ struct SpeciesSection: Identifiable {
         var labels = savedSpecies.labels
         guard labels.contains(label) else { return }
         
-        labels.removeAll(where: { $0 == label })
+        labels.removeAll { $0 == label }
         updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
     }
     
@@ -158,6 +166,7 @@ struct SpeciesSection: Identifiable {
                 labels = savedSpecies.labels
                 
                 if savedSpecies.species != species {
+                    // Update existing saved species
                     savedSpeciesToAdd.append(
                         SavedSpecies(species: species, labels: savedSpecies.labels)
                     )
@@ -187,12 +196,27 @@ struct SpeciesSection: Identifiable {
     
     private func updateSpeciesSections() {
         var speciesToShow: [SpeciesItem] = Array(speciesItemDict.values)
+        
+        if favoriteOnly {
+            speciesToShow.removeAll { !$0.labels.contains(.favorite) }
+            
+            // Show saved favorited species even if there's no count.
+            let savedFavorites: [SavedSpecies] = savedSpeciesDict.values.filter {
+                $0.hasLabel(.favorite) && speciesItemDict[$0.species.taxon.id] == nil
+            }
+            speciesToShow.append(
+                contentsOf: savedFavorites.map {
+                    .init(species: $0.species, count: nil, labels: $0.labels)
+                }
+            )
+        }
+        
         if hideObserved {
-            speciesToShow.removeAll(where: { $0.labels.contains(.observed) })
+            speciesToShow.removeAll { $0.labels.contains(.observed) }
         }
         
         let families: [Family] = Dictionary(grouping: speciesToShow.map(\.species)) {
-            $0.ancestors.first(where: { $0.rank == .family }) ?? Taxon.Constants.unknownTaxon
+            $0.ancestors.first { $0.rank == .family } ?? Taxon.Constants.unknownTaxon
         }.map {
             let familyAncestors: [Taxon] = $1.first?.ancestors.filter({ $0.rank < .family }) ?? []
             return .init(taxon: $0, ancestors: familyAncestors, species: $1)

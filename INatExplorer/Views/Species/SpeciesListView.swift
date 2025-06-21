@@ -22,6 +22,10 @@ struct SpeciesListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                 
+                Toggle("Only Show Favorited", isOn: $speciesItemViewModel.favoriteOnly)
+                    .padding(.horizontal)
+                    .listRowSeparator(.hidden)
+                
                 Toggle("Only Show Unobserved", isOn: $speciesItemViewModel.hideObserved)
                     .padding(.horizontal)
                     .listRowSeparator(.hidden)
