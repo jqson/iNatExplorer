@@ -200,6 +200,7 @@ struct SpeciesSection: Identifiable {
         if favoriteOnly {
             speciesToShow.removeAll { !$0.labels.contains(.favorite) }
             
+            // Show saved favorited species even if there's no count.
             let savedFavorites: [SavedSpecies] = savedSpeciesDict.values.filter {
                 $0.hasLabel(.favorite) && speciesItemDict[$0.species.taxon.id] == nil
             }
