@@ -35,23 +35,18 @@ struct SpeciesSection: Identifiable {
 
 @MainActor class SpeciesItemViewModel: ObservableObject {
     
-    enum Constants {
-        static let hideObservedKey = "hideObserved"
-        static let favoriteOnlyKey = "favoriteOnly"
-    }
-    
     @Published private(set) var speciesSections: [SpeciesSection] = []
     
     var hideObserved: Bool = false {
         didSet {
-            UserDefaults.standard.set(hideObserved, forKey: Constants.hideObservedKey)
+            UserDefaults.standard.set(hideObserved, forKey: UserDefaultsKeys.hideObservedKey)
             updateSpeciesSections()
         }
     }
     
     var favoriteOnly: Bool = false {
         didSet {
-            UserDefaults.standard.set(favoriteOnly, forKey: Constants.favoriteOnlyKey)
+            UserDefaults.standard.set(favoriteOnly, forKey: UserDefaultsKeys.favoriteOnlyKey)
             updateSpeciesSections()
         }
     }
@@ -78,11 +73,11 @@ struct SpeciesSection: Identifiable {
     
     init(dataService: SwiftDataService) {
         self.dataService = dataService
-        self.hideObserved = UserDefaults.standard.bool(forKey: Constants.hideObservedKey)
+        self.hideObserved = UserDefaults.standard.bool(forKey: UserDefaultsKeys.hideObservedKey)
     }
     
-    func fetchData(category: CategoryStruct) async {
-        await fetchSpeciesCounts(category: category)
+    func fetchData(category: CategoryStruct, timeRange: DateUtil.TimeRange) async {
+        await fetchSpeciesCounts(category: category, timeRange: timeRange)
         loadSavedSpecies(category: category)
         generateFullSpeciesItems()
         updateSpeciesSections()
@@ -123,9 +118,9 @@ struct SpeciesSection: Identifiable {
         updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
     }
     
-    private func fetchSpeciesCounts(category: CategoryStruct) async {
+    private func fetchSpeciesCounts(category: CategoryStruct, timeRange: DateUtil.TimeRange) async {
         guard let response = await NetworkRequest.getSpeciesCounts(
-            category: category, timeRange: .year
+            category: category, timeRange: timeRange
         ) else { return }
         
         speciesCountsDict = response.results.reduce(into: [Int: (Species, Int)]()) {

@@ -10,14 +10,22 @@ import SwiftUI
 struct SpeciesListView: View {
     
     var category: CategoryStruct
+    @Binding var selectedTimeRange: DateUtil.TimeRange
     
     @StateObject private var speciesItemViewModel: SpeciesItemViewModel
         = SpeciesItemViewModel(dataService: .shared)
-    @State private var isLoading: Bool = true
+    @State private var isLoading: Bool = false
     
     var body: some View {
         ZStack {
             ScrollView {
+                TimeRangePickerView(selectedTimeRange: $selectedTimeRange)
+                .onChange(of: selectedTimeRange) {
+                    Task {
+                        await fetchData()
+                    }
+                }
+                
                 Text(speciesItemViewModel.speciesCountText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
@@ -59,11 +67,7 @@ struct SpeciesListView: View {
                     }
                 }
                 .task {
-                    guard isLoading else { return }
-                    
-                    await speciesItemViewModel.fetchData(category: category)
-                    
-                    isLoading = false
+                    await fetchData()
                 }
             }
             
@@ -73,11 +77,23 @@ struct SpeciesListView: View {
                 ProgressView()
                     .scaleEffect(2)
             }
-            .opacity(isLoading ? 1 : 0)
+            .opacity(isLoading ? 0.8 : 0)
         }
+    }
+    
+    private func fetchData() async {
+        isLoading = true
+        
+        await speciesItemViewModel.fetchData(
+            category: category, timeRange: selectedTimeRange
+        )
+        
+        isLoading = false
     }
 }
 
 #Preview {
-    SpeciesListView(category: Category.bird.category)
+    @Previewable @State var selectedTimeRange: DateUtil.TimeRange = .year
+    
+    SpeciesListView(category: Category.bird.category, selectedTimeRange: $selectedTimeRange)
 }
