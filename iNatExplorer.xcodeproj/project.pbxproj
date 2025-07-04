@@ -22,6 +22,7 @@
 		37BCA9262D3B089800AA10CA /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9252D3B089800AA10CA /* Filter.swift */; };
 		37BCA9342D4CA5DC00AA10CA /* ReportHistogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9332D4CA5DC00AA10CA /* ReportHistogram.swift */; };
 		37BCA9372D506DB700AA10CA /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BCA9362D506DB700AA10CA /* DateUtil.swift */; };
+		37DB54002E17AB580079B1C4 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DB53FF2E17AB580079B1C4 /* UserDefaultsKeys.swift */; };
 		37F62C922D1CC93A00FECE1A /* UpdateFilterButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C912D1CC93A00FECE1A /* UpdateFilterButtonView.swift */; };
 		37F62C942D1F568600FECE1A /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C932D1F568600FECE1A /* CategorySelectionView.swift */; };
 		37F62C962D1F655700FECE1A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F62C952D1F655700FECE1A /* Category.swift */; };
@@ -75,6 +76,7 @@
 		37BCA9252D3B089800AA10CA /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		37BCA9332D4CA5DC00AA10CA /* ReportHistogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportHistogram.swift; sourceTree = "<group>"; };
 		37BCA9362D506DB700AA10CA /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
+		37DB53FF2E17AB580079B1C4 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		37F62C912D1CC93A00FECE1A /* UpdateFilterButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFilterButtonView.swift; sourceTree = "<group>"; };
 		37F62C932D1F568600FECE1A /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		37F62C952D1F655700FECE1A /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				37A0EA1D2DF02FC200E052A0 /* SwiftDataService.swift */,
 				37BCA9362D506DB700AA10CA /* DateUtil.swift */,
 				3793E1162D6AFE1000113EF5 /* AosFamilyOrder.swift */,
+				37DB53FF2E17AB580079B1C4 /* UserDefaultsKeys.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				37A0EA2E2DFF785800E052A0 /* SpeciesLabelsView.swift in Sources */,
 				378AF5C22D1557FC00AC77A8 /* SpeciesItemView.swift in Sources */,
 				37F888922D0A1E1C00258BDC /* Location.swift in Sources */,
+				37DB54002E17AB580079B1C4 /* UserDefaultsKeys.swift in Sources */,
 				37F888672D0128BA00258BDC /* INatExplorerApp.swift in Sources */,
 				37A0EA182DE6DDD800E052A0 /* SavedSpecies.swift in Sources */,
 				37F8886A2D01297D00258BDC /* ReportListView.swift in Sources */,

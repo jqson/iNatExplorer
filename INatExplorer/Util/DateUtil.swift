@@ -17,10 +17,12 @@ class DateUtil {
         static let dateFormatDayLen = mdFormat.count
     }
     
-    enum TimeRange {
+    enum TimeRange: String, CaseIterable, Identifiable {
         case week
         case month
         case year
+        
+        var id: Self { self }
     }
     
     static func getPastDateString(for timeRange: TimeRange) -> String {

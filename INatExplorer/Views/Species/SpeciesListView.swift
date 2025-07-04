@@ -10,6 +10,7 @@ import SwiftUI
 struct SpeciesListView: View {
     
     var category: CategoryStruct
+    @Binding var selectedTimeRange: DateUtil.TimeRange
     
     @StateObject private var speciesItemViewModel: SpeciesItemViewModel
         = SpeciesItemViewModel(dataService: .shared)
@@ -18,6 +19,8 @@ struct SpeciesListView: View {
     var body: some View {
         ZStack {
             ScrollView {
+                TimeRangePickerView(selectedTimeRange: $selectedTimeRange)
+                
                 Text(speciesItemViewModel.speciesCountText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
@@ -79,5 +82,7 @@ struct SpeciesListView: View {
 }
 
 #Preview {
-    SpeciesListView(category: Category.bird.category)
+    @Previewable @State var selectedTimeRange: DateUtil.TimeRange = .year
+    
+    SpeciesListView(category: Category.bird.category, selectedTimeRange: $selectedTimeRange)
 }
