@@ -39,8 +39,7 @@ struct CategorySelectionView: View {
                 ForEach(categories) { category in
                     NavigationLink(
                         destination: SpeciesListView(
-                            category: category,
-                            selectedTimeRange: $selectedTimeRange
+                            category: category, selectedTimeRange: $selectedTimeRange
                         )
                     ) {
                         Label(category.name, systemImage: category.systemIcon)

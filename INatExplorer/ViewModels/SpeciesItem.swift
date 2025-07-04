@@ -76,8 +76,8 @@ struct SpeciesSection: Identifiable {
         self.hideObserved = UserDefaults.standard.bool(forKey: UserDefaultsKeys.hideObservedKey)
     }
     
-    func fetchData(category: CategoryStruct) async {
-        await fetchSpeciesCounts(category: category)
+    func fetchData(category: CategoryStruct, timeRange: DateUtil.TimeRange) async {
+        await fetchSpeciesCounts(category: category, timeRange: timeRange)
         loadSavedSpecies(category: category)
         generateFullSpeciesItems()
         updateSpeciesSections()
@@ -118,9 +118,9 @@ struct SpeciesSection: Identifiable {
         updateSpeciesLabels(savedSpecies: savedSpecies, labels: labels)
     }
     
-    private func fetchSpeciesCounts(category: CategoryStruct) async {
+    private func fetchSpeciesCounts(category: CategoryStruct, timeRange: DateUtil.TimeRange) async {
         guard let response = await NetworkRequest.getSpeciesCounts(
-            category: category, timeRange: .year
+            category: category, timeRange: timeRange
         ) else { return }
         
         speciesCountsDict = response.results.reduce(into: [Int: (Species, Int)]()) {
