@@ -10,8 +10,8 @@ import SwiftUI
 struct ReportDetailView: View {
     
     var report: Report
-    @StateObject var locationViewModel = LocationViewModel()
-    @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
+    @State var locationViewModel = LocationViewModel()
+    @State var taxonNamesViewModel = TaxonNamesViewModel()
     
     var body: some View {
         VStack {

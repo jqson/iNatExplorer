@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 struct SpeciesItem: Identifiable {
     
@@ -33,9 +34,11 @@ struct SpeciesSection: Identifiable {
 }
 
 
-@MainActor class SpeciesItemViewModel: ObservableObject {
+@MainActor
+@Observable
+class SpeciesItemViewModel {
     
-    @Published private(set) var speciesSections: [SpeciesSection] = []
+    private(set) var speciesSections: [SpeciesSection] = []
     
     var hideObserved: Bool = false {
         didSet {

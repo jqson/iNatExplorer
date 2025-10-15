@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 typealias Coordinates = (lat: Double, lng: Double)
 typealias AddressComponentType = ReverseGeoResponse.Result.AddressComponent.ComponentType
@@ -22,9 +23,11 @@ struct Location {
     let displayAddress: String?
 }
 
-@MainActor class LocationViewModel: ObservableObject {
+@MainActor
+@Observable
+class LocationViewModel {
     
-    @Published private(set) var location: Location? = nil
+    private(set) var location: Location? = nil
     
     func fetchData(coordinates: Coordinates) async {
         guard let addressResponse = await NetworkRequest.reverseGeo(coordinates: coordinates) else {

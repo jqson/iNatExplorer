@@ -12,7 +12,7 @@ struct SpeciesListView: View {
     var category: CategoryStruct
     @Binding var selectedTimeRange: DateUtil.TimeRange
     
-    @StateObject private var speciesItemViewModel: SpeciesItemViewModel
+    @State private var speciesItemViewModel: SpeciesItemViewModel
         = SpeciesItemViewModel(dataService: .shared)
     @State private var isLoading: Bool = false
     
