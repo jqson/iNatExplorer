@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Report: Identifiable {
     
@@ -35,9 +36,11 @@ struct Report: Identifiable {
     }
 }
 
-@MainActor class ReportViewModel: ObservableObject {
+@MainActor
+@Observable
+class ReportViewModel {
     
-    @Published private(set) var reports: [Report] = []
+    private(set) var reports: [Report] = []
     
     func fetchData(taxons: [Taxon] = []) async {
         guard let observationResponse = await NetworkRequest.getObservations(taxons: taxons) else {

@@ -12,7 +12,7 @@ struct ReportListView: View {
     
     var taxons: [Taxon]
     
-    @StateObject private var reportViewModel = ReportViewModel()
+    @State private var reportViewModel = ReportViewModel()
     @State private var reports: [Report] = []
     @State private var isLoading = true
     

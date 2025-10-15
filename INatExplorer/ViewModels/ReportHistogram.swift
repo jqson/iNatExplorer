@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Histogram {
     enum Constants {
@@ -22,10 +23,12 @@ struct ReportCount: Hashable {
     let count: Double
 }
 
-@MainActor class ReportHistogramViewModel: ObservableObject {
+@MainActor
+@Observable
+class ReportHistogramViewModel {
     
-    @Published private(set) var historicalHistogram: Histogram = .init(legend: "", counts: [])
-    @Published private(set) var pastYearHistogram: Histogram = .init(legend: "", counts: [])
+    private(set) var historicalHistogram: Histogram = .init(legend: "", counts: [])
+    private(set) var pastYearHistogram: Histogram = .init(legend: "", counts: [])
     
     private(set) var ready: Bool = false
     private(set) var currMonthDay: Date = Date()

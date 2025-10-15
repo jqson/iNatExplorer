@@ -35,7 +35,7 @@ struct SpeciesLabelsView: View {
     }
     
     var species: Species
-    @StateObject var speciesItemViewModel: SpeciesItemViewModel
+    @State var speciesItemViewModel: SpeciesItemViewModel
     
     var body: some View {
         let labelIconSize = Constants.labelIconSize

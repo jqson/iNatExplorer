@@ -13,8 +13,8 @@ struct SpeciesDetailView: View {
     var species: Species
     var speciesItemViewModel: SpeciesItemViewModel
     
-    @StateObject var taxonNamesViewModel = TaxonNamesViewModel()
-    @StateObject var histogramViewModel = ReportHistogramViewModel()
+    @State var taxonNamesViewModel = TaxonNamesViewModel()
+    @State var histogramViewModel = ReportHistogramViewModel()
     
     var body: some View {
         ScrollView {

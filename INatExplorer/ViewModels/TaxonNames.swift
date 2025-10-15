@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct TaxonName {
     
@@ -20,10 +21,12 @@ struct TaxonName {
 }
 
 
-@MainActor class TaxonNamesViewModel: ObservableObject {
+@MainActor
+@Observable
+class TaxonNamesViewModel {
     
-    @Published private(set) var taxonNames: [TaxonName] = []
-    @Published private(set) var selectedTaxonName: TaxonName?
+    private(set) var taxonNames: [TaxonName] = []
+    private(set) var selectedTaxonName: TaxonName?
     
     func fetchData(taxonId: Int) async {
         guard let taxonNamesResponse = await NetworkRequest.getTaxonNames(taxonId: taxonId) else {
