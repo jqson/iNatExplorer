@@ -23,7 +23,7 @@ struct ReportListView: View {
                     NavigationLink(destination: ReportDetailView(report: report)) {
                         ReportItemView(report: report)
                     }
-                    .navigationTitle("Search Results")
+                    .navigationTitle("Observations")
                 }
                 .listStyle(.plain)
                 
