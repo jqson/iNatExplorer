@@ -14,16 +14,28 @@ struct SpeciesItem: Identifiable {
     enum Constants {
         static let preview: SpeciesItem = .init(
             species: Species.Constants.preview,
-            count: 1234,
-            labels: []
+            count: 1234
         )
     }
     
     let species: Species
     let count: Int?
     let labels: [SavedSpecies.Label]
+    let isNew: Bool
     
     var id: Int { species.taxon.id }
+    
+    init(
+        species: Species,
+        count: Int? = nil,
+        labels: [SavedSpecies.Label] = [],
+        isNew: Bool = false
+    ) {
+        self.species = species
+        self.count = count
+        self.labels = labels
+        self.isNew = isNew
+    }
 }
 
 struct SpeciesSection: Identifiable {
@@ -72,7 +84,7 @@ class SpeciesItemViewModel {
     
     private var speciesCountsDict: [Int: (Species, Int)] = [:]  // From server
     private var savedSpeciesDict: [Int: SavedSpecies] = [:]  // Synced with saved data
-    private var speciesItemDict: [Int: SpeciesItem] = [:]  // Full species items
+    private var speciesItemDict: [Int: SpeciesItem] = [:]  // Species items with counts
     
     init(dataService: SwiftDataService) {
         self.dataService = dataService
@@ -160,6 +172,7 @@ class SpeciesItemViewModel {
         for (taxonId, speciesCount) in speciesCountsDict {
             let species = speciesCount.0
             var labels: [SavedSpecies.Label] = []
+            var isNew: Bool = false
             if let savedSpecies = savedSpeciesDict[taxonId] {
                 labels = savedSpecies.labels
                 
@@ -172,9 +185,12 @@ class SpeciesItemViewModel {
                 }
             } else {
                 savedSpeciesToAdd.append(.init(species: species, labels: []))
+                isNew = true
             }
             
-            itemDict[taxonId] = .init(species: species, count: speciesCount.1, labels: labels)
+            itemDict[taxonId] = .init(
+                species: species, count: speciesCount.1, labels: labels, isNew: isNew
+            )
         }
         
         dataService.removeSavedSpecies(savedSpeciesToDelete)
@@ -203,15 +219,17 @@ class SpeciesItemViewModel {
                 $0.hasLabel(.favorite) && speciesItemDict[$0.species.taxon.id] == nil
             }
             speciesToShow.append(
-                contentsOf: savedFavorites.map {
-                    .init(species: $0.species, count: nil, labels: $0.labels)
-                }
+                contentsOf: savedFavorites.map { .init(species: $0.species, labels: $0.labels) }
             )
         }
         
         if hideObserved {
             speciesToShow.removeAll { $0.labels.contains(.observed) }
         }
+        
+        let newSpecies: [SpeciesItem] = speciesToShow.filter { $0.isNew }
+        speciesToShow.removeAll { $0.isNew }
+        print("New species: \(newSpecies.count)")
         
         let families: [Family] = Dictionary(grouping: speciesToShow.map(\.species)) {
             $0.ancestors.first { $0.rank == .family } ?? Taxon.Constants.unknownTaxon
@@ -220,12 +238,11 @@ class SpeciesItemViewModel {
             return .init(taxon: $0, ancestors: familyAncestors, species: $1)
         }.sorted()
         
-        speciesSections = families.map { family in
+        var sections: [SpeciesSection] = families.map { family in
             let speciesItems: [SpeciesItem] = family.species.map { species in
                     .init(
                         species: species,
-                        count: speciesCountsDict[species.taxon.id]?.1,
-                        labels: speciesItemDict[species.taxon.id]?.labels ?? []
+                        count: speciesCountsDict[species.taxon.id]?.1
                     )
             }.sorted {
                 if $0.count == $1.count {
@@ -237,6 +254,24 @@ class SpeciesItemViewModel {
             
             return .init(title: family.taxon.displayName, speciesItem: speciesItems)
         }
+        
+        if !newSpecies.isEmpty {
+            sections.insert(
+                .init(
+                    title: "New Species",
+                    speciesItem: newSpecies.sorted {
+                        if $0.count == $1.count {
+                            return $0.species.taxon.id < $1.species.taxon.id
+                        }
+                        
+                        return $0.count ?? -1 > $1.count ?? -1
+                    }
+                ),
+                at: 0
+            )
+        }
+        
+        speciesSections = sections
     }
     
     private func updateSpeciesLabels(savedSpecies: SavedSpecies, labels: [SavedSpecies.Label]) {
