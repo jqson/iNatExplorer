@@ -165,8 +165,7 @@ class SpeciesItemViewModel {
     }
     
     private func generateFullSpeciesItems() {
-        var savedSpeciesToAdd: [SavedSpecies] = []
-        var savedSpeciesToDelete: [SavedSpecies] = []
+        var newSpeciesToSave: [SavedSpecies] = []
         
         var itemDict: [Int: SpeciesItem] = [:]
         for (taxonId, speciesCount) in speciesCountsDict {
@@ -177,14 +176,11 @@ class SpeciesItemViewModel {
                 labels = savedSpecies.labels
                 
                 if savedSpecies.species != species {
-                    // Update existing saved species
-                    savedSpeciesToAdd.append(
-                        SavedSpecies(species: species, labels: savedSpecies.labels)
-                    )
-                    savedSpeciesToDelete.append(savedSpecies)
+                    savedSpecies.species = species
                 }
+                savedSpecies.lastSaved = Date()
             } else {
-                savedSpeciesToAdd.append(.init(species: species, labels: []))
+                newSpeciesToSave.append(.init(species: species, labels: [], lastSaved: Date()))
                 isNew = true
             }
             
@@ -193,13 +189,10 @@ class SpeciesItemViewModel {
             )
         }
         
-        dataService.removeSavedSpecies(savedSpeciesToDelete)
-        dataService.addSavedSpecies(savedSpeciesToAdd)
+        dataService.addSavedSpecies(newSpeciesToSave)
+        dataService.saveChanges()
         
-        for savedSpecies in savedSpeciesToDelete {
-            savedSpeciesDict[savedSpecies.species.taxon.id] = nil
-        }
-        for savedSpecies in savedSpeciesToAdd {
+        for savedSpecies in newSpeciesToSave {
             savedSpeciesDict[savedSpecies.species.taxon.id] = savedSpecies
         }
         
@@ -229,7 +222,6 @@ class SpeciesItemViewModel {
         
         let newSpecies: [SpeciesItem] = speciesToShow.filter { $0.isNew }
         speciesToShow.removeAll { $0.isNew }
-        print("New species: \(newSpecies.count)")
         
         let families: [Family] = Dictionary(grouping: speciesToShow.map(\.species)) {
             $0.ancestors.first { $0.rank == .family } ?? Taxon.Constants.unknownTaxon
@@ -275,12 +267,8 @@ class SpeciesItemViewModel {
     }
     
     private func updateSpeciesLabels(savedSpecies: SavedSpecies, labels: [SavedSpecies.Label]) {
-        let newSavedSpecies: SavedSpecies = .init(species: savedSpecies.species, labels: labels)
-        
-        dataService.removeSavedSpecies([savedSpecies])
-        dataService.addSavedSpecies([newSavedSpecies])
-        
-        savedSpeciesDict[newSavedSpecies.species.taxon.id] = newSavedSpecies
+        savedSpecies.labels = labels
+        dataService.saveChanges()
         
         generateFullSpeciesItems()
         updateSpeciesSections()
