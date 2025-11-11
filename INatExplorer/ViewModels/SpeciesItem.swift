@@ -179,6 +179,7 @@ class SpeciesItemViewModel {
                     savedSpecies.species = species
                 }
                 savedSpecies.lastSaved = Date()
+                isNew = savedSpecies.newThisYear
             } else {
                 newSpeciesToSave.append(.init(species: species, labels: [], lastSaved: Date()))
                 isNew = true
@@ -250,7 +251,7 @@ class SpeciesItemViewModel {
         if !newSpecies.isEmpty {
             sections.insert(
                 .init(
-                    title: "New Species",
+                    title: "New for Past Year",
                     speciesItem: newSpecies.sorted {
                         if $0.count == $1.count {
                             return $0.species.taxon.id < $1.species.taxon.id
@@ -272,5 +273,25 @@ class SpeciesItemViewModel {
         
         generateFullSpeciesItems()
         updateSpeciesSections()
+    }
+}
+
+extension SavedSpecies {
+    var newThisYear: Bool {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        let startOfToday = calendar.startOfDay(for: now)
+        let startOfSavedDate = calendar.startOfDay(for: lastSaved)
+
+        guard startOfSavedDate < startOfToday else {
+            return true
+        }
+        
+        guard let oneYearAgo = calendar.date(byAdding: .year, value: -1, to: startOfToday) else {
+            return false
+        }
+
+        return lastSaved < oneYearAgo
     }
 }
