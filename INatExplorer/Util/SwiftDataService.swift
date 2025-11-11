@@ -60,4 +60,12 @@ class SwiftDataService {
             fatalError(error.localizedDescription)
         }
     }
+    
+    func saveChanges() {
+        do {
+            try modelContext.save()
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
 }

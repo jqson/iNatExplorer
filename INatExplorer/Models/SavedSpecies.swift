@@ -18,10 +18,12 @@ class SavedSpecies {
     
     var species: Species
     var labels: [Label]
+    var lastSaved: Date = Date()
     
-    init(species: Species, labels: [Label]) {
+    init(species: Species, labels: [Label], lastSaved: Date) {
         self.species = species
         self.labels = labels
+        self.lastSaved = lastSaved
     }
     
     func hasLabel(_ label: Label) -> Bool {
